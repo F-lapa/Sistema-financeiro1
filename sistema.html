@@ -24,7 +24,8 @@
         h1 {
             text-align: center;
             color: #333333;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 2em;
         }
         .greeting {
             text-align: center;
@@ -32,18 +33,17 @@
             margin-bottom: 20px;
             font-size: 1.2em;
         }
-        .logout {
+        .logout, .admin-icon {
             position: absolute;
             top: 20px;
-            right: 20px;
             cursor: pointer;
+        }
+        .logout {
+            right: 20px;
             color: #007bff;
         }
         .admin-icon {
-            position: absolute;
-            top: 20px;
             left: 20px;
-            cursor: pointer;
             color: #28a745;
             display: none;
         }
@@ -66,19 +66,9 @@
             font-size: 16px;
             transition: all 0.3s ease;
         }
-        input[type="text"]:invalid, input[type="date"]:invalid {
-            border-color: red;
-        }
         input.highlight, select.highlight {
             border: 2px solid #007bff;
             box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
-        }
-        .date-group {
-            display: flex;
-            justify-content: space-between;
-        }
-        .date-group .form-group {
-            width: 48%;
         }
         .buttons {
             display: flex;
@@ -216,21 +206,15 @@
             .container {
                 padding: 15px;
             }
-            .form-group, .buttons {
-                width: 100%;
+            .buttons {
+                flex-direction: column;
             }
-            .date-group .form-group {
+            button {
                 width: 100%;
+                margin-bottom: 10px;
             }
             .admin-section input, .admin-section select {
                 width: 100%;
-            }
-            .admin-section .buttons {
-                flex-direction: column;
-            }
-            .admin-section button {
-                width: 100%;
-                margin-bottom: 10px;
             }
         }
         .alert {
@@ -611,7 +595,7 @@
             });
 
             const dailyBalanceSpan = document.getElementById('dailyBalance');
-            const monthlyBalanceSpan = document.getElementById('monthlyBalance');
+                        const monthlyBalanceSpan = document.getElementById('monthlyBalance');
             const annualBalanceSpan = document.getElementById('annualBalance');
 
             dailyBalanceSpan.innerText = formatCurrency(dailyBalance);
@@ -714,6 +698,9 @@
         const inputs = document.querySelectorAll('input, select');
         inputs.forEach(input => {
             input.addEventListener('focus', function() {
+                this.classList.add('highlight');
+            });
+            input.addEventListener('blur', function() {
                 this.classList.remove('highlight');
             });
         });
@@ -732,6 +719,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const dateInput = document.getElementById('date');
             dateInput.value = new Date().toISOString().split('T')[0];
+            updateFilteredView();
         });
 
         function logout() {
@@ -840,3 +828,5 @@
     </script>
 </body>
 </html>
+
+           
