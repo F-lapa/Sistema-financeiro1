@@ -7,9 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Seu CSS aqui */
-/* Seu CSS aqui */
-/* Seu CSS aqui */
-/* Seu CSS aqui */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f0f2f5;
@@ -244,11 +241,7 @@ tbody tr:hover {
     color: #007bff;
 }
 
-   
-</style>
-</head>
-<body>
-   <div class="container">
+ <div class="container">
         <div class="greeting" id="userGreeting"></div>
         <h1>Sistema de Receitas e Despesas</h1>
         <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
@@ -387,12 +380,16 @@ tbody tr:hover {
                 <label for="monthlyLimit">Limite Mensal (R$):</label>
                 <input type="text" id="monthlyLimit" placeholder="0,00" pattern="^\d+(\.\d{1,2})?$" title="Digite um valor válido" class="highlight" autocomplete="off">
             </div>
-            <div class="limit-info">
-                <p>Gastos Mensais Restantes: <span id="remainingBalance">R$ 0,00</span></p>
+            <div id="limitModalInfo" class="limit-info">
+                <!-- Limite Mensal e Gastos Restantes serão exibidos aqui -->
             </div>
             <button onclick="setMonthlyLimit()">Salvar Limite</button>
         </div>
-    </div>
+    </div>  
+</style>
+</head>
+<body>
+   
        
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
@@ -416,8 +413,7 @@ tbody tr:hover {
         const database = firebase.database();
         const auth = firebase.auth();
 
-        
-let transactions = [];
+        let transactions = [];
 let lastTransactionId = localStorage.getItem('lastTransactionId');
 let allUsers = [];
 let monthlyLimit = 0;
@@ -457,7 +453,6 @@ function loadTransactions(userId) {
             updateDescriptionList();
             updateFilteredView();
             calculateBalances();
-            calculateRemainingBalance();
         }
     });
 }
@@ -465,7 +460,7 @@ function loadTransactions(userId) {
 function loadMonthlyLimit(userId) {
     database.ref('users/' + userId + '/monthlyLimit').once('value').then((snapshot) => {
         monthlyLimit = parseCurrency(snapshot.val() || '0,00');
-        document.getElementById('monthlyLimit').value = formatCurrency(monthlyLimit);
+        updateLimitModal();
         calculateRemainingBalance();
     });
 }
@@ -795,7 +790,7 @@ function adminUndoLastTransaction() {
 function openLimitModal() {
     console.log('Abrir Modal de Limite de Gastos');
     document.getElementById('limitModal').style.display = "block";
-    document.getElementById('monthlyLimit').value = monthlyLimit > 0 ? formatCurrency(monthlyLimit) : '0,00';
+    updateLimitModal();
     calculateRemainingBalance();
 }
 
@@ -809,6 +804,7 @@ function setMonthlyLimit() {
     monthlyLimit = parseCurrency(limitInput.value);
     saveMonthlyLimit(monthlyLimit);
     calculateRemainingBalance();
+    updateLimitModal();
     closeLimitModal();
 }
 
@@ -825,6 +821,14 @@ function calculateRemainingBalance() {
     const remainingBalance = monthlyLimit - spentThisMonth;
     document.getElementById('remainingBalance').innerText = formatCurrency(remainingBalance);
     document.getElementById('remainingBalance').classList.toggle('negative', remainingBalance < 0);
+}
+
+function updateLimitModal() {
+    document.getElementById('monthlyLimit').value = monthlyLimit > 0 ? formatCurrency(monthlyLimit) : '0,00';
+    document.getElementById('limitModalInfo').innerHTML = `
+        <p>Limite Mensal: ${formatCurrency(monthlyLimit)}</p>
+        <p>Gastos Restantes: <span id="remainingBalance">${formatCurrency(monthlyLimit)}</span></p>
+    `;
 }
     </script>
 </body>
