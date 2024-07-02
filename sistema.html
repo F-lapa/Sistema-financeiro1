@@ -280,11 +280,12 @@ tbody tr:hover {
         </table>
 
         <div class="totals">
-            <p>Saldo do Dia: <span id="dailyBalance">R$ 0,00</span></p>
+             p>Saldo do Dia: <span id="dailyBalance">R$ 0,00</span></p>
             <p>Saldo do Mês: <span id="monthlyBalance">R$ 0,00</span></p>
             <p>Saldo do Ano: <span id="annualBalance">R$ 0,00</span></p>
-            <p class="hide-limit-texts">Limite de Gastos: <span id="monthlyLimitValue">R$ 0,00</span></p>
-            <p class="hide-limit-texts">Gastos Restantes: <span id="remainingBalance">R$ 0,00</span></p>
+            <p id="monthlyLimitText">Limite de Gastos: <span id="monthlyLimitValue">R$ 0,00</span></p>
+            <p id="remainingBalanceText">Gastos Restantes: <span id="remainingBalance">R$ 0,00</span></p>
+            <button id="monthlyLimitButton" onclick="openLimitModal()">Limite de Gastos Mensal</button>
         </div>
 
         <div class="filter">
@@ -417,8 +418,8 @@ tbody tr:hover {
             // Esconde o botão "Limite de Gastos Mensal" e os textos "Limite de Gastos" e "Gastos Restantes" se o usuário for "ssocarroes@gmail.com"
             if (user.email === 'ssocarroes@gmail.com') {
                 document.getElementById('monthlyLimitButton').classList.add('hide-monthly-limit-button');
-                const limitTexts = document.querySelectorAll('.hide-limit-texts');
-                limitTexts.forEach(element => element.style.display = 'none');
+                document.getElementById('monthlyLimitText').style.display = 'none';
+                document.getElementById('remainingBalanceText').style.display = 'none';
             }
         });
     } else {
