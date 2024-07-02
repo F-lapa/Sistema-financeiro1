@@ -6,6 +6,7 @@
     <title>Sistema de Receitas e Despesas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* Seu CSS aqui */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f2f5;
@@ -24,8 +25,7 @@
         h1 {
             text-align: center;
             color: #333333;
-            margin-bottom: 20px;
-            font-size: 2em;
+            margin-bottom: 10px;
         }
         .greeting {
             text-align: center;
@@ -33,17 +33,18 @@
             margin-bottom: 20px;
             font-size: 1.2em;
         }
-        .logout, .admin-icon {
+        .logout {
             position: absolute;
             top: 20px;
-            cursor: pointer;
-        }
-        .logout {
             right: 20px;
+            cursor: pointer;
             color: #007bff;
         }
         .admin-icon {
+            position: absolute;
+            top: 20px;
             left: 20px;
+            cursor: pointer;
             color: #28a745;
             display: none;
         }
@@ -66,9 +67,19 @@
             font-size: 16px;
             transition: all 0.3s ease;
         }
+        input[type="text"]:invalid, input[type="date"]:invalid {
+            border-color: red;
+        }
         input.highlight, select.highlight {
             border: 2px solid #007bff;
             box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+        }
+        .date-group {
+            display: flex;
+            justify-content: space-between;
+        }
+        .date-group .form-group {
+            width: 48%;
         }
         .buttons {
             display: flex;
@@ -169,6 +180,7 @@
             width: 100%;
             margin-bottom: 10px;
         }
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -202,44 +214,14 @@
             text-decoration: none;
             cursor: pointer;
         }
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            .buttons {
-                flex-direction: column;
-            }
-            button {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-            .admin-section input, .admin-section select {
-                width: 100%;
-            }
-        }
-        .alert {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 15px;
-            background-color: #4caf50;
-            color: white;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-        }
-        .alert.error {
-            background-color: #f44336;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="greeting" id="userGreeting"></div>
         <h1>Sistema de Receitas e Despesas</h1>
-        <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar" aria-label="Deslogar"></i>
-        <i class="fas fa-user-shield admin-icon" id="adminIcon" onclick="toggleAdminSection()" title="Admin" aria-label="Admin"></i>
+        <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
+        <i class="fas fa-user-shield admin-icon" id="adminIcon" onclick="toggleAdminSection()" title="Admin"></i>
         <div class="form-group">
             <label for="date">Data:</label>
             <input type="date" id="date" onchange="updateFilteredView()" class="highlight">
@@ -311,6 +293,7 @@
                 <label for="filterDescription">Descrição:</label>
                 <select id="filterDescription" class="highlight">
                     <option value="">Todos</option>
+                    <!-- Options will be populated here -->
                 </select>
             </div>
             <button onclick="filterByPeriod()">Filtrar</button>
@@ -355,6 +338,7 @@
             <div class="form-group">
                 <label for="userSelect">Selecionar Usuário:</label>
                 <select id="userSelect" class="highlight">
+                    <!-- Options will be populated here -->
                 </select>
             </div>
             <div class="buttons">
@@ -365,6 +349,7 @@
         </div>
     </div>
 
+    <!-- Modal -->
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -381,6 +366,7 @@
         </div>
     </div>
 
+    <!-- Modal para definir limite de gastos -->
     <div id="limitModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeLimitModal()">&times;</span>
@@ -393,167 +379,258 @@
         </div>
     </div>
 
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
 
-        <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+    <script>
+        // Configuração do Firebase
+        var firebaseConfig = {
+            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
+            authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+            databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+            projectId: "sistema-de-receitas-e-despesas",
+            storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+            messagingSenderId: "252102478972",
+            appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
+            measurementId: "G-K2HCS7WNZV"
+        };
+        // Inicialize o Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const auth = firebase.auth();
 
-<script>
-    var firebaseConfig = {
-        apiKey: "API_KEY",
-        authDomain: "DOMAIN",
-        databaseURL: "URL",
-        projectId: "PROJECT_ID",
-        storageBucket: "BUCKET",
-        messagingSenderId: "SENDER_ID",
-        appId: "APP_ID",
-        measurementId: "MEASUREMENT_ID"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const auth = firebase.auth();
+        // Verifique se o usuário está autenticado
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                const userId = user.uid;
+                database.ref('users/' + userId).once('value').then((snapshot) => {
+                    const userData = snapshot.val();
+                    const userName = userData ? userData.name : "Usuário";
+                    localStorage.setItem('username', userName);
+                    document.getElementById('userGreeting').innerHTML = user.email === 'fernandolapa1987@gmail.com' ? 
+                        '<span>Olá, <strong>Administrador!</strong></span>' : 
+                        '<span>Olá, <strong>' + userName + '</strong>!</span>';
+                    loadTransactions();
+                    checkAdmin(user.email);
+                });
+            } else {
+                window.location.href = 'index.html';  // Redirecionar para a página de login se não estiver autenticado
+            }
+        });
 
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            const userId = user.uid;
-            database.ref('users/' + userId).once('value').then((snapshot) => {
-                const userData = snapshot.val();
-                const userName = userData ? userData.name : "Usuário";
-                localStorage.setItem('username', userName);
-                document.getElementById('userGreeting').innerHTML = user.email === 'admin@example.com' ? 
-                    '<span>Olá, <strong>Administrador!</strong></span>' : 
-                    '<span>Olá, <strong>' + userName + '</strong>!</span>';
-                loadTransactions();
-                checkAdmin(user.email);
+        let transactions = [];
+        let lastTransactionId = localStorage.getItem('lastTransactionId');
+        let allUsers = [];
+        let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
+
+        document.getElementById('monthlyLimitValue').innerText = formatCurrency(monthlyLimit);
+
+        function saveTransactions() {
+            const userId = auth.currentUser.uid;
+            database.ref('transactions/' + userId).set(transactions);
+        }
+
+        function loadTransactions() {
+            const userId = auth.currentUser.uid;
+            database.ref('transactions/' + userId).once('value', function(snapshot) {
+                if (snapshot.val()) {
+                    transactions = snapshot.val();
+                    updateDescriptionList();
+                    updateFilteredView();
+                    calculateBalances();
+                }
             });
-        } else {
-            window.location.href = 'index.html';  
         }
-    });
 
-    let transactions = [];
-    let lastTransactionId = localStorage.getItem('lastTransactionId');
-    let allUsers = [];
-    let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
-
-    document.getElementById('monthlyLimitValue').innerText = formatCurrency(monthlyLimit);
-
-    function saveTransactions() {
-        const userId = auth.currentUser.uid;
-        database.ref('transactions/' + userId).set(transactions);
-    }
-
-    function loadTransactions() {
-        const userId = auth.currentUser.uid;
-        database.ref('transactions/' + userId).once('value', function(snapshot) {
-            if (snapshot.val()) {
-                transactions = snapshot.val();
-                updateDescriptionList();
-                updateFilteredView();
-                calculateBalances();
+        function checkAdmin(email) {
+            if (email === 'fernandolapa1987@gmail.com') {
+                document.getElementById('adminIcon').style.display = 'block';
+                loadAllUsers();
             }
-        });
-    }
-
-    function checkAdmin(email) {
-        if (email === 'admin@example.com') {
-            document.getElementById('adminIcon').style.display = 'block';
-            loadAllUsers();
         }
-    }
 
-    function loadAllUsers() {
-        database.ref('users').once('value').then((snapshot) => {
-            const users = snapshot.val();
-            const userSelect = document.getElementById('userSelect');
-            userSelect.innerHTML = '';
-            for (let uid in users) {
-                allUsers.push({ uid, name: users[uid].name });
+        function loadAllUsers() {
+            database.ref('users').once('value').then((snapshot) => {
+                const users = snapshot.val();
+                const userSelect = document.getElementById('userSelect');
+                userSelect.innerHTML = '';
+                for (let uid in users) {
+                    allUsers.push({ uid, name: users[uid].name });
+                    const option = document.createElement('option');
+                    option.value = uid;
+                    option.textContent = users[uid].name;
+                    userSelect.appendChild(option);
+                }
+            });
+        }
+
+        function formatCurrency(value) {
+            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function parseCurrency(value) {
+            return parseFloat(value.replace(/\./g, '').replace(',', '.').replace('R$', '')) || 0;
+        }
+
+        function addTransaction() {
+            console.log('Adicionar Transação');
+            const date = document.getElementById('date').value;
+            const description = document.getElementById('description').value;
+            const amountInput = document.getElementById('amount');
+            const amount = parseCurrency(amountInput.value);
+            const type = document.getElementById('type').value;
+
+            const transaction = { id: generateTransactionId(), date, description, amount, type };
+            transactions.push(transaction);
+            lastTransactionId = transaction.id;
+            localStorage.setItem('lastTransactionId', lastTransactionId);
+
+            saveTransactions();
+            updateDescriptionList();
+            updateFilteredView();
+            calculateBalances();
+
+            // Reset form fields
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('description').value = '';
+            amountInput.value = '0,00';
+            document.getElementById('type').value = 'receita';
+        }
+
+        function generateTransactionId() {
+            return '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function updateDescriptionList() {
+            const filterDescription = document.getElementById('filterDescription');
+            filterDescription.innerHTML = '<option value="">Todos</option>';
+            const uniqueDescriptions = [...new Set(transactions.map(t => t.description))];
+            uniqueDescriptions.forEach(description => {
                 const option = document.createElement('option');
-                option.value = uid;
-                option.textContent = users[uid].name;
-                userSelect.appendChild(option);
-            }
-        });
-    }
-
-    function formatCurrency(value) {
-        return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
-
-    function parseCurrency(value) {
-        return parseFloat(value.replace(/\./g, '').replace(',', '.').replace('R$', '')) || 0;
-    }
-
-    function showAlert(message, type = 'success') {
-        const alertBox = document.createElement('div');
-        alertBox.className = `alert ${type}`;
-        alertBox.innerText = message;
-        document.body.appendChild(alertBox);
-        setTimeout(() => alertBox.remove(), 3000);
-    }
-
-    function validateForm() {
-        const date = document.getElementById('date').value;
-        const description = document.getElementById('description').value;
-        const amount = document.getElementById('amount').value;
-        if (!date || !description || !amount) {
-            showAlert('Por favor, preencha todos os campos.', 'error');
-            return false;
+                option.value = description;
+                option.text = description;
+                filterDescription.appendChild(option);
+            });
         }
-        return true;
-    }
 
-    function addTransaction() {
-        if (!validateForm()) return;
-        const date = document.getElementById('date').value;
-        const description = document.getElementById('description').value;
-        const amountInput = document.getElementById('amount');
-        const amount = parseCurrency(amountInput.value);
-        const type = document.getElementById('type').value;
+        function updateFilteredView() {
+            const selectedDate = document.getElementById('date').value;
+            const tbody = document.getElementById('transactionsTable').getElementsByTagName('tbody')[0];
+            tbody.innerHTML = '';
 
-        const transaction = { id: generateTransactionId(), date, description, amount, type };
-        transactions.push(transaction);
-        lastTransactionId = transaction.id;
-        localStorage.setItem('lastTransactionId', lastTransactionId);
+            transactions.forEach(transaction => {
+                if (transaction.date === selectedDate) {
+                    const row = tbody.insertRow();
+                    const cellDate = row.insertCell(0);
+                    const cellDescription = row.insertCell(1);
+                    const cellAmount = row.insertCell(2);
+                    const cellType = row.insertCell(3);
 
-        saveTransactions();
-        updateDescriptionList();
-        updateFilteredView();
-        calculateBalances();
+                    cellDate.innerText = transaction.date;
+                    cellDescription.innerHTML = `<div class="transaction-description">
+                                                    <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
+                                                    ${transaction.description}
+                                                 </div>`;
+                    cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
+                    cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
+                }
+            });
 
-        document.getElementById('date').value = getCurrentDateBrasilia();
-        document.getElementById('description').value = '';
-        amountInput.value = '0,00';
-        document.getElementById('type').value = 'receita';
+            calculateBalances();
+        }
 
-        showAlert('Transação adicionada com sucesso!');
-    }
+        function calculateBalances() {
+            const selectedDate = document.getElementById('date').value;
+            const currentMonth = selectedDate.slice(0, 7);
+            const currentYear = selectedDate.slice(0, 4);
 
-    function generateTransactionId() {
-        return '_' + Math.random().toString(36).substr(2, 9);
-    }
+            let dailyBalance = 0;
+            let monthlyBalance = 0;
+            let annualBalance = 0;
 
-    function updateDescriptionList() {
-        const filterDescription = document.getElementById('filterDescription');
-        filterDescription.innerHTML = '<option value="">Todos</option>';
-        const uniqueDescriptions = [...new Set(transactions.map(t => t.description))];
-        uniqueDescriptions.forEach(description => {
-            const option = document.createElement('option');
-            option.value = description;
-            option.text = description;
-            filterDescription.appendChild(option);
-        });
-    }
+            transactions.forEach(transaction => {
+                if (transaction.date === selectedDate) {
+                    dailyBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
+                }
 
-    function updateFilteredView() {
-        const selectedDate = document.getElementById('date').value;
-        const tbody = document.getElementById('transactionsTable').getElementsByTagName('tbody')[0];
-        tbody.innerHTML = '';
+                if (transaction.date.startsWith(currentMonth)) {
+                    monthlyBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
+                }
 
-        transactions.forEach(transaction => {
-            if (transaction.date === selectedDate) {
-                const row = tbody.insertRow();
+                if (transaction.date.startsWith(currentYear)) {
+                    annualBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
+                }
+            });
+
+            const dailyBalanceSpan = document.getElementById('dailyBalance');
+            const monthlyBalanceSpan = document.getElementById('monthlyBalance');
+            const annualBalanceSpan = document.getElementById('annualBalance');
+
+            dailyBalanceSpan.innerText = formatCurrency(dailyBalance);
+            monthlyBalanceSpan.innerText = formatCurrency(monthlyBalance);
+            annualBalanceSpan.innerText = formatCurrency(annualBalance);
+
+            dailyBalanceSpan.classList.toggle('negative', dailyBalance < 0);
+            monthlyBalanceSpan.classList.toggle('negative', monthlyBalance < 0);
+            annualBalanceSpan.classList.toggle('negative', annualBalance < 0);
+
+            // Chamada para calcular o valor restante do limite de gastos
+            calculateRemainingBalance();
+        }
+
+        function openModal() {
+            console.log('Abrir Modal');
+            document.getElementById('myModal').style.display = "block";
+        }
+
+        function closeModal() {
+            console.log('Fechar Modal');
+            document.getElementById('myModal').style.display = "none";
+        }
+
+        function removeTransactionsByPeriod() {
+            console.log('Remover Transações por Período');
+            const startDate = document.getElementById('modalStartDate').value;
+            const endDate = document.getElementById('modalEndDate').value;
+
+            transactions = transactions.filter(transaction => !(transaction.date >= startDate && transaction.date <= endDate));
+            saveTransactions();
+            updateDescriptionList();
+            updateFilteredView();
+            calculateBalances();
+            closeModal();
+            alert('Transações do período selecionado foram removidas.');
+        }
+
+        function filterByPeriod() {
+            console.log('Filtrar por Período');
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const filterType = document.getElementById('filterType').value;
+            const filterDescription = document.getElementById('filterDescription').value.toLowerCase();
+
+            let totalReceitas = 0;
+            let totalDespesas = 0;
+
+            const filteredTransactions = transactions.filter(transaction => 
+                transaction.date >= startDate && transaction.date <= endDate &&
+                (filterType === '' || transaction.type === filterType) &&
+                (filterDescription === '' || transaction.description.toLowerCase().includes(filterDescription))
+            );
+
+            const filteredTbody = document.getElementById('filteredTransactionsTable').getElementsByTagName('tbody')[0];
+            filteredTbody.innerHTML = '';
+
+            filteredTransactions.forEach(transaction => {
+                if (transaction.type === 'receita') {
+                    totalReceitas += transaction.amount;
+                } else if (transaction.type === 'despesa') {
+                    totalDespesas += transaction.amount;
+                }
+
+                const row = filteredTbody.insertRow();
                 const cellDate = row.insertCell(0);
                 const cellDescription = row.insertCell(1);
                 const cellAmount = row.insertCell(2);
@@ -566,273 +643,205 @@
                                              </div>`;
                 cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
                 cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
-            }
-        });
+            });
 
-        calculateBalances();
-    }
+            const totalSaldo = totalReceitas - totalDespesas;
 
-    function calculateBalances() {
-        const selectedDate = document.getElementById('date').value;
-        const currentMonth = selectedDate.slice(0, 7);
-        const currentYear = selectedDate.slice(0, 4);
+            const totalReceitasSpan = document.getElementById('totalReceitas');
+            const totalDespesasSpan = document.getElementById('totalDespesas');
+            const totalSaldoSpan = document.getElementById('totalSaldo');
 
-        let dailyBalance = 0;
-        let monthlyBalance = 0;
-        let annualBalance = 0;
+            totalReceitasSpan.innerText = formatCurrency(totalReceitas);
+            totalDespesasSpan.innerText = formatCurrency(totalDespesas);
+            totalSaldoSpan.innerText = formatCurrency(totalSaldo);
 
-        transactions.forEach(transaction => {
-            if (transaction.date === selectedDate) {
-                dailyBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
-            }
-
-            if (transaction.date.startsWith(currentMonth)) {
-                monthlyBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
-            }
-
-            if (transaction.date.startsWith(currentYear)) {
-                annualBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
-            }
-        });
-
-        const dailyBalanceSpan = document.getElementById('dailyBalance');
-        const monthlyBalanceSpan = document.getElementById('monthlyBalance');
-        const annualBalanceSpan = document.getElementById('annualBalance');
-
-        dailyBalanceSpan.innerText = formatCurrency(dailyBalance);
-        monthlyBalanceSpan.innerText = formatCurrency(monthlyBalance);
-        annualBalanceSpan.innerText = formatCurrency(annualBalance);
-
-        dailyBalanceSpan.classList.toggle('negative', dailyBalance < 0);
-        monthlyBalanceSpan.classList.toggle('negative', monthlyBalance < 0);
-        annualBalanceSpan.classList.toggle('negative', annualBalance < 0);
-
-        calculateRemainingBalance();
-    }
-
-    function openModal() {
-        document.getElementById('myModal').style.display = "block";
-    }
-
-    function closeModal() {
-        document.getElementById('myModal').style.display = "none";
-    }
-
-    function removeTransactionsByPeriod() {
-        const startDate = document.getElementById('modalStartDate').value;
-        const endDate = document.getElementById('modalEndDate').value;
-
-        transactions = transactions.filter(transaction => !(transaction.date >= startDate && transaction.date <= endDate));
-        saveTransactions();
-        updateDescriptionList();
-        updateFilteredView();
-        calculateBalances();
-        closeModal();
-        showAlert('Transações do período selecionado foram removidas.');
-    }
-
-    function filterByPeriod() {
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
-        const filterType = document.getElementById('filterType').value;
-        const filterDescription = document.getElementById('filterDescription').value.toLowerCase();
-
-        let totalReceitas = 0;
-        let totalDespesas = 0;
-
-        const filteredTransactions = transactions.filter(transaction => 
-            transaction.date >= startDate && transaction.date <= endDate &&
-            (filterType === '' || transaction.type === filterType) &&
-            (filterDescription === '' || transaction.description.toLowerCase().includes(filterDescription))
-        );
-
-        const filteredTbody = document.getElementById('filteredTransactionsTable').getElementsByTagName('tbody')[0];
-        filteredTbody.innerHTML = '';
-
-        filteredTransactions.forEach(transaction => {
-            if (transaction.type === 'receita') {
-                totalReceitas += transaction.amount;
-            } else if (transaction.type === 'despesa') {
-                totalDespesas += transaction.amount;
-            }
-
-            const row = filteredTbody.insertRow();
-            const cellDate = row.insertCell(0);
-            const cellDescription = row.insertCell(1);
-            const cellAmount = row.insertCell(2);
-            const cellType = row.insertCell(3);
-
-            cellDate.innerText = transaction.date;
-            cellDescription.innerHTML = `<div class="transaction-description">
-                                            <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
-                                            ${transaction.description}
-                                         </div>`;
-            cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
-            cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
-        });
-
-        const totalSaldo = totalReceitas - totalDespesas;
-
-        const totalReceitasSpan = document.getElementById('totalReceitas');
-        const totalDespesasSpan = document.getElementById('totalDespesas');
-        const totalSaldoSpan = document.getElementById('totalSaldo');
-
-        totalReceitasSpan.innerText = formatCurrency(totalReceitas);
-        totalDespesasSpan.innerText = formatCurrency(totalDespesas);
-        totalSaldoSpan.innerText = formatCurrency(totalSaldo);
-
-        totalDespesasSpan.classList.add('negative');
-        totalSaldoSpan.classList.toggle('negative', totalSaldo < 0);
-    }
-
-    function clearFilter() {
-        document.getElementById('startDate').value = '';
-        document.getElementById('endDate').value = '';
-        document.getElementById('filterType').value = '';
-        document.getElementById('filterDescription').value = '';
-        document.getElementById('filteredTransactionsTable').getElementsByTagName('tbody')[0].innerHTML = '';
-        document.getElementById('totalReceitas').innerText = 'R$ 0,00';
-        document.getElementById('totalDespesas').innerText = 'R$ 0,00';
-        document.getElementById('totalSaldo').innerText = 'R$ 0,00';
-    }
-
-    const inputs = document.querySelectorAll('input, select');
-    inputs.forEach(input => {
-        input.addEventListener('focus', function() {
-            this.classList.add('highlight');
-        });
-        input.addEventListener('blur', function() {
-            this.classList.remove('highlight');
-        });
-    });
-
-    const amountInput = document.getElementById('amount');
-    amountInput.addEventListener('input', function() {
-        this.value = this.value.replace(/[^\d,]/g, '');
-    });
-
-    amountInput.addEventListener('blur', function() {
-        if (this.value === '') {
-            this.value = '0,00';
+            totalDespesasSpan.classList.add('negative');
+            totalSaldoSpan.classList.toggle('negative', totalSaldo < 0);
         }
-    });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const dateInput = document.getElementById('date');
-        dateInput.value = getCurrentDateBrasilia();
-        updateFilteredView();
-    });
+        function clearFilter() {
+            console.log('Limpar Filtro');
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            document.getElementById('filterType').value = '';
+            document.getElementById('filterDescription').value = '';
+            document.getElementById('filteredTransactionsTable').getElementsByTagName('tbody')[0].innerHTML = '';
+            document.getElementById('totalReceitas').innerText = 'R$ 0,00';
+            document.getElementById('totalDespesas').innerText = 'R$ 0,00';
+            document.getElementById('totalSaldo').innerText = 'R$ 0,00';
+        }
 
-    function logout() {
-        auth.signOut().then(() => {
-            localStorage.removeItem('loggedIn');
-            localStorage.removeItem('username');
-            localStorage.removeItem('lastTransactionId');
-            window.location.href = 'index.html';
-        }).catch(error => {
-            console.error('Erro ao deslogar: ', error);
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.classList.remove('highlight');
+            });
         });
-    }
 
-    function toggleAdminSection() {
-        const adminSection = document.getElementById('adminSection');
-        adminSection.style.display = adminSection.style.display === 'block' ? 'none' : 'block';
-    }
+        const amountInput = document.getElementById('amount');
+        amountInput.addEventListener('input', function() {
+            this.value = this.value.replace(/[^\d,]/g, '');
+        });
 
-    function clearAllTransactions() {
-        if (confirm('Você tem certeza que deseja limpar todas as suas transações?')) {
-            const userId = auth.currentUser.uid;
-            database.ref('transactions/' + userId).remove().then(() => {
-                transactions = [];
+        amountInput.addEventListener('blur', function() {
+            if (this.value === '') {
+                this.value = '0,00';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('date');
+            dateInput.value = new Date().toISOString().split('T')[0];
+        });
+
+        function logout() {
+            console.log('Logout');
+            auth.signOut().then(() => {
+                localStorage.removeItem('loggedIn');
+                localStorage.removeItem('username');
+                localStorage.removeItem('lastTransactionId');
+                window.location.href = 'index.html';
+            }).catch(error => {
+                console.error('Erro ao deslogar: ', error);
+            });
+        }
+
+        function toggleAdminSection() {
+            console.log('Toggle Admin Section');
+            const adminSection = document.getElementById('adminSection');
+            adminSection.style.display = adminSection.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function clearAllTransactions() {
+            console.log('Limpar Todas as Transações');
+            if (confirm('Você tem certeza que deseja limpar todas as suas transações?')) {
+                const userId = auth.currentUser.uid;
+                database.ref('transactions/' + userId).remove().then(() => {
+                    transactions = [];
+                    updateDescriptionList();
+                    updateFilteredView();
+                    calculateBalances();
+                    alert('Todas as suas transações foram removidas.');
+                }).catch(error => {
+                    alert('Erro ao remover transações: ' + error.message);
+                });
+            }
+        }
+
+        function registerNewUser() {
+            console.log('Registrar Novo Usuário');
+            const name = document.getElementById('newUserName').value;
+            const email = document.getElementById('newUserEmail').value;
+            const password = document.getElementById('newUserPassword').value;
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    const user = userCredential.user;
+                    database.ref('users/' + user.uid).set({
+                        name: name,
+                        email: email
+                    }).then(() => {
+                        alert('Novo usuário registrado com sucesso.');
+                        document.getElementById('newUserName').value = '';
+                        document.getElementById('newUserEmail').value = '';
+                        document.getElementById('newUserPassword').value = '';
+                        loadAllUsers(); // Atualiza a lista de usuários após registrar um novo usuário
+                    });
+                })
+                .catch(error => {
+                    alert('Erro ao registrar novo usuário: ' + error.message);
+                });
+        }
+
+        function adminUndoLastTransaction() {
+            console.log('Corrigir Última Ação do Usuário');
+            if (lastTransactionId) {
+                transactions = transactions.filter(transaction => transaction.id !== lastTransactionId);
+                saveTransactions();
                 updateDescriptionList();
                 updateFilteredView();
                 calculateBalances();
-                showAlert('Todas as suas transações foram removidas.');
-            }).catch(error => {
-                showAlert('Erro ao remover transações: ' + error.message, 'error');
-            });
+                alert('Última ação do usuário foi corrigida.');
+                lastTransactionId = null;
+                localStorage.removeItem('lastTransactionId');
+            } else {
+                alert('Nenhuma ação anterior para corrigir.');
+            }
         }
-    }
-function registerNewUser() {
-    const name = document.getElementById('newUserName').value;
-    const email = document.getElementById('newUserEmail').value;
-    const password = document.getElementById('newUserPassword').value;
 
-    auth.createUserWithEmailAndPassword(email, password)
-        .then(userCredential => {
-            const user = userCredential.user;
-            database.ref('users/' + user.uid).set({
-                name: name,
-                email: email
-            }).then(() => {
-                showAlert('Novo usuário registrado com sucesso.');
-                document.getElementById('newUserName').value = '';
-                document.getElementById('newUserEmail').value = '';
-                document.getElementById('newUserPassword').value = '';
-                loadAllUsers();
-            }).catch(error => {
-                showAlert('Erro ao salvar dados do usuário no banco de dados: ' + error.message, 'error');
-            });
-        })
-        .catch(error => {
-            showAlert('Erro ao registrar novo usuário: ' + error.message, 'error');
-        });
-}
-
-function adminUndoLastTransaction() {
-    if (lastTransactionId) {
-        transactions = transactions.filter(transaction => transaction.id !== lastTransactionId);
-        saveTransactions();
-        updateDescriptionList();
-        updateFilteredView();
-        calculateBalances();
-        showAlert('Última ação do usuário foi corrigida.');
-        lastTransactionId = null;
-        localStorage.removeItem('lastTransactionId');
-    } else {
-        showAlert('Nenhuma ação anterior para corrigir.', 'error');
-    }
-}
-
-function openLimitModal() {
-    document.getElementById('limitModal').style.display = "block";
-}
-
-function closeLimitModal() {
-    document.getElementById('limitModal').style.display = "none";
-}
-
-function setMonthlyLimit() {
-    const limitInput = document.getElementById('monthlyLimit');
-    monthlyLimit = parseCurrency(limitInput.value);
-    localStorage.setItem('monthlyLimit', formatCurrency(monthlyLimit));
-    document.getElementById('monthlyLimitValue').innerText = formatCurrency(monthlyLimit);
-    calculateRemainingBalance();
-    closeLimitModal();
-}
-
-function calculateRemainingBalance() {
-    const currentMonth = new Date().toISOString().split('T')[0].slice(0, 7);
-    let spentThisMonth = 0;
-
-    transactions.forEach(transaction => {
-        if (transaction.date.startsWith(currentMonth) && transaction.type === 'despesa') {
-            spentThisMonth += transaction.amount;
+        function openLimitModal() {
+            console.log('Abrir Modal de Limite de Gastos');
+            document.getElementById('limitModal').style.display = "block";
         }
-    });
 
-    const remainingBalance = monthlyLimit - spentThisMonth;
-    document.getElementById('remainingBalance').innerText = formatCurrency(remainingBalance);
-    document.getElementById('remainingBalance').classList.toggle('negative', remainingBalance < 0);
-}
+        function closeLimitModal() {
+            console.log('Fechar Modal de Limite de Gastos');
+            document.getElementById('limitModal').style.display = "none";
+        }
 
-function getCurrentDateBrasilia() {
-    const date = new Date();
-    const brTime = new Date(date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
-    return brTime.toISOString().split('T')[0];
-}
+        function setMonthlyLimit() {
+            const limitInput = document.getElementById('monthlyLimit');
+            monthlyLimit = parseCurrency(limitInput.value);
+            localStorage.setItem('monthlyLimit', formatCurrency(monthlyLimit));
+            document.getElementById('monthlyLimitValue').innerText = formatCurrency(monthlyLimit);
+            calculateRemainingBalance();
+            closeLimitModal();
+        }
 
-calculateBalances();
+        function calculateRemainingBalance() {
+            const currentMonth = new Date().toISOString().split('T')[0].slice(0, 7);
+            let spentThisMonth = 0;
+
+            transactions.forEach(transaction => {
+                if (transaction.date.startsWith(currentMonth) && transaction.type === 'despesa') {
+                    spentThisMonth += transaction.amount;
+                }
+            });
+
+            const remainingBalance = monthlyLimit - spentThisMonth;
+            document.getElementById('remainingBalance').innerText = formatCurrency(remainingBalance);
+            document.getElementById('remainingBalance').classList.toggle('negative', remainingBalance < 0);
+        }
+
+        // Atualize a função calculateBalances para incluir a chamada a calculateRemainingBalance
+        function calculateBalances() {
+            const selectedDate = document.getElementById('date').value;
+            const currentMonth = selectedDate.slice(0, 7);
+            const currentYear = selectedDate.slice(0, 4);
+
+            let dailyBalance = 0;
+            let monthlyBalance = 0;
+            let annualBalance = 0;
+
+            transactions.forEach(transaction => {
+                if (transaction.date === selectedDate) {
+                    dailyBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
+                }
+
+                if (transaction.date.startsWith(currentMonth)) {
+                    monthlyBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
+                }
+
+                if (transaction.date.startsWith(currentYear)) {
+                    annualBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
+                }
+            });
+
+            const dailyBalanceSpan = document.getElementById('dailyBalance');
+            const monthlyBalanceSpan = document.getElementById('monthlyBalance');
+            const annualBalanceSpan = document.getElementById('annualBalance');
+
+            dailyBalanceSpan.innerText = formatCurrency(dailyBalance);
+            monthlyBalanceSpan.innerText = formatCurrency(monthlyBalance);
+            annualBalanceSpan.innerText = formatCurrency(annualBalance);
+
+            dailyBalanceSpan.classList.toggle('negative', dailyBalance < 0);
+            monthlyBalanceSpan.classList.toggle('negative', monthlyBalance < 0);
+            annualBalanceSpan.classList.toggle('negative', annualBalance < 0);
+
+            // Chamada para calcular o valor restante do limite de gastos
+            calculateRemainingBalance();
+        }
     </script>
 </body>
 </html>
