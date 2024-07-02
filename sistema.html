@@ -9,6 +9,7 @@
         /* Seu CSS aqui */
 /* Seu CSS aqui */
 /* Seu CSS aqui */
+/* Seu CSS aqui */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f0f2f5;
@@ -216,53 +217,38 @@ tbody tr:hover {
     text-decoration: none;
     cursor: pointer;
 }
+
 /* Novo CSS para ícone de remoção */
 .fa-trash-alt {
     cursor: pointer;
     color: red;
 }
+
 /* CSS para esconder elementos específicos para o usuário ssocarroes@gmail.com */
 .hide-monthly-limit-button {
     display: none;
 }
+
 .hide-limit-texts {
     display: none;
 }
-/* CSS específico para modal de limite de gastos mensais */
-#limitModal .form-group {
-    margin-bottom: 15px;
-}
-#limitModal input[type="text"] {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin: 0 auto;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    font-size: 16px;
-    transition: all 0.3s ease;
-}
-#limitModal button {
-    width: 100%;
-    padding: 12px;
+
+/* Novo CSS para modal de limite de gastos */
+.limit-info {
     margin-top: 10px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
+    font-size: 18px;
+    color: #333;
 }
-#limitModal button:hover {
-    background-color: #218838;
+.limit-info span {
+    font-weight: bold;
+    color: #007bff;
 }
+
    
 </style>
 </head>
 <body>
    <div class="container">
-        <div class="container">
         <div class="greeting" id="userGreeting"></div>
         <h1>Sistema de Receitas e Despesas</h1>
         <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
@@ -310,8 +296,6 @@ tbody tr:hover {
             <p>Saldo do Dia: <span id="dailyBalance">R$ 0,00</span></p>
             <p>Saldo do Mês: <span id="monthlyBalance">R$ 0,00</span></p>
             <p>Saldo do Ano: <span id="annualBalance">R$ 0,00</span></p>
-            <p id="monthlyLimitText">Limite de Gastos: <span id="monthlyLimitValue">R$ 0,00</span></p>
-            <p id="remainingBalanceText">Gastos Restantes: <span id="remainingBalance">R$ 0,00</span></p>
         </div>
 
         <div class="filter">
@@ -403,17 +387,8 @@ tbody tr:hover {
                 <label for="monthlyLimit">Limite Mensal (R$):</label>
                 <input type="text" id="monthlyLimit" placeholder="0,00" pattern="^\d+(\.\d{1,2})?$" title="Digite um valor válido" class="highlight" autocomplete="off">
             </div>
-            <button onclick="setMonthlyLimit()">Salvar Limite</button>
-        </div>
-    </div>
-<!-- Modal para definir limite de gastos -->
-    <div id="limitModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeLimitModal()">&times;</span>
-            <h2>Definir Limite de Gastos Mensal</h2>
-            <div class="form-group">
-                <label for="monthlyLimit">Limite Mensal (R$):</label>
-                <input type="text" id="monthlyLimit" placeholder="0,00" pattern="^\d+(\.\d{1,2})?$" title="Digite um valor válido" class="highlight" autocomplete="off">
+            <div class="limit-info">
+                <p>Gastos Mensais Restantes: <span id="remainingBalance">R$ 0,00</span></p>
             </div>
             <button onclick="setMonthlyLimit()">Salvar Limite</button>
         </div>
@@ -461,11 +436,8 @@ auth.onAuthStateChanged(user => {
             loadTransactions();
             loadMonthlyLimit(userId);
             checkAdmin(user.email);
-            // Esconde o botão "Limite de Gastos Mensal" e os textos "Limite de Gastos" e "Gastos Restantes" se o usuário for "ssocarroes@gmail.com"
             if (user.email === 'ssocarroes@gmail.com') {
                 document.getElementById('monthlyLimitButton').style.display = 'none';
-                document.getElementById('monthlyLimitText').style.display = 'none';
-                document.getElementById('remainingBalanceText').style.display = 'none';
             }
         });
     } else {
@@ -493,7 +465,7 @@ function loadTransactions() {
 function loadMonthlyLimit(userId) {
     database.ref('users/' + userId + '/monthlyLimit').once('value').then((snapshot) => {
         monthlyLimit = parseCurrency(snapshot.val() || '0,00');
-        document.getElementById('monthlyLimitValue').innerText = formatCurrency(monthlyLimit);
+        document.getElementById('monthlyLimit').value = formatCurrency(monthlyLimit);
         calculateRemainingBalance();
     });
 }
@@ -587,7 +559,7 @@ function updateFilteredView() {
             const cellDescription = row.insertCell(1);
             const cellAmount = row.insertCell(2);
             const cellType = row.insertCell(3);
-            const cellAction = row.insertCell(4); // Nova célula para o ícone de remoção
+            const cellAction = row.insertCell(4);
 
             cellDate.innerText = transaction.date;
             cellDescription.innerHTML = `<div class="transaction-description">
@@ -797,7 +769,7 @@ function registerNewUser() {
                 document.getElementById('newUserName').value = '';
                 document.getElementById('newUserEmail').value = '';
                 document.getElementById('newUserPassword').value = '';
-                loadAllUsers(); // Atualiza a lista de usuários após registrar um novo usuário
+                loadAllUsers();
             });
         })
         .catch(error => {
@@ -825,6 +797,7 @@ function openLimitModal() {
     console.log('Abrir Modal de Limite de Gastos');
     document.getElementById('limitModal').style.display = "block";
     document.getElementById('monthlyLimit').value = monthlyLimit > 0 ? formatCurrency(monthlyLimit) : '0,00';
+    calculateRemainingBalance();
 }
 
 function closeLimitModal() {
@@ -835,7 +808,6 @@ function closeLimitModal() {
 function setMonthlyLimit() {
     const limitInput = document.getElementById('monthlyLimit');
     monthlyLimit = parseCurrency(limitInput.value);
-    document.getElementById('monthlyLimitValue').innerText = formatCurrency(monthlyLimit);
     saveMonthlyLimit(monthlyLimit);
     calculateRemainingBalance();
     closeLimitModal();
@@ -854,46 +826,6 @@ function calculateRemainingBalance() {
     const remainingBalance = monthlyLimit - spentThisMonth;
     document.getElementById('remainingBalance').innerText = formatCurrency(remainingBalance);
     document.getElementById('remainingBalance').classList.toggle('negative', remainingBalance < 0);
-}
-
-// Atualize a função calculateBalances para incluir a chamada a calculateRemainingBalance
-function calculateBalances() {
-    const selectedDate = document.getElementById('date').value;
-    const currentMonth = selectedDate.slice(0, 7);
-    const currentYear = selectedDate.slice(0, 4);
-
-    let dailyBalance = 0;
-    let monthlyBalance = 0;
-    let annualBalance = 0;
-
-    transactions.forEach(transaction => {
-        if (transaction.date === selectedDate) {
-            dailyBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
-        }
-
-        if (transaction.date.startsWith(currentMonth)) {
-            monthlyBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
-        }
-
-        if (transaction.date.startsWith(currentYear)) {
-            annualBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
-        }
-    });
-
-    const dailyBalanceSpan = document.getElementById('dailyBalance');
-    const monthlyBalanceSpan = document.getElementById('monthlyBalance');
-    const annualBalanceSpan = document.getElementById('annualBalance');
-
-    dailyBalanceSpan.innerText = formatCurrency(dailyBalance);
-    monthlyBalanceSpan.innerText = formatCurrency(monthlyBalance);
-    annualBalanceSpan.innerText = formatCurrency(annualBalance);
-
-    dailyBalanceSpan.classList.toggle('negative', dailyBalance < 0);
-    monthlyBalanceSpan.classList.toggle('negative', monthlyBalance < 0);
-    annualBalanceSpan.classList.toggle('negative', annualBalance < 0);
-
-    // Chamada para calcular o valor restante do limite de gastos
-    calculateRemainingBalance();
 }
     </script>
 </body>
