@@ -433,8 +433,8 @@ auth.onAuthStateChanged(user => {
             document.getElementById('userGreeting').innerHTML = user.email === 'fernandolapa1987@gmail.com' ? 
                 '<span>Olá, <strong>Administrador!</strong></span>' : 
                 '<span>Olá, <strong>' + userName + '</strong>!</span>';
-            loadTransactions();
             loadMonthlyLimit(userId);
+            loadTransactions(userId);
             checkAdmin(user.email);
             if (user.email === 'ssocarroes@gmail.com') {
                 document.getElementById('monthlyLimitButton').style.display = 'none';
@@ -450,14 +450,14 @@ function saveTransactions() {
     database.ref('transactions/' + userId).set(transactions);
 }
 
-function loadTransactions() {
-    const userId = auth.currentUser.uid;
+function loadTransactions(userId) {
     database.ref('transactions/' + userId).once('value', function(snapshot) {
         if (snapshot.val()) {
             transactions = snapshot.val();
             updateDescriptionList();
             updateFilteredView();
             calculateBalances();
+            calculateRemainingBalance();
         }
     });
 }
@@ -473,7 +473,6 @@ function loadMonthlyLimit(userId) {
 function saveMonthlyLimit(limit) {
     const userId = auth.currentUser.uid;
     database.ref('users/' + userId + '/monthlyLimit').set(limit);
-    localStorage.setItem('monthlyLimit', limit.toString());
 }
 
 function checkAdmin(email) {
