@@ -462,6 +462,7 @@ function loadMonthlyLimit(userId) {
 function saveMonthlyLimit(limit) {
     const userId = auth.currentUser.uid;
     database.ref('users/' + userId + '/monthlyLimit').set(limit);
+    localStorage.setItem('monthlyLimit', limit.toString());
 }
 
 function checkAdmin(email) {
@@ -784,6 +785,7 @@ function adminUndoLastTransaction() {
 function openLimitModal() {
     console.log('Abrir Modal de Limite de Gastos');
     document.getElementById('limitModal').style.display = "block";
+    document.getElementById('monthlyLimit').value = monthlyLimit > 0 ? formatCurrency(monthlyLimit) : '0,00';
 }
 
 function closeLimitModal() {
@@ -854,6 +856,7 @@ function calculateBalances() {
     // Chamada para calcular o valor restante do limite de gastos
     calculateRemainingBalance();
 }
+
     </script>
 </body>
 </html>
