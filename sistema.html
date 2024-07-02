@@ -402,7 +402,8 @@ tbody tr:hover {
         const database = firebase.database();
         const auth = firebase.auth();
 
-        let transactions = [];
+        
+let transactions = [];
 let lastTransactionId = localStorage.getItem('lastTransactionId');
 let allUsers = [];
 let monthlyLimit = 0;
@@ -423,7 +424,7 @@ auth.onAuthStateChanged(user => {
             checkAdmin(user.email);
             // Esconde o botão "Limite de Gastos Mensal" e os textos "Limite de Gastos" e "Gastos Restantes" se o usuário for "ssocarroes@gmail.com"
             if (user.email === 'ssocarroes@gmail.com') {
-                document.getElementById('monthlyLimitButton').classList.add('hide-monthly-limit-button');
+                document.getElementById('monthlyLimitButton').style.display = 'none';
                 document.getElementById('monthlyLimitText').style.display = 'none';
                 document.getElementById('remainingBalanceText').style.display = 'none';
             }
