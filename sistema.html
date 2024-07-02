@@ -412,8 +412,10 @@ tbody tr:hover {
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const auth = firebase.auth();
+        alert('Nenhuma ação anterior para corrigir.');
+    
 
-        let transactions = [];
+let transactions = [];
 let lastTransactionId = localStorage.getItem('lastTransactionId');
 let allUsers = [];
 let monthlyLimit = 0;
@@ -460,7 +462,6 @@ function loadTransactions(userId) {
 function loadMonthlyLimit(userId) {
     database.ref('users/' + userId + '/monthlyLimit').once('value').then((snapshot) => {
         monthlyLimit = parseCurrency(snapshot.val() || '0,00');
-        updateLimitModal();
         calculateRemainingBalance();
     });
 }
@@ -787,25 +788,8 @@ function adminUndoLastTransaction() {
     }
 }
 
-function openLimitModal() {
-    console.log('Abrir Modal de Limite de Gastos');
-    document.getElementById('limitModal').style.display = "block";
-    updateLimitModal();
-    calculateRemainingBalance();
-}
-
-function closeLimitModal() {
-    console.log('Fechar Modal de Limite de Gastos');
-    document.getElementById('limitModal').style.display = "none";
-}
-
-function setMonthlyLimit() {
-    const limitInput = document.getElementById('monthlyLimit');
-    monthlyLimit = parseCurrency(limitInput.value);
-    saveMonthlyLimit(monthlyLimit);
-    calculateRemainingBalance();
-    updateLimitModal();
-    closeLimitModal();
+function openLimitPage() {
+    window.location.href = 'limite.html';
 }
 
 function calculateRemainingBalance() {
@@ -822,14 +806,7 @@ function calculateRemainingBalance() {
     document.getElementById('remainingBalance').innerText = formatCurrency(remainingBalance);
     document.getElementById('remainingBalance').classList.toggle('negative', remainingBalance < 0);
 }
-
-function updateLimitModal() {
-    document.getElementById('monthlyLimit').value = monthlyLimit > 0 ? formatCurrency(monthlyLimit) : '0,00';
-    document.getElementById('limitModalInfo').innerHTML = `
-        <p>Limite Mensal: ${formatCurrency(monthlyLimit)}</p>
-        <p>Gastos Restantes: <span id="remainingBalance">${formatCurrency(monthlyLimit)}</span></p>
-    `;
-}
+        
     </script>
 </body>
 </html>
