@@ -8,6 +8,7 @@
     <style>
         /* Seu CSS aqui */
 /* Seu CSS aqui */
+/* Seu CSS aqui */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f0f2f5;
@@ -215,27 +216,53 @@ tbody tr:hover {
     text-decoration: none;
     cursor: pointer;
 }
-
 /* Novo CSS para ícone de remoção */
 .fa-trash-alt {
     cursor: pointer;
     color: red;
 }
-
 /* CSS para esconder elementos específicos para o usuário ssocarroes@gmail.com */
 .hide-monthly-limit-button {
     display: none;
 }
-
 .hide-limit-texts {
     display: none;
 }
-
+/* CSS específico para modal de limite de gastos mensais */
+#limitModal .form-group {
+    margin-bottom: 15px;
+}
+#limitModal input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+#limitModal button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+#limitModal button:hover {
+    background-color: #218838;
+}
    
 </style>
 </head>
 <body>
    <div class="container">
+        <div class="container">
         <div class="greeting" id="userGreeting"></div>
         <h1>Sistema de Receitas e Despesas</h1>
         <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
@@ -282,10 +309,9 @@ tbody tr:hover {
         <div class="totals">
             <p>Saldo do Dia: <span id="dailyBalance">R$ 0,00</span></p>
             <p>Saldo do Mês: <span id="monthlyBalance">R$ 0,00</span></p>
-<p>Saldo do Ano: <span id="annualBalance">R$ 0,00</span></p>
-<p id="monthlyLimitText">Limite de Gastos: <span id="monthlyLimitValue">R$ 0,00</span></p>
-<p id="remainingBalanceText">Gastos Restantes: <span id="remainingBalance">R$ 0,00</span></p>
-<button id="monthlyLimitButton" onclick="openLimitModal()">Limite de Gastos Mensal</button>
+            <p>Saldo do Ano: <span id="annualBalance">R$ 0,00</span></p>
+            <p id="monthlyLimitText">Limite de Gastos: <span id="monthlyLimitValue">R$ 0,00</span></p>
+            <p id="remainingBalanceText">Gastos Restantes: <span id="remainingBalance">R$ 0,00</span></p>
         </div>
 
         <div class="filter">
@@ -380,6 +406,19 @@ tbody tr:hover {
             <button onclick="setMonthlyLimit()">Salvar Limite</button>
         </div>
     </div>
+<!-- Modal para definir limite de gastos -->
+    <div id="limitModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLimitModal()">&times;</span>
+            <h2>Definir Limite de Gastos Mensal</h2>
+            <div class="form-group">
+                <label for="monthlyLimit">Limite Mensal (R$):</label>
+                <input type="text" id="monthlyLimit" placeholder="0,00" pattern="^\d+(\.\d{1,2})?$" title="Digite um valor válido" class="highlight" autocomplete="off">
+            </div>
+            <button onclick="setMonthlyLimit()">Salvar Limite</button>
+        </div>
+    </div>
+       
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
@@ -856,7 +895,6 @@ function calculateBalances() {
     // Chamada para calcular o valor restante do limite de gastos
     calculateRemainingBalance();
 }
-
     </script>
 </body>
 </html>
