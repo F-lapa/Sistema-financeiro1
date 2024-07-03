@@ -244,7 +244,7 @@ tbody tr:hover {
 </style>
  </head>
 <body>
-  <div class="container">
+ <div class="container">
         <div class="greeting" id="userGreeting"></div>
         <h1>Sistema de Receitas e Despesas</h1>
         <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
@@ -270,7 +270,6 @@ tbody tr:hover {
         </div>
         <div class="buttons">
             <button onclick="addTransaction()">Adicionar</button>
-            <button id="monthlyLimitButton" onclick="openLimitModal()">Limite de Gastos Mensal</button>
         </div>
 
         <table id="transactionsTable">
@@ -373,23 +372,6 @@ tbody tr:hover {
             </div>
         </div>
     </div>
-
-    <!-- Modal para definir limite de gastos -->
-    <div id="limitModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeLimitModal()">&times;</span>
-            <h2>Definir Limite de Gastos Mensal</h2>
-            <div class="form-group">
-                <label for="monthlyLimit">Limite Mensal (R$):</label>
-                <input type="text" id="monthlyLimit" placeholder="0,00" pattern="^\d+(\.\d{1,2})?$" title="Digite um valor válido" class="highlight" autocomplete="off">
-            </div>
-            <div id="limitModalInfo" class="limit-info">
-                <!-- Limite Mensal e Gastos Restantes serão exibidos aqui -->
-            </div>
-            <button onclick="setMonthlyLimit()">Salvar Limite</button>
-        </div>
-    </div>
-   
        
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
@@ -418,7 +400,6 @@ tbody tr:hover {
 let transactions = [];
 let lastTransactionId = localStorage.getItem('lastTransactionId');
 let allUsers = [];
-let monthlyLimit = 0;
 
 // Verifique se o usuário está autenticado
 auth.onAuthStateChanged(user => {
@@ -431,12 +412,8 @@ auth.onAuthStateChanged(user => {
             document.getElementById('userGreeting').innerHTML = user.email === 'fernandolapa1987@gmail.com' ? 
                 '<span>Olá, <strong>Administrador!</strong></span>' : 
                 '<span>Olá, <strong>' + userName + '</strong>!</span>';
-            loadMonthlyLimit(userId);
             loadTransactions(userId);
             checkAdmin(user.email);
-            if (user.email === 'ssocarroes@gmail.com') {
-                document.getElementById('monthlyLimitButton').style.display = 'none';
-            }
         });
     } else {
         window.location.href = 'index.html';  // Redirecionar para a página de login se não estiver autenticado
@@ -457,18 +434,6 @@ function loadTransactions(userId) {
             calculateBalances();
         }
     });
-}
-
-function loadMonthlyLimit(userId) {
-    database.ref('users/' + userId + '/monthlyLimit').once('value').then((snapshot) => {
-        monthlyLimit = parseCurrency(snapshot.val() || '0,00');
-        calculateRemainingBalance();
-    });
-}
-
-function saveMonthlyLimit(limit) {
-    const userId = auth.currentUser.uid;
-    database.ref('users/' + userId + '/monthlyLimit').set(limit);
 }
 
 function checkAdmin(email) {
@@ -618,9 +583,6 @@ function calculateBalances() {
     dailyBalanceSpan.classList.toggle('negative', dailyBalance < 0);
     monthlyBalanceSpan.classList.toggle('negative', monthlyBalance < 0);
     annualBalanceSpan.classList.toggle('negative', annualBalance < 0);
-
-    // Chamada para calcular o valor restante do limite de gastos
-    calculateRemainingBalance();
 }
 
 function filterByPeriod() {
@@ -786,25 +748,6 @@ function adminUndoLastTransaction() {
     } else {
         alert('Nenhuma ação anterior para corrigir.');
     }
-}
-
-function openLimitPage() {
-    window.location.href = 'limite.html';
-}
-
-function calculateRemainingBalance() {
-    const currentMonth = new Date().toISOString().split('T')[0].slice(0, 7);
-    let spentThisMonth = 0;
-
-    transactions.forEach(transaction => {
-        if (transaction.date.startsWith(currentMonth) && transaction.type === 'despesa') {
-            spentThisMonth += transaction.amount;
-        }
-    });
-
-    const remainingBalance = monthlyLimit - spentThisMonth;
-    document.getElementById('remainingBalance').innerText = formatCurrency(remainingBalance);
-    document.getElementById('remainingBalance').classList.toggle('negative', remainingBalance < 0);
 }
         
     </script>
