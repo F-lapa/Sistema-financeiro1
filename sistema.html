@@ -398,7 +398,7 @@ tbody tr:hover {
 
     <script>
         // Configuração do Firebase
-       var firebaseConfig = {
+    var firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
     databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
@@ -432,6 +432,9 @@ auth.onAuthStateChanged(user => {
             loadMonthlyLimit(userId);
             loadTransactions(userId);
             checkAdmin(user.email);
+        }).catch((error) => {
+            console.error("Erro ao carregar dados do usuário:", error);
+            window.location.href = 'index.html';  // Redirecionar para a página de login se houver um erro
         });
     } else {
         window.location.href = 'index.html';  // Redirecionar para a página de login se não estiver autenticado
@@ -819,6 +822,8 @@ function updateLimitModal() {
         <p>Gastos Restantes: <span id="remainingBalance">${formatCurrency(monthlyLimit)}</span></p>
     `;
 }
+
+
     </script>
 </body>
 </html>
