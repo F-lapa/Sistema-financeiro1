@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Seu CSS aqui */
-body {
+    body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f0f2f5;
     margin: 0;
@@ -220,31 +220,11 @@ tbody tr:hover {
     cursor: pointer;
     color: red;
 }
-
-/* CSS para esconder elementos específicos para o usuário ssocarroes@gmail.com */
-.hide-monthly-limit-button {
-    display: none;
-}
-
-.hide-limit-texts {
-    display: none;
-}
-
-/* Novo CSS para modal de limite de gastos */
-.limit-info {
-    margin-top: 10px;
-    font-size: 18px;
-    color: #333;
-}
-.limit-info span {
-    font-weight: bold;
-    color: #007bff;
-}
-
+   
 </style>
 </head>
 <body>
-  <div class="container">
+   <div class="container">
         <div class="greeting" id="userGreeting"></div>
         <h1>Sistema de Receitas e Despesas</h1>
         <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
@@ -270,7 +250,6 @@ tbody tr:hover {
         </div>
         <div class="buttons">
             <button onclick="addTransaction()">Adicionar</button>
-            <button onclick="openLimitModal()" id="limitButton">Limitar Gastos</button>
         </div>
 
         <table id="transactionsTable">
@@ -374,23 +353,6 @@ tbody tr:hover {
         </div>
     </div>
 
-    <!-- Modal para definir limite de gastos -->
-    <div id="limitModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeLimitModal()">&times;</span>
-            <h2>Definir Limite de Gastos Mensal</h2>
-            <div class="form-group">
-                <label for="monthlyLimit">Limite Mensal (R$):</label>
-                <input type="text" id="monthlyLimit" placeholder="0,00" pattern="^\d+(\.\d{1,2})?$" title="Digite um valor válido" class="highlight" autocomplete="off">
-            </div>
-            <div id="limitModalInfo" class="limit-info">
-                <!-- Limite Mensal e Gastos Restantes serão exibidos aqui -->
-            </div>
-            <button id="saveLimitButton" onclick="setMonthlyLimit()">Salvar Limite</button>
-            <button id="cancelLimitButton" onclick="closeLimitModal()" style="display: none;">Cancelar</button>
-        </div>
-    </div>
-
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
@@ -398,28 +360,23 @@ tbody tr:hover {
 
     <script>
         // Configuração do Firebase
-    var firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-    databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-    projectId: "sistema-de-receitas-e-despesas",
-    storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-    messagingSenderId: "252102478972",
-    appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-    measurementId: "G-K2HCS7WNZV"
-};
-// Inicialize o Firebase
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-const auth = firebase.auth();
+        var firebaseConfig = {
+            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
+            authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+            databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+            projectId: "sistema-de-receitas-e-despesas",
+            storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+            messagingSenderId: "252102478972",
+            appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
+            measurementId: "G-K2HCS7WNZV"
+        };
+        // Inicialize o Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const auth = firebase.auth();
 
-let transactions = [];
-let lastTransactionId = localStorage.getItem('lastTransactionId');
-let allUsers = [];
-let monthlyLimit = 0;
-
-// Verifique se o usuário está autenticado
-auth.onAuthStateChanged(user => {
+        // Verifique se o usuário está autenticado
+        auth.onAuthStateChanged(user => {
     if (user) {
         const userId = user.uid;
         database.ref('users/' + userId).once('value').then((snapshot) => {
@@ -429,24 +386,25 @@ auth.onAuthStateChanged(user => {
             document.getElementById('userGreeting').innerHTML = user.email === 'fernandolapa1987@gmail.com' ? 
                 '<span>Olá, <strong>Administrador!</strong></span>' : 
                 '<span>Olá, <strong>' + userName + '</strong>!</span>';
-            loadMonthlyLimit(userId);
-            loadTransactions(userId);
+            loadTransactions();
             checkAdmin(user.email);
-        }).catch((error) => {
-            console.error("Erro ao carregar dados do usuário:", error);
-            window.location.href = 'index.html';  // Redirecionar para a página de login se houver um erro
         });
     } else {
         window.location.href = 'index.html';  // Redirecionar para a página de login se não estiver autenticado
     }
 });
 
+let transactions = [];
+let lastTransactionId = localStorage.getItem('lastTransactionId');
+let allUsers = [];
+
 function saveTransactions() {
     const userId = auth.currentUser.uid;
     database.ref('transactions/' + userId).set(transactions);
 }
 
-function loadTransactions(userId) {
+function loadTransactions() {
+    const userId = auth.currentUser.uid;
     database.ref('transactions/' + userId).once('value', function(snapshot) {
         if (snapshot.val()) {
             transactions = snapshot.val();
@@ -455,19 +413,6 @@ function loadTransactions(userId) {
             calculateBalances();
         }
     });
-}
-
-function loadMonthlyLimit(userId) {
-    database.ref('users/' + userId + '/monthlyLimit').once('value').then((snapshot) => {
-        monthlyLimit = parseCurrency(snapshot.val() || '0,00');
-        updateLimitModal();
-        calculateRemainingBalance();
-    });
-}
-
-function saveMonthlyLimit(limit) {
-    const userId = auth.currentUser.uid;
-    database.ref('users/' + userId + '/monthlyLimit').set(limit);
 }
 
 function checkAdmin(email) {
@@ -501,6 +446,7 @@ function parseCurrency(value) {
 }
 
 function addTransaction() {
+    console.log('Adicionar Transação');
     const date = document.getElementById('date').value;
     const description = document.getElementById('description').value;
     const amountInput = document.getElementById('amount');
@@ -552,13 +498,13 @@ function updateFilteredView() {
             const cellDescription = row.insertCell(1);
             const cellAmount = row.insertCell(2);
             const cellType = row.insertCell(3);
-            const cellAction = row.insertCell(4);
+            const cellAction = row.insertCell(4); // Nova célula para o ícone de remoção
 
             cellDate.innerText = transaction.date;
             cellDescription.innerHTML = `<div class="transaction-description">
                                             <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
                                             ${transaction.description}
-                                        </div>`;
+                                         </div>`;
             cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
             cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
             cellAction.innerHTML = `<i class="fas fa-trash-alt" onclick="confirmRemoveTransaction('${transaction.id}')" style="cursor:pointer; color:red;"></i>`;
@@ -616,12 +562,10 @@ function calculateBalances() {
     dailyBalanceSpan.classList.toggle('negative', dailyBalance < 0);
     monthlyBalanceSpan.classList.toggle('negative', monthlyBalance < 0);
     annualBalanceSpan.classList.toggle('negative', annualBalance < 0);
-
-    // Chamada para calcular o valor restante do limite de gastos
-    calculateRemainingBalance();
 }
 
 function filterByPeriod() {
+    console.log('Filtrar por Período');
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
     const filterType = document.getElementById('filterType').value;
@@ -656,7 +600,7 @@ function filterByPeriod() {
         cellDescription.innerHTML = `<div class="transaction-description">
                                         <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
                                         ${transaction.description}
-                                    </div>`;
+                                     </div>`;
         cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
         cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
     });
@@ -676,6 +620,7 @@ function filterByPeriod() {
 }
 
 function clearFilter() {
+    console.log('Limpar Filtro');
     document.getElementById('startDate').value = '';
     document.getElementById('endDate').value = '';
     document.getElementById('filterType').value = '';
@@ -710,6 +655,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function logout() {
+    console.log('Logout');
     auth.signOut().then(() => {
         localStorage.removeItem('loggedIn');
         localStorage.removeItem('username');
@@ -721,11 +667,13 @@ function logout() {
 }
 
 function toggleAdminSection() {
+    console.log('Toggle Admin Section');
     const adminSection = document.getElementById('adminSection');
     adminSection.style.display = adminSection.style.display === 'block' ? 'none' : 'block';
 }
 
 function clearAllTransactions() {
+    console.log('Limpar Todas as Transações');
     if (confirm('Você tem certeza que deseja limpar todas as suas transações?')) {
         const userId = auth.currentUser.uid;
         database.ref('transactions/' + userId).remove().then(() => {
@@ -741,6 +689,7 @@ function clearAllTransactions() {
 }
 
 function registerNewUser() {
+    console.log('Registrar Novo Usuário');
     const name = document.getElementById('newUserName').value;
     const email = document.getElementById('newUserEmail').value;
     const password = document.getElementById('newUserPassword').value;
@@ -756,7 +705,7 @@ function registerNewUser() {
                 document.getElementById('newUserName').value = '';
                 document.getElementById('newUserEmail').value = '';
                 document.getElementById('newUserPassword').value = '';
-                loadAllUsers();
+                loadAllUsers(); // Atualiza a lista de usuários após registrar um novo usuário
             });
         })
         .catch(error => {
@@ -765,6 +714,7 @@ function registerNewUser() {
 }
 
 function adminUndoLastTransaction() {
+    console.log('Corrigir Última Ação do Usuário');
     if (lastTransactionId) {
         transactions = transactions.filter(transaction => transaction.id !== lastTransactionId);
         saveTransactions();
@@ -778,52 +728,6 @@ function adminUndoLastTransaction() {
         alert('Nenhuma ação anterior para corrigir.');
     }
 }
-
-function openLimitModal() {
-    document.getElementById('limitModal').style.display = "block";
-    updateLimitModal();
-    calculateRemainingBalance();
-}
-
-function closeLimitModal() {
-    document.getElementById('limitModal').style.display = "none";
-}
-
-function setMonthlyLimit() {
-    const limitInput = document.getElementById('monthlyLimit');
-    monthlyLimit = parseCurrency(limitInput.value);
-    saveMonthlyLimit(monthlyLimit);
-    calculateRemainingBalance();
-    updateLimitModal();
-    closeLimitModal();
-    document.getElementById('saveLimitButton').innerText = 'Alterar Limite';
-    document.getElementById('cancelLimitButton').style.display = 'inline-block';
-}
-
-function calculateRemainingBalance() {
-    const currentMonth = new Date().toISOString().split('T')[0].slice(0, 7);
-    let spentThisMonth = 0;
-
-    transactions.forEach(transaction => {
-        if (transaction.date.startsWith(currentMonth) && transaction.type === 'despesa') {
-            spentThisMonth += transaction.amount;
-        }
-    });
-
-    const remainingBalance = monthlyLimit - spentThisMonth;
-    document.getElementById('remainingBalance').innerText = formatCurrency(remainingBalance);
-    document.getElementById('remainingBalance').classList.toggle('negative', remainingBalance < 0);
-}
-
-function updateLimitModal() {
-    document.getElementById('monthlyLimit').value = monthlyLimit > 0 ? formatCurrency(monthlyLimit) : '0,00';
-    document.getElementById('limitModalInfo').innerHTML = `
-        <p>Limite Mensal: ${formatCurrency(monthlyLimit)}</p>
-        <p>Gastos Restantes: <span id="remainingBalance">${formatCurrency(monthlyLimit)}</span></p>
-    `;
-}
-
-
     </script>
 </body>
 </html>
