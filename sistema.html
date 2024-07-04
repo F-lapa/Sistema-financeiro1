@@ -6,7 +6,6 @@
     <title>Sistema de Receitas e Despesas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Seu CSS aqui */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f2f5;
@@ -180,152 +179,103 @@
             width: 100%;
             margin-bottom: 10px;
         }
-        .fa-trash-alt {
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
             cursor: pointer;
-            color: red;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            .form-group, .buttons {
+                width: 100%;
+            }
+            .date-group .form-group {
+                width: 100%;
+            }
+            .admin-section input, .admin-section select {
+                width: 100%;
+            }
+            .admin-section .buttons {
+                flex-direction: column;
+            }
+            .admin-section button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+        .alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        .alert.error {
+            background-color: #f44336;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="greeting" id="userGreeting"></div>
-        <h1>Sistema de Receitas e Despesas</h1>
-        <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
-        <i class="fas fa-user-shield admin-icon" id="adminIcon" onclick="toggleAdminSection()" title="Admin"></i>
-        <div class="form-group">
-            <label for="date">Data:</label>
-            <input type="date" id="date" onchange="updateFilteredView()" class="highlight">
-        </div>
-        <div class="form-group">
-            <label for="description">Descrição:</label>
-            <input type="text" id="description" class="highlight">
-        </div>
-        <div class="form-group">
-            <label for="amount">Valor (R$):</label>
-            <input type="text" id="amount" placeholder="0,00" pattern="^\d+(\.\d{1,2})?$" title="Digite um valor válido" class="highlight" autocomplete="off">
-        </div>
-        <div class="form-group">
-            <label for="type">Tipo:</label>
-            <select id="type" class="highlight">
-                <option value="receita">Receita</option>
-                <option value="despesa">Despesa</option>
-            </select>
-        </div>
-        <div class="buttons">
-            <button onclick="addTransaction()">Adicionar</button>
-            <button onclick="openLimitPage()">Limite de Gastos Mensal</button>
-        </div>
+        <!-- ...conteúdo existente... -->
+    </div>
 
-        <table id="transactionsTable">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Descrição</th>
-                    <th>Valor</th>
-                    <th>Tipo</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Transactions will be added here -->
-            </tbody>
-        </table>
+    <div id="myModal" class="modal">
+        <!-- ...conteúdo existente... -->
+    </div>
 
-        <div class="totals">
-            <p>Saldo do Dia: <span id="dailyBalance">R$ 0,00</span></p>
-            <p>Saldo do Mês: <span id="monthlyBalance">R$ 0,00</span></p>
-            <p>Saldo do Ano: <span id="annualBalance">R$ 0,00</span></p>
-            <p id="monthlyLimitText"></p>
-            <p id="remainingBalanceText"></p>
-        </div>
-
-        <div class="filter">
-            <h2>Filtrar por Período</h2>
-            <div class="date-group">
-                <div class="form-group">
-                    <label for="startDate">Data Inicial:</label>
-                    <input type="date" id="startDate" class="highlight">
-                </div>
-                <div class="form-group">
-                    <label for="endDate">Data Final:</label>
-                    <input type="date" id="endDate" class="highlight">
-                </div>
-            </div>
+    <div id="limitModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLimitModal()">&times;</span>
+            <h2>Definir Limite de Gastos Mensal</h2>
             <div class="form-group">
-                <label for="filterType">Tipo:</label>
-                <select id="filterType" class="highlight">
-                    <option value="">Todos</option>
-                    <option value="receita">Receita</option>
-                    <option value="despesa">Despesa</option>
-                </select>
+                <label for="monthlyLimit">Limite Mensal (R$):</label>
+                <input type="text" id="monthlyLimit" placeholder="0,00" pattern="^\d+(\.\d{1,2})?$" title="Digite um valor válido" class="highlight" autocomplete="off">
             </div>
-            <div class="form-group">
-                <label for="filterDescription">Descrição:</label>
-                <select id="filterDescription" class="highlight">
-                    <option value="">Todos</option>
-                    <!-- Options will be populated here -->
-                </select>
-            </div>
-            <button onclick="filterByPeriod()">Filtrar</button>
-            <button onclick="clearFilter()">Limpar Filtro</button>
-            <div id="filteredResults">
-                <p>Total Receitas: <span id="totalReceitas">R$ 0,00</span></p>
-                <p>Total Despesas: <span id="totalDespesas" class="negative">R$ 0,00</span></p>
-                <p>Saldo: <span id="totalSaldo">R$ 0,00</span></p>
-            </div>
-            <div class="filter-results" id="filterResults">
-                <h3>Extrato</h3>
-                <table id="filteredTransactionsTable">
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Descrição</th>
-                            <th>Valor</th>
-                            <th>Tipo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Filtered transactions will be added here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="admin-section" id="adminSection">
-            <h2>Gerenciamento de Usuários</h2>
-            <div class="form-group">
-                <label for="newUserName">Nome do Novo Usuário:</label>
-                <input type="text" id="newUserName" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="newUserEmail">Email do Novo Usuário:</label>
-                <input type="text" id="newUserEmail" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="newUserPassword">Senha do Novo Usuário:</label>
-                <input type="password" id="newUserPassword" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="userSelect">Selecionar Usuário:</label>
-                <select id="userSelect" class="highlight">
-                    <!-- Options will be populated here -->
-                </select>
-            </div>
-            <div class="buttons">
-                <button onclick="registerNewUser()">Registrar Novo Usuário</button>
-                <button onclick="clearAllTransactions()">Limpar Minhas Transações</button>
-                <button onclick="adminUndoLastTransaction()">Corrigir Última Ação do Usuário</button>
-            </div>
+            <button onclick="setMonthlyLimit()">Salvar Limite</button>
         </div>
     </div>
 
-    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
 
     <script>
-        // Configuração do Firebase
         var firebaseConfig = {
             apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
             authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
@@ -336,12 +286,10 @@
             appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
             measurementId: "G-K2HCS7WNZV"
         };
-        // Inicialize o Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const auth = firebase.auth();
 
-        // Verifique se o usuário está autenticado
         auth.onAuthStateChanged(user => {
             if (user) {
                 const userId = user.uid;
@@ -354,15 +302,17 @@
                         '<span>Olá, <strong>' + userName + '</strong>!</span>';
                     loadTransactions();
                     checkAdmin(user.email);
+                    loadMonthlyLimit();
                 });
             } else {
-                window.location.href = 'index.html';  // Redirecionar para a página de login se não estiver autenticado
+                window.location.href = 'index.html';  
             }
         });
 
         let transactions = [];
         let lastTransactionId = localStorage.getItem('lastTransactionId');
         let allUsers = [];
+        let monthlyLimit = 0;
 
         function saveTransactions() {
             const userId = auth.currentUser.uid;
@@ -377,7 +327,6 @@
                     updateDescriptionList();
                     updateFilteredView();
                     calculateBalances();
-                    loadMonthlyLimit(); // Carregar limite mensal
                 }
             });
         }
@@ -404,6 +353,15 @@
             });
         }
 
+        function loadMonthlyLimit() {
+            const userId = auth.currentUser.uid;
+            database.ref('limits/' + userId).once('value').then((snapshot) => {
+                monthlyLimit = snapshot.val() || 0;
+                document.getElementById('monthlyLimitValue').innerText = formatCurrency(monthlyLimit);
+                calculateRemainingBalance();
+            });
+        }
+
         function formatCurrency(value) {
             return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
@@ -412,7 +370,27 @@
             return parseFloat(value.replace(/\./g, '').replace(',', '.').replace('R$', '')) || 0;
         }
 
+        function showAlert(message, type = 'success') {
+            const alertBox = document.createElement('div');
+            alertBox.className = `alert ${type}`;
+            alertBox.innerText = message;
+            document.body.appendChild(alertBox);
+            setTimeout(() => alertBox.remove(), 3000);
+        }
+
+        function validateForm() {
+            const date = document.getElementById('date').value;
+            const description = document.getElementById('description').value;
+            const amount = document.getElementById('amount').value;
+            if (!date || !description || !amount) {
+                showAlert('Por favor, preencha todos os campos.', 'error');
+                return false;
+            }
+            return true;
+        }
+
         function addTransaction() {
+            if (!validateForm()) return;
             const date = document.getElementById('date').value;
             const description = document.getElementById('description').value;
             const amountInput = document.getElementById('amount');
@@ -429,11 +407,12 @@
             updateFilteredView();
             calculateBalances();
 
-            // Reset form fields
             document.getElementById('date').value = new Date().toISOString().split('T')[0];
             document.getElementById('description').value = '';
             amountInput.value = '0,00';
             document.getElementById('type').value = 'receita';
+
+            showAlert('Transação adicionada com sucesso!');
         }
 
         function generateTransactionId() {
@@ -464,7 +443,6 @@
                     const cellDescription = row.insertCell(1);
                     const cellAmount = row.insertCell(2);
                     const cellType = row.insertCell(3);
-                    const cellAction = row.insertCell(4); // Nova célula para o ícone de remoção
 
                     cellDate.innerText = transaction.date;
                     cellDescription.innerHTML = `<div class="transaction-description">
@@ -473,24 +451,9 @@
                                                  </div>`;
                     cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
                     cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
-                    cellAction.innerHTML = `<i class="fas fa-trash-alt" onclick="confirmRemoveTransaction('${transaction.id}')" style="cursor:pointer; color:red;"></i>`;
                 }
             });
 
-            calculateBalances();
-        }
-
-        function confirmRemoveTransaction(transactionId) {
-            if (confirm('Tem certeza que deseja remover esta transação?')) {
-                removeTransaction(transactionId);
-            }
-        }
-
-        function removeTransaction(transactionId) {
-            transactions = transactions.filter(transaction => transaction.id !== transactionId);
-            saveTransactions();
-            updateDescriptionList();
-            updateFilteredView();
             calculateBalances();
         }
 
@@ -529,7 +492,28 @@
             monthlyBalanceSpan.classList.toggle('negative', monthlyBalance < 0);
             annualBalanceSpan.classList.toggle('negative', annualBalance < 0);
 
-            calculateRemainingBalance(); // Calcular saldo restante
+            calculateRemainingBalance();
+        }
+
+        function openModal() {
+            document.getElementById('myModal').style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = "none";
+        }
+
+        function removeTransactionsByPeriod() {
+            const startDate = document.getElementById('modalStartDate').value;
+            const endDate = document.getElementById('modalEndDate').value;
+
+            transactions = transactions.filter(transaction => !(transaction.date >= startDate && transaction.date <= endDate));
+            saveTransactions();
+            updateDescriptionList();
+            updateFilteredView();
+            calculateBalances();
+            closeModal();
+            showAlert('Transações do período selecionado foram removidas.');
         }
 
         function filterByPeriod() {
@@ -644,9 +628,9 @@
                     updateDescriptionList();
                     updateFilteredView();
                     calculateBalances();
-                    alert('Todas as suas transações foram removidas.');
+                    showAlert('Todas as suas transações foram removidas.');
                 }).catch(error => {
-                    alert('Erro ao remover transações: ' + error.message);
+                    showAlert('Erro ao remover transações: ' + error.message, 'error');
                 });
             }
         }
@@ -663,7 +647,7 @@
                         name: name,
                         email: email
                     }).then(() => {
-                        alert('Novo usuário registrado com sucesso.');
+                        showAlert('Novo usuário registrado com sucesso.');
                         document.getElementById('newUserName').value = '';
                         document.getElementById('newUserEmail').value = '';
                         document.getElementById('newUserPassword').value = '';
@@ -671,7 +655,7 @@
                     });
                 })
                 .catch(error => {
-                    alert('Erro ao registrar novo usuário: ' + error.message);
+                    showAlert('Erro ao registrar novo usuário: ' + error.message, 'error');
                 });
         }
 
@@ -682,30 +666,39 @@
                 updateDescriptionList();
                 updateFilteredView();
                 calculateBalances();
-                alert('Última ação do usuário foi corrigida.');
+                showAlert('Última ação do usuário foi corrigida.');
                 lastTransactionId = null;
                 localStorage.removeItem('lastTransactionId');
             } else {
-                alert('Nenhuma ação anterior para corrigir.');
+                showAlert('Nenhuma ação anterior para corrigir.', 'error');
             }
         }
 
-        function openLimitPage() {
-            window.location.href = 'limite.html';
+        function openLimitModal() {
+            document.getElementById('limitModal').style.display = "block";
         }
 
-        function loadMonthlyLimit() {
+        function closeLimitModal() {
+            document.getElementById('limitModal').style.display = "none";
+        }
+
+        function setMonthlyLimit() {
+            const limitInput = document.getElementById('monthlyLimit');
+            const newLimit = parseCurrency(limitInput.value);
             const userId = auth.currentUser.uid;
-            database.ref('monthlyLimit/' + userId).once('value', function(snapshot) {
-                if (snapshot.val()) {
-                    const limit = snapshot.val();
-                    document.getElementById('monthlyLimitText').innerText = 'Limite de Gastos: ' + formatCurrency(limit);
-                    calculateRemainingBalance(limit);
-                }
+
+            database.ref('limits/' + userId).set(newLimit).then(() => {
+                monthlyLimit = newLimit;
+                document.getElementById('monthlyLimitValue').innerText = formatCurrency(monthlyLimit);
+                calculateRemainingBalance();
+                closeLimitModal();
+                showAlert('Limite de gastos mensal atualizado com sucesso!');
+            }).catch(error => {
+                showAlert('Erro ao atualizar limite de gastos: ' + error.message, 'error');
             });
         }
 
-        function calculateRemainingBalance(monthlyLimit) {
+        function calculateRemainingBalance() {
             const currentMonth = new Date().toISOString().split('T')[0].slice(0, 7);
             let spentThisMonth = 0;
 
@@ -716,9 +709,11 @@
             });
 
             const remainingBalance = monthlyLimit - spentThisMonth;
-            document.getElementById('remainingBalanceText').innerText = 'Gastos Restantes: ' + formatCurrency(remainingBalance);
-            document.getElementById('remainingBalanceText').classList.toggle('negative', remainingBalance < 0);
+            document.getElementById('remainingBalance').innerText = formatCurrency(remainingBalance);
+            document.getElementById('remainingBalance').classList.toggle('negative', remainingBalance < 0);
         }
+
+        calculateBalances();
     </script>
 </body>
 </html>
