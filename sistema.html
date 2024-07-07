@@ -8,226 +8,231 @@
     <style>
         /* Seu CSS aqui */
     body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f2f5;
-    margin: 0;
-    padding: 0;
-}
-.container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    position: relative;
-}
-h1 {
-    text-align: center;
-    color: #333333;
-    margin-bottom: 10px;
-}
-.greeting {
-    text-align: center;
-    color: #555555;
-    margin-bottom: 20px;
-    font-size: 1.2em;
-}
-.logout {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-    color: #007bff;
-}
-.admin-icon {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    cursor: pointer;
-    color: #28a745;
-    display: none;
-}
-.form-group {
-    margin-bottom: 20px;
-}
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #555555;
-}
-input[type="text"], input[type="number"], input[type="date"], select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    font-size: 16px;
-    transition: all 0.3s ease;
-}
-input[type="text"]:invalid, input[type="date"]:invalid {
-    border-color: red;
-}
-input.highlight, select.highlight {
-    border: 2px solid #007bff;
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
-}
-.date-group {
-    display: flex;
-    justify-content: space-between;
-}
-.date-group .form-group {
-    width: 48%;
-}
-.buttons {
-    display: flex;
-    justify-content: space-between;
-}
-button {
-    width: 48%;
-    padding: 12px;
-    margin: 10px 1%;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-button:hover {
-    background-color: #0056b3;
-}
-table {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: separate;
-    border-spacing: 0 10px;
-}
-th, td {
-    padding: 12px;
-    text-align: left;
-    background-color: #fff;
-}
-th {
-    background-color: #f7f7f7;
-    color: #333333;
-}
-tbody tr {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    overflow: hidden;
-}
-tbody tr:hover {
-    background-color: #f1f1f1;
-}
-.totals, .filter {
-    margin-top: 20px;
-    text-align: center;
-}
-.totals p, .filter p {
-    font-size: 20px;
-    color: #333333;
-}
-.totals span, .filter span {
-    font-weight: bold;
-    color: #007bff;
-}
-.negative {
-    color: red !important;
-}
-.transaction-description {
-    display: flex;
-    align-items: center;
-}
-.transaction-amount {
-    text-align: left;
-    color: green;
-}
-.transaction-amount.despesa {
-    color: red;
-}
-.transaction-icon {
-    margin-right: 10px;
-    font-size: 1.2em;
-}
-.filter-results {
-    margin-top: 20px;
-}
-.admin-section {
-    display: none;
-    margin-top: 30px;
-}
-.admin-section h2 {
-    text-align: center;
-    color: #28a745;
-}
-.admin-section .form-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.admin-section input, .admin-section select {
-    width: 50%;
-    margin-bottom: 10px;
-}
-.admin-section .buttons {
-    flex-direction: column;
-}
-.admin-section button {
-    width: 100%;
-    margin-bottom: 10px;
-}
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f2f5;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        position: relative;
+    }
+    h1 {
+        text-align: center;
+        color: #333333;
+        margin-bottom: 10px;
+    }
+    .greeting {
+        text-align: center;
+        color: #555555;
+        margin-bottom: 20px;
+        font-size: 1.2em;
+    }
+    .logout, .change-password {
+        position: absolute;
+        top: 20px;
+        cursor: pointer;
+        color: #007bff;
+    }
+    .logout {
+        right: 20px;
+    }
+    .change-password {
+        right: 60px;
+    }
+    .admin-icon {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        cursor: pointer;
+        color: #28a745;
+        display: none;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #555555;
+    }
+    input[type="text"], input[type="number"], input[type="date"], select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+    input[type="text"]:invalid, input[type="date"]:invalid {
+        border-color: red;
+    }
+    input.highlight, select.highlight {
+        border: 2px solid #007bff;
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+    }
+    .date-group {
+        display: flex;
+        justify-content: space-between;
+    }
+    .date-group .form-group {
+        width: 48%;
+    }
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+    button {
+        width: 48%;
+        padding: 12px;
+        margin: 10px 1%;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+    table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+    th, td {
+        padding: 12px;
+        text-align: left;
+        background-color: #fff;
+    }
+    th {
+        background-color: #f7f7f7;
+        color: #333333;
+    }
+    tbody tr {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+    .totals, .filter {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .totals p, .filter p {
+        font-size: 20px;
+        color: #333333;
+    }
+    .totals span, .filter span {
+        font-weight: bold;
+        color: #007bff;
+    }
+    .negative {
+        color: red !important;
+    }
+    .transaction-description {
+        display: flex;
+        align-items: center;
+    }
+    .transaction-amount {
+        text-align: left;
+        color: green;
+    }
+    .transaction-amount.despesa {
+        color: red;
+    }
+    .transaction-icon {
+        margin-right: 10px;
+        font-size: 1.2em;
+    }
+    .filter-results {
+        margin-top: 20px;
+    }
+    .admin-section {
+        display: none;
+        margin-top: 30px;
+    }
+    .admin-section h2 {
+        text-align: center;
+        color: #28a745;
+    }
+    .admin-section .form-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .admin-section input, .admin-section select {
+        width: 50%;
+        margin-bottom: 10px;
+    }
+    .admin-section .buttons {
+        flex-direction: column;
+    }
+    .admin-section button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
-/* Novo CSS para ícone de remoção */
-.fa-trash-alt {
-    cursor: pointer;
-    color: red;
-}
-   
-</style>
+    /* Novo CSS para ícone de remoção */
+    .fa-trash-alt {
+        cursor: pointer;
+        color: red;
+    }
+    </style>
 </head>
 <body>
-   <div class="container">
+    <div class="container">
         <div class="greeting" id="userGreeting"></div>
         <h1>Sistema de Receitas e Despesas</h1>
         <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
+        <i class="fas fa-key change-password" onclick="openChangePasswordModal()" title="Alterar Senha"></i>
         <i class="fas fa-user-shield admin-icon" id="adminIcon" onclick="toggleAdminSection()" title="Admin"></i>
         <div class="form-group">
             <label for="date">Data:</label>
@@ -366,30 +371,43 @@ tbody tr:hover {
         </div>
     </div>
 
+    <!-- Modal para alterar senha -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeChangePasswordModal()">&times;</span>
+            <h2>Alterar Senha</h2>
+            <div class="form-group">
+                <label for="newPassword">Nova Senha:</label>
+                <input type="password" id="newPassword" class="highlight">
+            </div>
+            <button onclick="changePassword()">Alterar Senha</button>
+        </div>
+    </div>
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
 
+    <script src="app.js"></script>
     <script>
         // Configuração do Firebase
-        var firebaseConfig = {
-            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-            authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-            databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-            projectId: "sistema-de-receitas-e-despesas",
-            storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-            messagingSenderId: "252102478972",
-            appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-            measurementId: "G-K2HCS7WNZV"
-        };
-        // Inicialize o Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const auth = firebase.auth();
+var firebaseConfig = {
+    apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
+    authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+    databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+    projectId: "sistema-de-receitas-e-despesas",
+    storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+    messagingSenderId: "252102478972",
+    appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
+    measurementId: "G-K2HCS7WNZV"
+};
+// Inicialize o Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const auth = firebase.auth();
 
-        // Verifique se o usuário está autenticado
-        auth.onAuthStateChanged(user => {
+// Verifique se o usuário está autenticado
+auth.onAuthStateChanged(user => {
     if (user) {
         const userId = user.uid;
         database.ref('users/' + userId).once('value').then((snapshot) => {
@@ -508,27 +526,27 @@ function updateFilteredView() {
     tbody.innerHTML = '';
 
     transactions.forEach(transaction => {
-    if (transaction.date === selectedDate) {
-        const row = tbody.insertRow();
-        
-        const cellDate = row.insertCell(0);
-        const cellDescription = row.insertCell(1);
-        const cellAmount = row.insertCell(2);
-        const cellType = row.insertCell(3);
-        const cellAction = row.insertCell(4); // Nova célula para o ícone de remoção
+        if (transaction.date === selectedDate) {
+            const row = tbody.insertRow();
+            
+            const cellDate = row.insertCell(0);
+            const cellDescription = row.insertCell(1);
+            const cellAmount = row.insertCell(2);
+            const cellType = row.insertCell(3);
+            const cellAction = row.insertCell(4); // Nova célula para o ícone de remoção
 
-        cellDate.innerText = transaction.date;
-        cellDescription.innerHTML = `<div class="transaction-description">
-                                        <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
-                                        ${transaction.description}
-                                     </div>`;
-        cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
-        cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
-        cellAction.innerHTML = `<i class="fas fa-trash-alt" onclick="confirmRemoveTransaction('${transaction.id}')" style="cursor:pointer; color:red;"></i>`;
-    }
-});
+            cellDate.innerText = transaction.date;
+            cellDescription.innerHTML = `<div class="transaction-description">
+                                            <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
+                                            ${transaction.description}
+                                         </div>`;
+            cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
+            cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
+            cellAction.innerHTML = `<i class="fas fa-trash-alt" onclick="confirmRemoveTransaction('${transaction.id}')" style="cursor:pointer; color:red;"></i>`;
+        }
+    });
 
-calculateBalances();
+    calculateBalances();
 }
 
 function confirmRemoveTransaction(transactionId) {
@@ -738,8 +756,27 @@ function adminUndoLastTransaction() {
         alert('Nenhuma ação anterior para corrigir.');
     }
 }
+
+function openChangePasswordModal() {
+    document.getElementById('changePasswordModal').style.display = 'block';
+}
+
+function closeChangePasswordModal() {
+    document.getElementById('changePasswordModal').style.display = 'none';
+}
+
+function changePassword() {
+    const newPassword = document.getElementById('newPassword').value;
+    const user = auth.currentUser;
+
+    user.updatePassword(newPassword).then(() => {
+        alert('Senha alterada com sucesso.');
+        closeChangePasswordModal();
+    }).catch(error => {
+        alert('Erro ao alterar senha: ' + error.message);
+    });
+}
+
     </script>
 </body>
 </html>
-
-           
