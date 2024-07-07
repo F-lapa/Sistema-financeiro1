@@ -65,7 +65,7 @@
             font-weight: bold;
             color: #555;
         }
-        input[type="text"], input[type="number"], input[type="date"], select {
+        input[type="text"], input[type="number"], input[type="date"], select, input[type="password"] {
             width: 100%;
             padding: 12px;
             margin-bottom: 10px;
@@ -170,7 +170,7 @@
             align-items: center;
         }
         .admin-section input, .admin-section select {
-            width: 50%;
+            width: 100%;
             margin-bottom: 10px;
         }
         .admin-section .buttons {
@@ -179,6 +179,20 @@
         .admin-section button {
             width: 100%;
             margin-bottom: 10px;
+        }
+        .password-field {
+            position: relative;
+        }
+        .password-field input {
+            width: calc(100% - 40px);
+            margin-bottom: 0;
+        }
+        .password-field i {
+            position: absolute;
+            right: 10px;
+            top: 12px;
+            cursor: pointer;
+            color: #007bff;
         }
         /* Modal */
         .modal {
@@ -335,9 +349,10 @@
                 <label for="newUserEmail">Email do Novo Usuário:</label>
                 <input type="text" id="newUserEmail" class="highlight">
             </div>
-            <div class="form-group">
+            <div class="form-group password-field">
                 <label for="newUserPassword">Senha do Novo Usuário:</label>
                 <input type="password" id="newUserPassword" class="highlight">
+                <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility()"></i>
             </div>
             <div class="form-group">
                 <label for="userSelect">Selecionar Usuário:</label>
@@ -347,8 +362,6 @@
             </div>
             <div class="buttons">
                 <button onclick="registerNewUser()">Registrar Novo Usuário</button>
-                <button onclick="clearAllTransactions()">Limpar Minhas Transações</button>
-                <button onclick="adminUndoLastTransaction()">Corrigir Última Ação do Usuário</button>
             </div>
         </div>
     </div>
@@ -373,14 +386,14 @@
     <script>
         // Configuração do Firebase
         var firebaseConfig = {
-            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-  projectId: "sistema-de-receitas-e-despesas",
-  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-  messagingSenderId: "252102478972",
-  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-  measurementId: "G-K2HCS7WNZV"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+            databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+            projectId: "sistema-de-receitas-e-despesas",
+            storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID",
+            measurementId: "YOUR_MEASUREMENT_ID"
         };
         // Inicialize o Firebase
         firebase.initializeApp(firebaseConfig);
@@ -684,21 +697,6 @@
             adminSection.style.display = adminSection.style.display === 'block' ? 'none' : 'block';
         }
 
-        function clearAllTransactions() {
-            if (confirm('Você tem certeza que deseja limpar todas as suas transações?')) {
-                const userId = auth.currentUser.uid;
-                database.ref('transactions/' + userId).remove().then(() => {
-                    transactions = [];
-                    updateDescriptionList();
-                    updateFilteredView();
-                    calculateBalances();
-                    alert('Todas as suas transações foram removidas.');
-                }).catch(error => {
-                    alert('Erro ao remover transações: ' + error.message);
-                });
-            }
-        }
-
         function registerNewUser() {
             const name = document.getElementById('newUserName').value;
             const email = document.getElementById('newUserEmail').value;
@@ -723,21 +721,6 @@
                 });
         }
 
-        function adminUndoLastTransaction() {
-            if (lastTransactionId) {
-                transactions = transactions.filter(transaction => transaction.id !== lastTransactionId);
-                saveTransactions();
-                updateDescriptionList();
-                updateFilteredView();
-                calculateBalances();
-                alert('Última ação do usuário foi corrigida.');
-                lastTransactionId = null;
-                localStorage.removeItem('lastTransactionId');
-            } else {
-                alert('Nenhuma ação anterior para corrigir.');
-            }
-        }
-
         function openChangePasswordModal() {
             document.getElementById('changePasswordModal').style.display = 'block';
         }
@@ -760,6 +743,20 @@
 
         function goToLimitPage() {
             window.location.href = 'definir_limite.html';
+        }
+
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById('newUserPassword');
+            const passwordToggle = document.getElementById('togglePassword');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                passwordToggle.classList.remove('fa-eye');
+                passwordToggle.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                passwordToggle.classList.remove('fa-eye-slash');
+                passwordToggle.classList.add('fa-eye');
+            }
         }
     </script>
 </body>
