@@ -414,8 +414,6 @@
         let allUsers = [];
         let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
 
-        document.getElementById('monthlyLimitValue').innerText = formatCurrency(monthlyLimit);
-
         function saveTransactions() {
             const userId = auth.currentUser.uid;
             database.ref('transactions/' + userId).set(transactions);
