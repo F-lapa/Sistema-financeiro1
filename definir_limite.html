@@ -8,22 +8,24 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            background-color: #f9f9f9;
             margin: 0;
             padding: 0;
         }
         .container {
             max-width: 600px;
             margin: 50px auto;
-            padding: 20px;
+            padding: 30px;
             background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
             text-align: center;
         }
         h1 {
-            color: #333333;
+            color: #333;
             margin-bottom: 20px;
+            font-size: 2em;
+            font-weight: 300;
         }
         .form-group {
             margin-bottom: 20px;
@@ -32,14 +34,14 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #555555;
+            color: #555;
         }
-        input[type="text"], input[type="number"], input[type="date"], select {
+        input[type="text"], input[type="date"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
             box-sizing: border-box;
             font-size: 16px;
             transition: all 0.3s ease;
@@ -54,13 +56,22 @@
             background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #0056b3;
+        }
+        .current-limit, .remaining-limit {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+        .current-limit span, .remaining-limit span {
+            font-weight: bold;
+            color: #007bff;
         }
     </style>
 </head>
@@ -79,8 +90,10 @@
             <button onclick="setMonthlyLimit()">Definir Limite</button>
             <button onclick="resetMonthlyLimit()">Zerar Limite de Gastos</button>
         </div>
-        <div class="form-group">
+        <div class="current-limit">
             <p>Limite Atual: <span id="currentLimit">R$ 0,00</span></p>
+        </div>
+        <div class="remaining-limit">
             <p>Gasto Restante: <span id="remainingLimit">R$ 0,00</span></p>
         </div>
     </div>
