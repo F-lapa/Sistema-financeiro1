@@ -232,10 +232,9 @@
         <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
         <i class="fas fa-key change-password" onclick="openChangePasswordModal()" title="Alterar Senha"></i>
         <i class="fas fa-user-shield admin-icon" id="adminIcon" onclick="toggleAdminSection()" title="Admin"></i>
-        <button onclick="goToLimitPage()">Definir Limite de Gastos</button>
         <div class="form-group">
             <label for="date">Data:</label>
-            <input type="date" id="date" onchange="updateFilteredView()" class="highlight">
+            <input type="date" id="date" class="highlight">
         </div>
         <div class="form-group">
             <label for="description">Descrição:</label>
@@ -254,6 +253,7 @@
         </div>
         <div class="buttons">
             <button onclick="addTransaction()">Adicionar</button>
+            <button onclick="goToLimitPage()">Definir Limite de Gastos</button>
         </div>
 
         <table id="transactionsTable">
@@ -482,7 +482,7 @@
             calculateBalances();
 
             // Reset form fields
-            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = getCurrentDate();
             document.getElementById('description').value = '';
             amountInput.value = '0,00';
             document.getElementById('type').value = 'receita';
@@ -661,9 +661,16 @@
             amountInput.value = amountInput.value.replace(/(,.*?),(.*?)/g, '$1'); // Ensure only one comma
         }
 
+        function getCurrentDate() {
+            const now = new Date();
+            const offset = -3; // Horário de Brasília (UTC-3)
+            const brasiliaTime = new Date(now.getTime() + offset * 3600 * 1000);
+            return brasiliaTime.toISOString().split('T')[0];
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const dateInput = document.getElementById('date');
-            dateInput.value = new Date().toISOString().split('T')[0];
+            dateInput.value = getCurrentDate();
         });
 
         function logout() {
