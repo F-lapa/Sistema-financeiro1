@@ -301,7 +301,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+     <div class="container">
         <div class="greeting" id="userGreeting"></div>
         <div class="logo"></div>
         <img src="logo.png" alt="Logo do Sistema" class="logo">
@@ -333,6 +333,7 @@
         </div>
         <div class="buttons">
             <button onclick="addTransaction()">Adicionar</button>
+            <button onclick="openTransactionDetailsModal()">Detalhes de Transações</button>
             <button onclick="goToLimitPage()">Definir Limite de Gastos</button>
         </div>
 
@@ -427,7 +428,6 @@
                 <button onclick="registerNewUser()">Registrar Novo Usuário</button>
             </div>
         </div>
-        <button onclick="openTransactionDetailsModal()">Detalhes de Transações</button>
     </div>
 
     <div id="changePasswordModal" class="modal">
@@ -610,9 +610,9 @@
 
                     cellDate.innerText = transaction.date;
                     cellDescription.innerHTML = `<div class="transaction-description">
-                                                <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
-                                                ${transaction.description}
-                                            </div>`;
+                                                    <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
+                                                    ${transaction.description}
+                                                </div>`;
                     cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
                     cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
                     cellAction.innerHTML = `<i class="fas fa-trash-alt" onclick="confirmRemoveTransaction('${transaction.id}')" style="cursor:pointer; color:red;"></i>`;
@@ -705,9 +705,9 @@
 
                 cellDate.innerText = transaction.date;
                 cellDescription.innerHTML = `<div class="transaction-description">
-                                            <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
-                                            ${transaction.description}
-                                        </div>`;
+                                                <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
+                                                ${transaction.description}
+                                            </div>`;
                 cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
                 cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
             });
@@ -870,7 +870,7 @@
             const ctx = document.getElementById('transactionChart').getContext('2d');
             const chartData = calculateTransactionData(chartType, startDate, endDate);
 
-            const chart = new Chart(ctx, {
+            new Chart(ctx, {
                 type: 'doughnut',
                 data: {
                     labels: chartData.labels,
