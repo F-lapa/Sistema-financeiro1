@@ -239,22 +239,21 @@
             100% { background-position: 200px; }
         }
         .logo {
-    width: 200px; /* Aumenta a largura da logo */
-    height: auto;
-    margin: 0 auto;
-    display: block;
-    background: url('logo.png') no-repeat center;
-    background-size: contain;
-    animation: shine 2s infinite linear;
-    background-image: linear-gradient(to right, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.1) 100%);
-    background-size: 200px 100%;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.logo:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(52, 152, 219, 0.7);
-}
+            width: 200px; /* Aumenta a largura da logo */
+            height: auto;
+            margin: 0 auto;
+            display: block;
+            background: url('logo.png') no-repeat center;
+            background-size: contain;
+            animation: shine 2s infinite linear;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.1) 100%);
+            background-size: 200px 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.7);
+        }
 
         input[type="text"]:hover, input[type="number"]:hover, input[type="date"]:hover, select:hover, input[type="password"]:hover {
             border-color: #3498db;
@@ -820,6 +819,8 @@ function closeSpecificTransactionsModal() {
     }, 500);
 }
 
+let specificTransactionsChart;
+
 function generateSpecificTransactionsReport() {
     const startDate = document.getElementById('specificStartDate').value;
     const endDate = document.getElementById('specificEndDate').value;
@@ -835,8 +836,12 @@ function generateSpecificTransactionsReport() {
                                    .reduce((total, transaction) => total + transaction.amount, 0);
     });
 
+    if (specificTransactionsChart) {
+        specificTransactionsChart.destroy();
+    }
+
     const ctx = document.getElementById('specificTransactionsChart').getContext('2d');
-    new Chart(ctx, {
+    specificTransactionsChart = new Chart(ctx, {
         type: 'pie',
         data: {
             labels: descriptions,
@@ -845,6 +850,20 @@ function generateSpecificTransactionsReport() {
                 data: data,
                 backgroundColor: descriptions.map(() => `#${Math.floor(Math.random()*16777215).toString(16)}`)
             }]
+        },
+        options: {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            let total = tooltipItem.dataset.data.reduce((sum, value) => sum + value, 0);
+                            let currentValue = tooltipItem.raw;
+                            let percentage = ((currentValue / total) * 100).toFixed(2);
+                            return `${tooltipItem.label}: R$ ${currentValue.toFixed(2)} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
         }
     });
 }
