@@ -85,10 +85,11 @@
         }
         .buttons {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            align-items: center;
         }
         button {
-            width: 32%;
+            width: 80%;
             padding: 10px;
             background-color: #3498db;
             color: #ecf0f1;
@@ -97,6 +98,7 @@
             cursor: pointer;
             font-size: 14px;
             transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-bottom: 10px;
         }
         button:hover {
             background-color: #2980b9;
@@ -293,9 +295,10 @@
             </select>
         </div>
         <div class="buttons">
-            <button onclick="addTransaction()">Adicionar</button>
-            <button onclick="openSpecificTransactionsModal()">Transações Específicas</button>
+            <button onclick="addTransaction()">Adicionar Transação</button>
+            <button onclick="openFilterPeriodModal()">Filtrar Período</button>
             <button onclick="goToLimitPage()">Definir Limite de Gastos</button>
+            <button onclick="openSpecificTransactionsModal()">Transações Específicas</button>
         </div>
 
         <table id="transactionsTable">
@@ -319,9 +322,93 @@
             <p>Saldo do Ano: <span id="annualBalance">R$ 0,00</span></p>
         </div>
 
-        <div class="filter">
-            <h2>Filtrar por Período</h2>
-            <button onclick="openFilterPeriodModal()">Filtrar Período</button>
+        <div id="filterPeriodModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeFilterPeriodModal()">&times;</span>
+                <h2>Filtrar por Período</h2>
+                <div class="form-group">
+                    <label for="startDate">Data Inicial:</label>
+                    <input type="date" id="startDate" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="endDate">Data Final:</label>
+                    <input type="date" id="endDate" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="filterType">Tipo:</label>
+                    <select id="filterType" class="highlight">
+                        <option value="">Todos</option>
+                        <option value="receita">Receita</option>
+                        <option value="despesa">Despesa</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filterDescription">Descrição:</label>
+                    <select id="filterDescription" class="highlight">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <button onclick="filterByPeriod()">Filtrar</button>
+                <button onclick="clearFilter()">Limpar Filtro</button>
+                <div id="filteredResults">
+                    <p>Total Receitas: <span id="totalReceitas">R$ 0,00</span></p>
+                    <p>Total Despesas: <span id="totalDespesas" class="negative">R$ 0,00</span></p>
+                    <p>Saldo: <span id="totalSaldo">R$ 0,00</span></p>
+                </div>
+                <div class="filter-results" id="filterResults">
+                    <h3>Extrato</h3>
+                    <table id="filteredTransactionsTable">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th>Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Filtered transactions will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="changePasswordModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeChangePasswordModal()">&times;</span>
+                <h2>Alterar Senha</h2>
+                <div class="form-group password-field">
+                    <label for="newPassword">Nova Senha:</label>
+                    <input type="password" id="newPassword" class="highlight">
+                    <i class="fas fa-eye" id="toggleChangePassword" onclick="togglePasswordVisibility('newPassword')"></i>
+                </div>
+                <button onclick="changePassword()">Alterar Senha</button>
+            </div>
+        </div>
+
+        <div id="specificTransactionsModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeSpecificTransactionsModal()">&times;</span>
+                <h2>Transações Específicas</h2>
+                <div class="form-group">
+                    <label for="specificStartDate">Data Inicial:</label>
+                    <input type="date" id="specificStartDate" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="specificEndDate">Data Final:</label>
+                    <input type="date" id="specificEndDate" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="specificType">Tipo:</label>
+                    <select id="specificType" class="highlight">
+                        <option value="receita">Receita</option>
+                        <option value="despesa">Despesa</option>
+                    </select>
+                </div>
+                <button onclick="generateSpecificTransactionsReport()">Gerar Relatório</button>
+                <canvas id="specificTransactionsChart" style="margin-top: 20px;"></canvas>
+            </div>
         </div>
 
         <div class="admin-section" id="adminSection">
@@ -345,101 +432,13 @@
         </div>
     </div>
 
-    <div id="filterPeriodModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeFilterPeriodModal()">&times;</span>
-            <h2>Filtrar por Período</h2>
-            <div class="form-group">
-                <label for="startDate">Data Inicial:</label>
-                <input type="date" id="startDate" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="endDate">Data Final:</label>
-                <input type="date" id="endDate" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="filterType">Tipo:</label>
-                <select id="filterType" class="highlight">
-                    <option value="">Todos</option>
-                    <option value="receita">Receita</option>
-                    <option value="despesa">Despesa</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="filterDescription">Descrição:</label>
-                <select id="filterDescription" class="highlight">
-                    <option value="">Todos</option>
-                </select>
-            </div>
-            <button onclick="filterByPeriod()">Filtrar</button>
-            <button onclick="clearFilter()">Limpar Filtro</button>
-            <div id="filteredResults">
-                <p>Total Receitas: <span id="totalReceitas">R$ 0,00</span></p>
-                <p>Total Despesas: <span id="totalDespesas" class="negative">R$ 0,00</span></p>
-                <p>Saldo: <span id="totalSaldo">R$ 0,00</span></p>
-            </div>
-            <div class="filter-results" id="filterResults">
-                <h3>Extrato</h3>
-                <table id="filteredTransactionsTable">
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Descrição</th>
-                            <th>Valor</th>
-                            <th>Tipo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Filtered transactions will be added here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div id="changePasswordModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeChangePasswordModal()">&times;</span>
-            <h2>Alterar Senha</h2>
-            <div class="form-group password-field">
-                <label for="newPassword">Nova Senha:</label>
-                <input type="password" id="newPassword" class="highlight">
-                <i class="fas fa-eye" id="toggleChangePassword" onclick="togglePasswordVisibility('newPassword')"></i>
-            </div>
-            <button onclick="changePassword()">Alterar Senha</button>
-        </div>
-    </div>
-
-    <div id="specificTransactionsModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeSpecificTransactionsModal()">&times;</span>
-            <h2>Transações Específicas</h2>
-            <div class="form-group">
-                <label for="specificStartDate">Data Inicial:</label>
-                <input type="date" id="specificStartDate" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="specificEndDate">Data Final:</label>
-                <input type="date" id="specificEndDate" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="specificType">Tipo:</label>
-                <select id="specificType" class="highlight">
-                    <option value="receita">Receita</option>
-                    <option value="despesa">Despesa</option>
-                </select>
-            </div>
-            <button onclick="generateSpecificTransactionsReport()">Gerar Relatório</button>
-            <canvas id="specificTransactionsChart" style="margin-top: 20px;"></canvas>
-        </div>
-    </div>
-
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var firebaseConfig = {
+       <script>
+
+           var firebaseConfig = {
     apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
     authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
     databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
@@ -888,7 +887,6 @@ function generateSpecificTransactionsReport() {
     });
 }
 
-       
-    </script>
+       </script>    
 </body>
 </html>
