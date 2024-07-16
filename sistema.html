@@ -13,36 +13,50 @@
             margin: 0;
             padding: 0;
             color: #ecf0f1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
         }
         .container {
-            width: 90%;
-            max-width: 800px;
+            max-width: 600px;
+            margin: 30px auto;
             padding: 20px;
             background-color: #34495e;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             border-radius: 12px;
             position: relative;
         }
-        header, .actions, .transactions, .balance, .admin-section {
-            margin-bottom: 20px;
+        h1 {
+            text-align: center;
+            color: #ecf0f1;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            font-weight: 500;
         }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .greeting {
+            text-align: center;
+            color: #ecf0f1;
+            margin-bottom: 15px;
+            font-size: 1.2em;
         }
-        header .logo {
-            width: 100px;
-            height: auto;
-            animation: shine 2s infinite linear;
+        .logout, .change-password {
+            position: absolute;
+            top: 10px;
+            cursor: pointer;
+            color: #ecf0f1;
+            font-size: 1.2em;
         }
-        header .controls {
-            display: flex;
-            gap: 20px;
+        .logout {
+            right: 10px;
+        }
+        .change-password {
+            right: 40px;
+        }
+        .admin-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+            color: #ecf0f1;
+            font-size: 1.2em;
+            display: none;
         }
         .form-group {
             margin-bottom: 15px;
@@ -53,7 +67,7 @@
             font-weight: bold;
             color: #bdc3c7;
         }
-        input, select {
+        input[type="text"], input[type="number"], input[type="date"], select, input[type="password"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 8px;
@@ -69,8 +83,13 @@
             border: 2px solid #3498db;
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         button {
-            width: 100%;
+            width: 80%;
             padding: 10px;
             background-color: #3498db;
             color: #ecf0f1;
@@ -87,6 +106,7 @@
         }
         table {
             width: 100%;
+            margin-top: 15px;
             border-collapse: separate;
             border-spacing: 0 8px;
         }
@@ -99,16 +119,84 @@
             background-color: #2c3e50;
             color: #bdc3c7;
         }
-        .totals p {
+        tbody tr {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        tbody tr:hover {
+            background-color: #3b4b5e;
+        }
+        .totals, .filter {
+            margin-top: 15px;
+            text-align: center;
+        }
+        .totals p, .filter p {
             font-size: 18px;
             color: #ecf0f1;
         }
-        .totals span {
+        .totals span, .filter span {
             font-weight: bold;
             color: #3498db;
         }
         .negative {
             color: red !important;
+        }
+        .transaction-description {
+            display: flex;
+            align-items: center;
+        }
+        .transaction-amount {
+            text-align: left;
+            color: green;
+        }
+        .transaction-amount.despesa {
+            color: red;
+        }
+        .transaction-icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        .filter-results {
+            margin-top: 20px;
+        }
+        .admin-section {
+            display: none;
+            margin-top: 20px;
+        }
+        .admin-section h2 {
+            text-align: center;
+            color: #ecf0f1;
+        }
+        .admin-section .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .admin-section input, .admin-section select {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .admin-section .buttons {
+            flex-direction: column;
+        }
+        .admin-section button {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .password-field {
+            position: relative;
+        }
+        .password-field input {
+            width: calc(100% - 40px);
+            margin-bottom: 0;
+        }
+        .password-field i {
+            position: absolute;
+            right: 10px;
+            top: 12px;
+            cursor: pointer;
+            color: #3498db;
         }
         .modal {
             display: none;
@@ -124,7 +212,7 @@
         .modal-content {
             background-color: #34495e;
             margin: 15% auto;
-            padding: 20px;
+            padding: 15px;
             border: 1px solid #444;
             width: 70%;
             max-width: 400px;
@@ -144,77 +232,186 @@
             text-decoration: none;
             cursor: pointer;
         }
+        .fa-trash-alt {
+            cursor: pointer;
+            color: red;
+        }
         @keyframes shine {
             0% { background-position: -200px; }
             100% { background-position: 200px; }
+        }
+        .logo {
+            width: 200px; /* Aumenta a largura da logo */
+            height: auto;
+            margin: 0 auto;
+            display: block;
+            background: url('logo.png') no-repeat center;
+            background-size: contain;
+            animation: shine 2s infinite linear;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.1) 100%);
+            background-size: 200px 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.7);
+        }
+
+        input[type="text"]:hover, input[type="number"]:hover, input[type="date"]:hover, select:hover, input[type="password"]:hover {
+            border-color: #3498db;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <img src="logo.png" alt="Logo do Sistema" class="logo">
-            <div class="controls">
-                <i class="fas fa-user-shield admin-icon" onclick="toggleAdminSection()" title="Admin"></i>
-                <i class="fas fa-key change-password" onclick="openChangePasswordModal()" title="Alterar Senha"></i>
-                <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
-            </div>
-        </header>
+        <div class="greeting" id="userGreeting"></div>
+        <div class="logo"></div>
+        <img src="logo.png" alt="Logo do Sistema" class="logo">
+        <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
+        <i class="fas fa-key change-password" onclick="openChangePasswordModal()" title="Alterar Senha"></i>
+        <i class="fas fa-user-shield admin-icon" id="adminIcon" onclick="toggleAdminSection()" title="Admin"></i>
+        
+        <input type="text" style="display:none;" autocomplete="username">
+        <input type="password" style="display:none;" autocomplete="new-password">
+        
+        <div class="form-group">
+            <label for="date">Data:</label>
+            <input type="date" id="date" class="highlight" onchange="updateFilteredView()">
+        </div>
+        <div class="form-group">
+            <label for="description">Descrição:</label>
+            <input type="text" id="description" class="highlight">
+        </div>
+        <div class="form-group">
+            <label for="amount">Valor (R$):</label>
+            <input type="text" id="amount" name="amount_field" placeholder="0,00" value="0,00" class="highlight" autocomplete="off" oninput="validateAmount()">
+        </div>
+        <div class="form-group">
+            <label for="type">Tipo:</label>
+            <select id="type" class="highlight">
+                <option value="receita">Receita</option>
+                <option value="despesa">Despesa</option>
+            </select>
+        </div>
+        <div class="buttons">
+            <button onclick="addTransaction()">Adicionar Transação</button>
+            <button onclick="openFilterPeriodModal()">Filtrar Período</button>
+            <button onclick="goToLimitPage()">Definir Limite de Gastos</button>
+            <button onclick="openSpecificTransactionsModal()">Transações Específicas</button>
+        </div>
 
-        <section class="actions">
-            <div class="form-group">
-                <label for="date">Data:</label>
-                <input type="date" id="date" class="highlight" onchange="updateFilteredView()">
-            </div>
-            <div class="form-group">
-                <label for="description">Descrição:</label>
-                <input type="text" id="description" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="amount">Valor (R$):</label>
-                <input type="text" id="amount" name="amount_field" placeholder="0,00" value="0,00" class="highlight" autocomplete="off" oninput="validateAmount()">
-            </div>
-            <div class="form-group">
-                <label for="type">Tipo:</label>
-                <select id="type" class="highlight">
-                    <option value="receita">Receita</option>
-                    <option value="despesa">Despesa</option>
-                </select>
-            </div>
-            <div class="buttons">
-                <button onclick="addTransaction()">Adicionar Transação</button>
-                <button onclick="openFilterPeriodModal()">Filtrar Período</button>
-                <button onclick="goToLimitPage()">Definir Limite de Gastos</button>
-                <button onclick="openSpecificTransactionsModal()">Transações Específicas</button>
-            </div>
-        </section>
+        <table id="transactionsTable">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Tipo</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Transactions will be added here -->
+            </tbody>
+        </table>
 
-        <section class="transactions">
-            <table id="transactionsTable">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Descrição</th>
-                        <th>Valor</th>
-                        <th>Tipo</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Transactions will be added here -->
-                </tbody>
-            </table>
-        </section>
+        <div class="totals">
+            <p>Saldo do Dia: <span id="dailyBalance">R$ 0,00</span></p>
+            <p>Saldo do Mês: <span id="monthlyBalance">R$ 0,00</span></p>
+            <p>Saldo do Ano: <span id="annualBalance">R$ 0,00</span></p>
+        </div>
 
-        <section class="balance">
-            <div class="totals">
-                <p>Saldo do Dia: <span id="dailyBalance">R$ 0,00</span></p>
-                <p>Saldo do Mês: <span id="monthlyBalance">R$ 0,00</span></p>
-                <p>Saldo do Ano: <span id="annualBalance">R$ 0,00</span></p>
+        <div id="filterPeriodModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeFilterPeriodModal()">&times;</span>
+                <h2>Filtrar por Período</h2>
+                <div class="form-group">
+                    <label for="startDate">Data Inicial:</label>
+                    <input type="date" id="startDate" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="endDate">Data Final:</label>
+                    <input type="date" id="endDate" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="filterType">Tipo:</label>
+                    <select id="filterType" class="highlight">
+                        <option value="">Todos</option>
+                        <option value="receita">Receita</option>
+                        <option value="despesa">Despesa</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filterDescription">Descrição:</label>
+                    <select id="filterDescription" class="highlight">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <button onclick="filterByPeriod()">Filtrar</button>
+                <button onclick="clearFilter()">Limpar Filtro</button>
+                <div id="filteredResults">
+                    <p>Total Receitas: <span id="totalReceitas">R$ 0,00</span></p>
+                    <p>Total Despesas: <span id="totalDespesas" class="negative">R$ 0,00</span></p>
+                    <p>Saldo: <span id="totalSaldo">R$ 0,00</span></p>
+                </div>
+                <div class="filter-results" id="filterResults">
+                    <h3>Extrato</h3>
+                    <table id="filteredTransactionsTable">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th>Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Filtered transactions will be added here -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </section>
+        </div>
 
-        <section class="admin-section" id="adminSection">
+        <div id="changePasswordModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeChangePasswordModal()">&times;</span>
+                <h2>Alterar Senha</h2>
+                <div class="form-group password-field">
+                    <label for="newPassword">Nova Senha:</label>
+                    <input type="password" id="newPassword" class="highlight">
+                    <i class="fas fa-eye" id="toggleChangePassword" onclick="togglePasswordVisibility('newPassword')"></i>
+                </div>
+                <button onclick="changePassword()">Alterar Senha</button>
+            </div>
+        </div>
+
+        <div id="specificTransactionsModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeSpecificTransactionsModal()">&times;</span>
+                <h2>Transações Específicas</h2>
+                <div class="form-group">
+                    <label for="specificStartDate">Data Inicial:</label>
+                    <input type="date" id="specificStartDate" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="specificEndDate">Data Final:</label>
+                    <input type="date" id="specificEndDate" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="specificType">Tipo:</label>
+                    <select id="specificType" class="highlight">
+                        <option value="receita">Receita</option>
+                        <option value="despesa">Despesa</option>
+                    </select>
+                </div>
+                <button onclick="generateSpecificTransactionsReport()">Gerar Relatório</button>
+                <canvas id="specificTransactionsChart" style="margin-top: 20px;"></canvas>
+            </div>
+        </div>
+
+        <div class="admin-section" id="adminSection">
             <h2>Gerenciamento de Usuários</h2>
             <div class="form-group">
                 <label for="newUserName">Nome do Novo Usuário:</label>
@@ -226,113 +423,21 @@
             </div>
             <div class="form-group password-field">
                 <label for="newUserPassword">Senha do Novo Usuário:</label>
-                <input type="password" id="newUserPassword" class="highlight">
+                <input type="password" id="newUserPassword" class="highlight" value="">
                 <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility('newUserPassword')"></i>
             </div>
             <div class="buttons">
                 <button onclick="registerNewUser()">Registrar Novo Usuário</button>
             </div>
-        </section>
-    </div>
-
-    <!-- Modals -->
-    <div id="changePasswordModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeChangePasswordModal()">&times;</span>
-            <h2>Alterar Senha</h2>
-            <div class="form-group password-field">
-                <label for="newPassword">Nova Senha:</label>
-                <input type="password" id="newPassword" class="highlight">
-                <i class="fas fa-eye" id="toggleChangePassword" onclick="togglePasswordVisibility('newPassword')"></i>
-            </div>
-            <button onclick="changePassword()">Alterar Senha</button>
         </div>
     </div>
 
-    <div id="filterPeriodModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeFilterPeriodModal()">&times;</span>
-            <h2>Filtrar por Período</h2>
-            <div class="form-group">
-                <label for="startDate">Data Inicial:</label>
-                <input type="date" id="startDate" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="endDate">Data Final:</label>
-                <input type="date" id="endDate" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="filterType">Tipo:</label>
-                <select id="filterType" class="highlight">
-                    <option value="">Todos</option>
-                    <option value="receita">Receita</option>
-                    <option value="despesa">Despesa</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="filterDescription">Descrição:</label>
-                <select id="filterDescription" class="highlight">
-                    <option value="">Todos</option>
-                </select>
-            </div>
-            <button onclick="filterByPeriod()">Filtrar</button>
-            <button onclick="clearFilter()">Limpar Filtro</button>
-            <div id="filteredResults">
-                <p>Total Receitas: <span id="totalReceitas">R$ 0,00</span></p>
-                <p>Total Despesas: <span id="totalDespesas" class="negative">R$ 0,00</span></p>
-                <p>Saldo: <span id="totalSaldo">R$ 0,00</span></p>
-            </div>
-            <div class="filter-results" id="filterResults">
-                <h3>Extrato</h3>
-                <table id="filteredTransactionsTable">
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Descrição</th>
-                            <th>Valor</th>
-                            <th>Tipo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Filtered transactions will be added here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div id="specificTransactionsModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeSpecificTransactionsModal()">&times;</span>
-            <h2>Transações Específicas</h2>
-            <div class="form-group">
-                <label for="specificStartDate">Data Inicial:</label>
-                <input type="date" id="specificStartDate" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="specificEndDate">Data Final:</label>
-                <input type="date" id="specificEndDate" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="specificType">Tipo:</label>
-                <select id="specificType" class="highlight">
-                    <option value="receita">Receita</option>
-                    <option value="despesa">Despesa</option>
-                </select>
-            </div>
-            <button onclick="generateSpecificTransactionsReport()">Gerar Relatório</button>
-            <canvas id="specificTransactionsChart" style="margin-top: 20px;"></canvas>
-        </div>
-    </div>
-
-    <!-- Scripts -->
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         var firebaseConfig = {
-            var firebaseConfig = {
     apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
     authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
     databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
@@ -342,446 +447,445 @@
     appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
     measurementId: "G-K2HCS7WNZV"
 };
-        };
 
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const auth = firebase.auth();
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const auth = firebase.auth();
 
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                const userId = user.uid;
-                database.ref('users/' + userId).once('value').then((snapshot) => {
-                    const userData = snapshot.val();
-                    const userName = userData ? userData.name : "Usuário";
-                    localStorage.setItem('username', userName);
-                    document.getElementById('userGreeting').innerHTML = user.email === 'admin@example.com' ? 
-                        '<span>Olá, <strong>Administrador!</strong></span>' : 
-                        '<span>Olá, <strong>' + userName + '</strong>!</span>';
-                    loadTransactions();
-                    checkAdmin(user.email);
-                });
-            } else {
-                window.location.href = 'index.html';  
-            }
+auth.onAuthStateChanged(user => {
+    if (user) {
+        const userId = user.uid;
+        database.ref('users/' + userId).once('value').then((snapshot) => {
+            const userData = snapshot.val();
+            const userName = userData ? userData.name : "Usuário";
+            localStorage.setItem('username', userName);
+            document.getElementById('userGreeting').innerHTML = user.email === 'fernandolapa1987@gmail.com' ? 
+                '<span>Olá, <strong>Administrador!</strong></span>' : 
+                '<span>Olá, <strong>' + userName + '</strong>!</span>';
+            loadTransactions();
+            checkAdmin(user.email);
         });
+    } else {
+        window.location.href = 'index.html';  
+    }
+});
 
-        let transactions = [];
-        let lastTransactionId = localStorage.getItem('lastTransactionId');
-        let allUsers = [];
-        let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
+let transactions = [];
+let lastTransactionId = localStorage.getItem('lastTransactionId');
+let allUsers = [];
+let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
 
-        function saveTransactions() {
-            const userId = auth.currentUser.uid;
-            database.ref('transactions/' + userId).set(transactions);
+function saveTransactions() {
+    const userId = auth.currentUser.uid;
+    database.ref('transactions/' + userId).set(transactions);
+}
+
+function loadTransactions() {
+    const userId = auth.currentUser.uid;
+    database.ref('transactions/' + userId).once('value', function(snapshot) {
+        if (snapshot.val()) {
+            transactions = snapshot.val();
+            updateDescriptionList();
+            updateFilteredView();
+            calculateBalances();
+        }
+    });
+}
+
+function checkAdmin(email) {
+    if (email === 'fernandolapa1987@gmail.com') {
+        document.getElementById('adminIcon').style.display = 'block';
+        loadAllUsers();
+    }
+}
+
+function loadAllUsers() {
+    database.ref('users').once('value').then((snapshot) => {
+        const users = snapshot.val();
+        for (let uid in users) {
+            allUsers.push({ uid, name: users[uid].name });
+        }
+    });
+}
+
+function formatCurrency(value) {
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function parseCurrency(value) {
+    return parseFloat(value.replace(/\./g, '').replace(',', '.').replace('R$', '')) || 0;
+}
+
+function addTransaction() {
+    const date = document.getElementById('date').value;
+    const description = document.getElementById('description').value;
+    const amountInput = document.getElementById('amount');
+    const amount = parseCurrency(amountInput.value);
+    const type = document.getElementById('type').value;
+
+    const transaction = { id: generateTransactionId(), date, description, amount, type };
+    transactions.push(transaction);
+    lastTransactionId = transaction.id;
+    localStorage.setItem('lastTransactionId', lastTransactionId);
+
+    saveTransactions();
+    updateDescriptionList();
+    updateFilteredView();
+    calculateBalances();
+
+    document.getElementById('date').value = getCurrentDate();
+    document.getElementById('description').value = '';
+    amountInput.value = '0,00';
+    document.getElementById('type').value = 'receita';
+}
+
+function generateTransactionId() {
+    return '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function updateDescriptionList() {
+    const filterDescription = document.getElementById('filterDescription');
+    filterDescription.innerHTML = '<option value="">Todos</option>';
+    const uniqueDescriptions = [...new Set(transactions.map(t => t.description))];
+    uniqueDescriptions.forEach(description => {
+        const option = document.createElement('option');
+        option.value = description;
+        option.text = description;
+        filterDescription.appendChild(option);
+    });
+}
+
+function updateFilteredView() {
+    const selectedDate = document.getElementById('date').value;
+    const tbody = document.getElementById('transactionsTable').getElementsByTagName('tbody')[0];
+    tbody.innerHTML = '';
+
+    transactions.forEach(transaction => {
+        if (transaction.date === selectedDate) {
+            const row = tbody.insertRow();
+            
+            const cellDate = row.insertCell(0);
+            const cellDescription = row.insertCell(1);
+            const cellAmount = row.insertCell(2);
+            const cellType = row.insertCell(3);
+            const cellAction = row.insertCell(4);
+
+            cellDate.innerText = transaction.date;
+            cellDescription.innerHTML = `<div class="transaction-description">
+                                            <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
+                                            ${transaction.description}
+                                         </div>`;
+            cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
+            cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
+            cellAction.innerHTML = `<i class="fas fa-trash-alt" onclick="confirmRemoveTransaction('${transaction.id}')" style="cursor:pointer; color:red;"></i>`;
+        }
+    });
+
+    calculateBalances();
+}
+
+function confirmRemoveTransaction(transactionId) {
+    if (confirm('Tem certeza que deseja remover esta transação?')) {
+        removeTransaction(transactionId);
+    }
+}
+
+function removeTransaction(transactionId) {
+    transactions = transactions.filter(transaction => transaction.id !== transactionId);
+    saveTransactions();
+    updateDescriptionList();
+    updateFilteredView();
+    calculateBalances();
+}
+
+function calculateBalances() {
+    const selectedDate = document.getElementById('date').value;
+    const currentMonth = selectedDate.slice(0, 7);
+    const currentYear = selectedDate.slice(0, 4);
+
+    let dailyBalance = 0;
+    let monthlyBalance = 0;
+    let annualBalance = 0;
+
+    transactions.forEach(transaction => {
+        if (transaction.date === selectedDate) {
+            dailyBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
         }
 
-        function loadTransactions() {
-            const userId = auth.currentUser.uid;
-            database.ref('transactions/' + userId).once('value', function(snapshot) {
-                if (snapshot.val()) {
-                    transactions = snapshot.val();
-                    updateDescriptionList();
-                    updateFilteredView();
-                    calculateBalances();
-                }
-            });
+        if (transaction.date.startsWith(currentMonth)) {
+            monthlyBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
         }
 
-        function checkAdmin(email) {
-            if (email === 'admin@example.com') {
-                document.getElementById('adminIcon').style.display = 'block';
+        if (transaction.date.startsWith(currentYear)) {
+            annualBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
+        }
+    });
+
+    const dailyBalanceSpan = document.getElementById('dailyBalance');
+    const monthlyBalanceSpan = document.getElementById('monthlyBalance');
+    const annualBalanceSpan = document.getElementById('annualBalance');
+
+    dailyBalanceSpan.innerText = formatCurrency(dailyBalance);
+    monthlyBalanceSpan.innerText = formatCurrency(monthlyBalance);
+    annualBalanceSpan.innerText = formatCurrency(annualBalance);
+
+    dailyBalanceSpan.classList.toggle('negative', dailyBalance < 0);
+    monthlyBalanceSpan.classList.toggle('negative', monthlyBalance < 0);
+    annualBalanceSpan.classList.toggle('negative', annualBalance < 0);
+}
+
+function filterByPeriod() {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    const filterType = document.getElementById('filterType').value;
+    const filterDescription = document.getElementById('filterDescription').value.toLowerCase();
+
+    let totalReceitas = 0;
+    let totalDespesas = 0;
+
+    const filteredTransactions = transactions.filter(transaction => 
+        transaction.date >= startDate && transaction.date <= endDate &&
+        (filterType === '' || transaction.type === filterType) &&
+        (filterDescription === '' || transaction.description.toLowerCase().includes(filterDescription))
+    );
+
+    const filteredTbody = document.getElementById('filteredTransactionsTable').getElementsByTagName('tbody')[0];
+    filteredTbody.innerHTML = '';
+
+    filteredTransactions.forEach(transaction => {
+        if (transaction.type === 'receita') {
+            totalReceitas += transaction.amount;
+        } else if (transaction.type === 'despesa') {
+            totalDespesas += transaction.amount;
+        }
+
+        const row = filteredTbody.insertRow();
+        const cellDate = row.insertCell(0);
+        const cellDescription = row.insertCell(1);
+        const cellAmount = row.insertCell(2);
+        const cellType = row.insertCell(3);
+
+        cellDate.innerText = transaction.date;
+        cellDescription.innerHTML = `<div class="transaction-description">
+                                        <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
+                                        ${transaction.description}
+                                     </div>`;
+        cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
+        cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
+    });
+
+    const totalSaldo = totalReceitas - totalDespesas;
+
+    const totalReceitasSpan = document.getElementById('totalReceitas');
+    const totalDespesasSpan = document.getElementById('totalDespesas');
+    const totalSaldoSpan = document.getElementById('totalSaldo');
+
+    totalReceitasSpan.innerText = formatCurrency(totalReceitas);
+    totalDespesasSpan.innerText = formatCurrency(totalDespesas);
+    totalSaldoSpan.innerText = formatCurrency(totalSaldo);
+
+    totalDespesasSpan.classList.add('negative');
+    totalSaldoSpan.classList.toggle('negative', totalSaldo < 0);
+}
+
+function clearFilter() {
+    document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value = '';
+    document.getElementById('filterType').value = '';
+    document.getElementById('filterDescription').value = '';
+    document.getElementById('filteredTransactionsTable').getElementsByTagName('tbody')[0].innerHTML = '';
+    document.getElementById('totalReceitas').innerText = 'R$ 0,00';
+    document.getElementById('totalDespesas').innerText = 'R$ 0,00';
+    document.getElementById('totalSaldo').innerText = 'R$ 0,00';
+}
+
+const inputs = document.querySelectorAll('input, select');
+inputs.forEach(input => {
+    input.addEventListener('focus', function() {
+        this.classList.remove('highlight');
+    });
+});
+
+function validateAmount() {
+    const amountInput = document.getElementById('amount');
+    amountInput.value = amountInput.value.replace(/[^\d,]/g, '');
+    amountInput.value = amountInput.value.replace(/(,.*?),(.*?)/g, '$1');
+}
+
+function getCurrentDate() {
+    const now = new Date();
+    const offset = -3;
+    const brasiliaTime = new Date(now.getTime() + offset * 3600 * 1000);
+    return brasiliaTime.toISOString().split('T')[0];
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('date');
+    dateInput.value = getCurrentDate();
+    updateFilteredView();
+});
+
+function logout() {
+    auth.signOut().then(() => {
+        localStorage.removeItem('loggedIn');
+        localStorage.removeItem('username');
+        localStorage.removeItem('lastTransactionId');
+        window.location.href = 'index.html';
+    }).catch(error => {
+        console.error('Erro ao deslogar: ', error);
+    });
+}
+
+function toggleAdminSection() {
+    const adminSection = document.getElementById('adminSection');
+    adminSection.style.display = adminSection.style.display === 'block' ? 'none' : 'block';
+}
+
+function registerNewUser() {
+    const name = document.getElementById('newUserName').value;
+    const email = document.getElementById('newUserEmail').value;
+    const password = document.getElementById('newUserPassword').value;
+
+    auth.createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+            const user = userCredential.user;
+            database.ref('users/' + user.uid).set({
+                name: name,
+                email: email
+            }).then(() => {
+                alert('Novo usuário registrado com sucesso.');
+                document.getElementById('newUserName').value = '';
+                document.getElementById('newUserEmail').value = '';
+                document.getElementById('newUserPassword').value = '';
                 loadAllUsers();
-            }
-        }
-
-        function loadAllUsers() {
-            database.ref('users').once('value').then((snapshot) => {
-                const users = snapshot.val();
-                for (let uid in users) {
-                    allUsers.push({ uid, name: users[uid].name });
-                }
             });
-        }
-
-        function formatCurrency(value) {
-            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        }
-
-        function parseCurrency(value) {
-            return parseFloat(value.replace(/\./g, '').replace(',', '.').replace('R$', '')) || 0;
-        }
-
-        function addTransaction() {
-            const date = document.getElementById('date').value;
-            const description = document.getElementById('description').value;
-            const amountInput = document.getElementById('amount');
-            const amount = parseCurrency(amountInput.value);
-            const type = document.getElementById('type').value;
-
-            const transaction = { id: generateTransactionId(), date, description, amount, type };
-            transactions.push(transaction);
-            lastTransactionId = transaction.id;
-            localStorage.setItem('lastTransactionId', lastTransactionId);
-
-            saveTransactions();
-            updateDescriptionList();
-            updateFilteredView();
-            calculateBalances();
-
-            document.getElementById('date').value = getCurrentDate();
-            document.getElementById('description').value = '';
-            amountInput.value = '0,00';
-            document.getElementById('type').value = 'receita';
-        }
-
-        function generateTransactionId() {
-            return '_' + Math.random().toString(36).substr(2, 9);
-        }
-
-        function updateDescriptionList() {
-            const filterDescription = document.getElementById('filterDescription');
-            filterDescription.innerHTML = '<option value="">Todos</option>';
-            const uniqueDescriptions = [...new Set(transactions.map(t => t.description))];
-            uniqueDescriptions.forEach(description => {
-                const option = document.createElement('option');
-                option.value = description;
-                option.text = description;
-                filterDescription.appendChild(option);
-            });
-        }
-
-        function updateFilteredView() {
-            const selectedDate = document.getElementById('date').value;
-            const tbody = document.getElementById('transactionsTable').getElementsByTagName('tbody')[0];
-            tbody.innerHTML = '';
-
-            transactions.forEach(transaction => {
-                if (transaction.date === selectedDate) {
-                    const row = tbody.insertRow();
-                    
-                    const cellDate = row.insertCell(0);
-                    const cellDescription = row.insertCell(1);
-                    const cellAmount = row.insertCell(2);
-                    const cellType = row.insertCell(3);
-                    const cellAction = row.insertCell(4);
-
-                    cellDate.innerText = transaction.date;
-                    cellDescription.innerHTML = `<div class="transaction-description">
-                                                    <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
-                                                    ${transaction.description}
-                                                 </div>`;
-                    cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
-                    cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
-                    cellAction.innerHTML = `<i class="fas fa-trash-alt" onclick="confirmRemoveTransaction('${transaction.id}')" style="cursor:pointer; color:red;"></i>`;
-                }
-            });
-
-            calculateBalances();
-        }
-
-        function confirmRemoveTransaction(transactionId) {
-            if (confirm('Tem certeza que deseja remover esta transação?')) {
-                removeTransaction(transactionId);
-            }
-        }
-
-        function removeTransaction(transactionId) {
-            transactions = transactions.filter(transaction => transaction.id !== transactionId);
-            saveTransactions();
-            updateDescriptionList();
-            updateFilteredView();
-            calculateBalances();
-        }
-
-        function calculateBalances() {
-            const selectedDate = document.getElementById('date').value;
-            const currentMonth = selectedDate.slice(0, 7);
-            const currentYear = selectedDate.slice(0, 4);
-
-            let dailyBalance = 0;
-            let monthlyBalance = 0;
-            let annualBalance = 0;
-
-            transactions.forEach(transaction => {
-                if (transaction.date === selectedDate) {
-                    dailyBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
-                }
-
-                if (transaction.date.startsWith(currentMonth)) {
-                    monthlyBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
-                }
-
-                if (transaction.date.startsWith(currentYear)) {
-                    annualBalance += transaction.type === 'receita' ? transaction.amount : -transaction.amount;
-                }
-            });
-
-            const dailyBalanceSpan = document.getElementById('dailyBalance');
-            const monthlyBalanceSpan = document.getElementById('monthlyBalance');
-            const annualBalanceSpan = document.getElementById('annualBalance');
-
-            dailyBalanceSpan.innerText = formatCurrency(dailyBalance);
-            monthlyBalanceSpan.innerText = formatCurrency(monthlyBalance);
-            annualBalanceSpan.innerText = formatCurrency(annualBalance);
-
-            dailyBalanceSpan.classList.toggle('negative', dailyBalance < 0);
-            monthlyBalanceSpan.classList.toggle('negative', monthlyBalance < 0);
-            annualBalanceSpan.classList.toggle('negative', annualBalance < 0);
-        }
-
-        function filterByPeriod() {
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-            const filterType = document.getElementById('filterType').value;
-            const filterDescription = document.getElementById('filterDescription').value.toLowerCase();
-
-            let totalReceitas = 0;
-            let totalDespesas = 0;
-
-            const filteredTransactions = transactions.filter(transaction => 
-                transaction.date >= startDate && transaction.date <= endDate &&
-                (filterType === '' || transaction.type === filterType) &&
-                (filterDescription === '' || transaction.description.toLowerCase().includes(filterDescription))
-            );
-
-            const filteredTbody = document.getElementById('filteredTransactionsTable').getElementsByTagName('tbody')[0];
-            filteredTbody.innerHTML = '';
-
-            filteredTransactions.forEach(transaction => {
-                if (transaction.type === 'receita') {
-                    totalReceitas += transaction.amount;
-                } else if (transaction.type === 'despesa') {
-                    totalDespesas += transaction.amount;
-                }
-
-                const row = filteredTbody.insertRow();
-                const cellDate = row.insertCell(0);
-                const cellDescription = row.insertCell(1);
-                const cellAmount = row.insertCell(2);
-                const cellType = row.insertCell(3);
-
-                cellDate.innerText = transaction.date;
-                cellDescription.innerHTML = `<div class="transaction-description">
-                                                <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
-                                                ${transaction.description}
-                                             </div>`;
-                cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
-                cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
-            });
-
-            const totalSaldo = totalReceitas - totalDespesas;
-
-            const totalReceitasSpan = document.getElementById('totalReceitas');
-            const totalDespesasSpan = document.getElementById('totalDespesas');
-            const totalSaldoSpan = document.getElementById('totalSaldo');
-
-            totalReceitasSpan.innerText = formatCurrency(totalReceitas);
-            totalDespesasSpan.innerText = formatCurrency(totalDespesas);
-            totalSaldoSpan.innerText = formatCurrency(totalSaldo);
-
-            totalDespesasSpan.classList.add('negative');
-            totalSaldoSpan.classList.toggle('negative', totalSaldo < 0);
-        }
-
-        function clearFilter() {
-            document.getElementById('startDate').value = '';
-            document.getElementById('endDate').value = '';
-            document.getElementById('filterType').value = '';
-            document.getElementById('filterDescription').value = '';
-            document.getElementById('filteredTransactionsTable').getElementsByTagName('tbody')[0].innerHTML = '';
-            document.getElementById('totalReceitas').innerText = 'R$ 0,00';
-            document.getElementById('totalDespesas').innerText = 'R$ 0,00';
-            document.getElementById('totalSaldo').innerText = 'R$ 0,00';
-        }
-
-        const inputs = document.querySelectorAll('input, select');
-        inputs.forEach(input => {
-            input.addEventListener('focus', function() {
-                this.classList.remove('highlight');
-            });
+        })
+        .catch(error => {
+            alert('Erro ao registrar novo usuário: ' + error.message);
         });
+}
 
-        function validateAmount() {
-            const amountInput = document.getElementById('amount');
-            amountInput.value = amountInput.value.replace(/[^\d,]/g, '');
-            amountInput.value = amountInput.value.replace(/(,.*?),(.*?)/g, '$1');
-        }
+function openChangePasswordModal() {
+    const modal = document.getElementById('changePasswordModal');
+    modal.style.display = 'block';
+    modal.style.animation = 'fadein 0.5s';
+}
 
-        function getCurrentDate() {
-            const now = new Date();
-            const offset = -3;
-            const brasiliaTime = new Date(now.getTime() + offset * 3600 * 1000);
-            return brasiliaTime.toISOString().split('T')[0];
-        }
+function closeChangePasswordModal() {
+    const modal = document.getElementById('changePasswordModal');
+    modal.style.animation = 'fadeout 0.5s';
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 500);
+}
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const dateInput = document.getElementById('date');
-            dateInput.value = getCurrentDate();
-            updateFilteredView();
-        });
+function changePassword() {
+    const newPassword = document.getElementById('newPassword').value;
+    const user = auth.currentUser;
 
-        function logout() {
-            auth.signOut().then(() => {
-                localStorage.removeItem('loggedIn');
-                localStorage.removeItem('username');
-                localStorage.removeItem('lastTransactionId');
-                window.location.href = 'index.html';
-            }).catch(error => {
-                console.error('Erro ao deslogar: ', error);
-            });
-        }
+    user.updatePassword(newPassword).then(() => {
+        alert('Senha alterada com sucesso.');
+        closeChangePasswordModal();
+    }).catch(error => {
+        alert('Erro ao alterar senha: ' + error.message);
+    });
+}
 
-        function toggleAdminSection() {
-            const adminSection = document.getElementById('adminSection');
-            adminSection.style.display = adminSection.style.display === 'block' ? 'none' : 'block';
-        }
+function goToLimitPage() {
+    window.location.href = 'definir_limite.html';
+}
 
-        function registerNewUser() {
-            const name = document.getElementById('newUserName').value;
-            const email = document.getElementById('newUserEmail').value;
-            const password = document.getElementById('newUserPassword').value;
+function togglePasswordVisibility(inputId) {
+    const passwordField = document.getElementById(inputId);
+    const passwordToggle = passwordField.nextElementSibling;
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        passwordToggle.classList.remove('fa-eye');
+        passwordToggle.classList.add('fa-eye-slash');
+    } else {
+        passwordField.type = 'password';
+        passwordToggle.classList.remove('fa-eye-slash');
+        passwordToggle.classList.add('fa-eye');
+    }
+}
 
-            auth.createUserWithEmailAndPassword(email, password)
-                .then(userCredential => {
-                    const user = userCredential.user;
-                    database.ref('users/' + user.uid).set({
-                        name: name,
-                        email: email
-                    }).then(() => {
-                        alert('Novo usuário registrado com sucesso.');
-                        document.getElementById('newUserName').value = '';
-                        document.getElementById('newUserEmail').value = '';
-                        document.getElementById('newUserPassword').value = '';
-                        loadAllUsers();
-                    });
-                })
-                .catch(error => {
-                    alert('Erro ao registrar novo usuário: ' + error.message);
-                });
-        }
+function openSpecificTransactionsModal() {
+    const modal = document.getElementById('specificTransactionsModal');
+    modal.style.display = 'block';
+    modal.style.animation = 'fadein 0.5s';
+}
 
-        function openChangePasswordModal() {
-            const modal = document.getElementById('changePasswordModal');
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-        }
+function closeSpecificTransactionsModal() {
+    const modal = document.getElementById('specificTransactionsModal');
+    modal.style.animation = 'fadeout 0.5s';
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 500);
+}
 
-        function closeChangePasswordModal() {
-            const modal = document.getElementById('changePasswordModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
+function openFilterPeriodModal() {
+    const modal = document.getElementById('filterPeriodModal');
+    modal.style.display = 'block';
+    modal.style.animation = 'fadein 0.5s';
+}
 
-        function changePassword() {
-            const newPassword = document.getElementById('newPassword').value;
-            const user = auth.currentUser;
+function closeFilterPeriodModal() {
+    const modal = document.getElementById('filterPeriodModal');
+    modal.style.animation = 'fadeout 0.5s';
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 500);
+}
 
-            user.updatePassword(newPassword).then(() => {
-                alert('Senha alterada com sucesso.');
-                closeChangePasswordModal();
-            }).catch(error => {
-                alert('Erro ao alterar senha: ' + error.message);
-            });
-        }
+let specificTransactionsChart;
 
-        function goToLimitPage() {
-            window.location.href = 'definir_limite.html';
-        }
+function generateSpecificTransactionsReport() {
+    const startDate = document.getElementById('specificStartDate').value;
+    const endDate = document.getElementById('specificEndDate').value;
+    const specificType = document.getElementById('specificType').value;
 
-        function togglePasswordVisibility(inputId) {
-            const passwordField = document.getElementById(inputId);
-            const passwordToggle = passwordField.nextElementSibling;
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                passwordToggle.classList.remove('fa-eye');
-                passwordToggle.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                passwordToggle.classList.remove('fa-eye-slash');
-                passwordToggle.classList.add('fa-eye');
-            }
-        }
+    const specificTransactions = transactions.filter(transaction => 
+        transaction.date >= startDate && transaction.date <= endDate && transaction.type === specificType
+    );
 
-        function openSpecificTransactionsModal() {
-            const modal = document.getElementById('specificTransactionsModal');
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-        }
+    const descriptions = [...new Set(specificTransactions.map(t => t.description))];
+    const data = descriptions.map(description => {
+        return specificTransactions.filter(transaction => transaction.description === description)
+                                   .reduce((total, transaction) => total + transaction.amount, 0);
+    });
 
-        function closeSpecificTransactionsModal() {
-            const modal = document.getElementById('specificTransactionsModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
+    if (specificTransactionsChart) {
+        specificTransactionsChart.destroy();
+    }
 
-        function openFilterPeriodModal() {
-            const modal = document.getElementById('filterPeriodModal');
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-        }
-
-        function closeFilterPeriodModal() {
-            const modal = document.getElementById('filterPeriodModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
-
-        let specificTransactionsChart;
-
-        function generateSpecificTransactionsReport() {
-            const startDate = document.getElementById('specificStartDate').value;
-            const endDate = document.getElementById('specificEndDate').value;
-            const specificType = document.getElementById('specificType').value;
-
-            const specificTransactions = transactions.filter(transaction => 
-                transaction.date >= startDate && transaction.date <= endDate && transaction.type === specificType
-            );
-
-            const descriptions = [...new Set(specificTransactions.map(t => t.description))];
-            const data = descriptions.map(description => {
-                return specificTransactions.filter(transaction => transaction.description === description)
-                                           .reduce((total, transaction) => total + transaction.amount, 0);
-            });
-
-            if (specificTransactionsChart) {
-                specificTransactionsChart.destroy();
-            }
-
-            const ctx = document.getElementById('specificTransactionsChart').getContext('2d');
-            specificTransactionsChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: descriptions,
-                    datasets: [{
-                        label: 'Transações Específicas',
-                        data: data,
-                        backgroundColor: descriptions.map(() => `#${Math.floor(Math.random()*16777215).toString(16)}`)
-                    }]
-                },
-                options: {
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    let total = tooltipItem.dataset.data.reduce((sum, value) => sum + value, 0);
-                                    let currentValue = tooltipItem.raw;
-                                    let percentage = ((currentValue / total) * 100).toFixed(2);
-                                    return `${tooltipItem.label}: R$ ${currentValue.toFixed(2)} (${percentage}%)`;
-                                }
-                            }
+    const ctx = document.getElementById('specificTransactionsChart').getContext('2d');
+    specificTransactionsChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: descriptions,
+            datasets: [{
+                label: 'Transações Específicas',
+                data: data,
+                backgroundColor: descriptions.map(() => `#${Math.floor(Math.random()*16777215).toString(16)}`)
+            }]
+        },
+        options: {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            let total = tooltipItem.dataset.data.reduce((sum, value) => sum + value, 0);
+                            let currentValue = tooltipItem.raw;
+                            let percentage = ((currentValue / total) * 100).toFixed(2);
+                            return `${tooltipItem.label}: R$ ${currentValue.toFixed(2)} (${percentage}%)`;
                         }
                     }
                 }
-            });
+            }
         }
-
+    });
+}
+        
     </script>
 </body>
 </html>
