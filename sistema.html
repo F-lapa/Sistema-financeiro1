@@ -427,7 +427,7 @@
                 <button onclick="registerNewUser()">Registrar Novo Usuário</button>
             </div>
         </div>
-        <button onclick="openExpenseDetailsModal()">Ver Gastos Específicos</button>
+        <button onclick="openTransactionDetailsModal()">Detalhes de Transações</button>
     </div>
 
     <div id="changePasswordModal" class="modal">
@@ -443,12 +443,29 @@
         </div>
     </div>
 
-    <div id="expenseDetailsModal" class="modal-chart">
+    <div id="transactionDetailsModal" class="modal-chart">
         <div class="modal-chart-content">
-            <span class="close-chart" onclick="closeExpenseDetailsModal()">&times;</span>
-            <h2>Gastos Específicos</h2>
+            <span class="close-chart" onclick="closeTransactionDetailsModal()">&times;</span>
+            <h2>Detalhes de Transações</h2>
+            <div class="form-group">
+                <label for="chartType">Tipo:</label>
+                <select id="chartType" class="highlight" onchange="updateTransactionChart()">
+                    <option value="receita">Receita</option>
+                    <option value="despesa">Despesa</option>
+                </select>
+            </div>
+            <div class="date-group">
+                <div class="form-group">
+                    <label for="chartStartDate">Data Inicial:</label>
+                    <input type="date" id="chartStartDate" class="highlight" onchange="updateTransactionChart()">
+                </div>
+                <div class="form-group">
+                    <label for="chartEndDate">Data Final:</label>
+                    <input type="date" id="chartEndDate" class="highlight" onchange="updateTransactionChart()">
+                </div>
+            </div>
             <div class="chart-container">
-                <canvas id="expenseChart"></canvas>
+                <canvas id="transactionChart"></canvas>
             </div>
         </div>
     </div>
@@ -830,20 +847,36 @@
             }
         }
 
-        function openExpenseDetailsModal() {
-            const modal = document.getElementById('expenseDetailsModal');
+        function openTransactionDetailsModal() {
+            const modal = document.getElementById('transactionDetailsModal');
             modal.style.display = 'block';
             modal.style.animation = 'fadein 0.5s';
+            updateTransactionChart();
+        }
 
-            const ctx = document.getElementById('expenseChart').getContext('2d');
-            const expenseData = calculateExpenseData();
+        function closeTransactionDetailsModal() {
+            const modal = document.getElementById('transactionDetailsModal');
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
+        function updateTransactionChart() {
+            const chartType = document.getElementById('chartType').value;
+            const startDate = document.getElementById('chartStartDate').value;
+            const endDate = document.getElementById('chartEndDate').value;
+
+            const ctx = document.getElementById('transactionChart').getContext('2d');
+            const chartData = calculateTransactionData(chartType, startDate, endDate);
+
             const chart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: expenseData.labels,
+                    labels: chartData.labels,
                     datasets: [{
-                        label: 'Gastos Específicos',
-                        data: expenseData.data,
+                        label: chartType === 'receita' ? 'Receitas Específicas' : 'Despesas Específicas',
+                        data: chartData.data,
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
@@ -871,36 +904,42 @@
                         },
                         title: {
                             display: true,
-                            text: 'Gastos Específicos'
+                            text: chartType === 'receita' ? 'Receitas Específicas' : 'Despesas Específicas'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    const total = tooltipItem.dataset.data.reduce((acc, val) => acc + val, 0);
+                                    const currentValue = tooltipItem.raw;
+                                    const percentage = parseFloat((currentValue / total * 100).toFixed(1));
+                                    return `${tooltipItem.label}: ${currentValue} (${percentage}%)`;
+                                }
+                            }
                         }
                     }
                 },
             });
         }
 
-        function closeExpenseDetailsModal() {
-            const modal = document.getElementById('expenseDetailsModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
+        function calculateTransactionData(type, startDate, endDate) {
+            const filteredTransactions = transactions.filter(transaction => 
+                transaction.type === type &&
+                transaction.date >= startDate && 
+                transaction.date <= endDate
+            );
 
-        function calculateExpenseData() {
-            const expenseData = transactions.reduce((acc, transaction) => {
-                if (transaction.type === 'despesa') {
-                    if (acc[transaction.description]) {
-                        acc[transaction.description] += transaction.amount;
-                    } else {
-                        acc[transaction.description] = transaction.amount;
-                    }
+            const transactionData = filteredTransactions.reduce((acc, transaction) => {
+                if (acc[transaction.description]) {
+                    acc[transaction.description] += transaction.amount;
+                } else {
+                    acc[transaction.description] = transaction.amount;
                 }
                 return acc;
             }, {});
 
             return {
-                labels: Object.keys(expenseData),
-                data: Object.values(expenseData)
+                labels: Object.keys(transactionData),
+                data: Object.values(transactionData)
             };
         }
     </script>
