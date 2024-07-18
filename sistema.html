@@ -27,8 +27,25 @@
             flex-direction: column;
             justify-content: flex-start;
         }
+        .sidebar h3 {
+            text-align: center;
+            color: #ecf0f1;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+        .sidebar .menu-icons {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .sidebar .menu-icons i {
+            margin: 0 5px;
+            cursor: pointer;
+            color: #ecf0f1;
+            font-size: 1.2em;
+        }
         .sidebar .logo {
-            width: 80%;
+            width: 100%;
             height: auto;
             margin: 10px auto;
             display: block;
@@ -42,13 +59,6 @@
         .sidebar .logo:hover {
             transform: scale(1.1);
             box-shadow: 0 0 20px rgba(52, 152, 219, 0.7);
-        }
-        .sidebar h3 {
-            text-align: center;
-            color: #ecf0f1;
-            margin-bottom: 15px;
-            font-size: 1.2em;
-            font-weight: 500;
         }
         .sidebar .buttons {
             display: flex;
@@ -89,6 +99,13 @@
             margin-bottom: 15px;
             font-size: 1.2em;
         }
+        .container .form-header {
+            text-align: center;
+            color: #ecf0f1;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
         .container .logout, .container .change-password {
             position: absolute;
             top: 10px;
@@ -97,10 +114,10 @@
             font-size: 1.2em;
         }
         .container .logout {
-            right: 10px;
+            right: 50px;
         }
         .container .change-password {
-            right: 40px;
+            right: 10px;
         }
         .container .admin-icon {
             position: absolute;
@@ -299,9 +316,11 @@
 </head>
 <body>
     <div class="sidebar">
+        <div class="menu-icons">
+            <i class="fas fa-key change-password" onclick="openChangePasswordModal()" title="Alterar Senha"></i>
+            <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
+        </div>
         <h3>Menu</h3>
-        <div class="logo"></div>
-        <img src="logo.png" alt="Logo do Sistema" class="logo">
         <div class="buttons">
             <button onclick="openFilterPeriodModal()">Filtrar Período</button>
             <button onclick="goToLimitPage()">Definir Limite de Gastos</button>
@@ -312,9 +331,9 @@
     </div>
     <div class="container">
         <div class="greeting" id="userGreeting"></div>
-        <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
-        <i class="fas fa-key change-password" onclick="openChangePasswordModal()" title="Alterar Senha"></i>
-        <i class="fas fa-user-shield admin-icon" id="adminIcon" onclick="toggleAdminSection()" title="Admin"></i>
+        <div class="logo"></div>
+        <img src="logo.png" alt="Logo do Sistema" class="logo">
+        <div class="form-header">Nova Transação</div>
         
         <input type="text" style="display:none;" autocomplete="username">
         <input type="password" style="display:none;" autocomplete="new-password">
