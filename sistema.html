@@ -45,8 +45,8 @@
             font-size: 1.2em;
         }
         .sidebar .logo {
-            width: 100%;
-            height: auto;
+            width: 80%;
+            height: 60px;
             margin: 10px auto;
             display: block;
             background: url('logo.png') no-repeat center;
@@ -325,8 +325,9 @@
             <button onclick="openFilterPeriodModal()">Filtrar Período</button>
             <button onclick="goToLimitPage()">Definir Limite de Gastos</button>
             <button onclick="openSpecificTransactionsModal()">Transações Específicas</button>
-            <button onclick="exportData()">Exportar Dados</button>
             <button onclick="openFinancialPerformanceModal()">Desempenho Financeiro</button>
+            <button onclick="openTrendAnalysisModal()">Análise de Tendências</button>
+            <button onclick="openBankIntegrationModal()">Integração com Banco</button>
         </div>
     </div>
     <div class="container">
@@ -477,6 +478,28 @@
             </div>
         </div>
 
+        <div id="trendAnalysisModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeTrendAnalysisModal()">&times;</span>
+                <h2>Análise de Tendências</h2>
+                <button onclick="analyzeSpendingPatterns()">Identificação de Padrões de Gasto</button>
+                <button onclick="forecastFinancialTrends()">Previsão Financeira</button>
+                <canvas id="trendAnalysisChart" style="margin-top: 20px;"></canvas>
+            </div>
+        </div>
+
+        <div id="bankIntegrationModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeBankIntegrationModal()">&times;</span>
+                <h2>Integração com Banco</h2>
+                <div class="form-group">
+                    <label for="bankAccount">Conta Bancária:</label>
+                    <input type="text" id="bankAccount" class="highlight">
+                </div>
+                <button onclick="importBankTransactions()">Importar Transações</button>
+            </div>
+        </div>
+
         <div class="admin-section" id="adminSection">
             <h2>Gerenciamento de Usuários</h2>
             <div class="form-group">
@@ -512,7 +535,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-var firebaseConfig = {
+var firebaseConfig = {s
   apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
   authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
   databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
@@ -521,7 +544,6 @@ var firebaseConfig = {
   messagingSenderId: "252102478972",
   appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
   measurementId: "G-K2HCS7WNZV"
-};
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const auth = firebase.auth();
@@ -985,23 +1007,6 @@ function generateSpecificTransactionsReport() {
     });
 }
 
-function exportData() {
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Data,Descrição,Valor,Tipo\n"; // Header
-    transactions.forEach(transaction => {
-        let row = `${transaction.date},${transaction.description},${formatCurrency(transaction.amount)},${transaction.type}\n`;
-        csvContent += row;
-    });
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "transacoes.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
 function checkMonthlyLimit() {
     const currentMonth = getCurrentDate().slice(0, 7);
     let monthlyExpenses = transactions
@@ -1120,6 +1125,52 @@ function generateFinancialPerformanceChart() {
             }
         }
     });
+}
+
+function openTrendAnalysisModal() {
+    const modal = document.getElementById('trendAnalysisModal');
+    modal.style.display = 'block';
+    modal.style.animation = 'fadein 0.5s';
+}
+
+function closeTrendAnalysisModal() {
+    const modal = document.getElementById('trendAnalysisModal');
+    modal.style.animation = 'fadeout 0.5s';
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 500);
+}
+
+function analyzeSpendingPatterns() {
+    // Implementação de machine learning para identificar padrões de gastos.
+    // Aqui você pode utilizar bibliotecas como TensorFlow.js ou outras para analisar os dados e identificar padrões.
+    alert("Análise de padrões de gastos em desenvolvimento.");
+}
+
+function forecastFinancialTrends() {
+    // Implementação de previsão financeira baseada em dados históricos.
+    // Aqui você pode utilizar técnicas de análise de série temporal para prever tendências financeiras.
+    alert("Previsão financeira em desenvolvimento.");
+}
+
+function openBankIntegrationModal() {
+    const modal = document.getElementById('bankIntegrationModal');
+    modal.style.display = 'block';
+    modal.style.animation = 'fadein 0.5s';
+}
+
+function closeBankIntegrationModal() {
+    const modal = document.getElementById('bankIntegrationModal');
+    modal.style.animation = 'fadeout 0.5s';
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 500);
+}
+
+function importBankTransactions() {
+    // Implementação da importação automática de transações bancárias.
+    // Aqui você pode utilizar APIs de bancos para importar transações automaticamente.
+    alert("Importação automática de transações em desenvolvimento.");
 }
     </script>
 </body>
