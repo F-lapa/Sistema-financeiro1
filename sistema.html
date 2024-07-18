@@ -535,7 +535,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-            var firebaseConfig = {
+             
+var firebaseConfig = {
     apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
     authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
     databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
@@ -1014,7 +1015,7 @@ function checkMonthlyLimit() {
         .filter(transaction => transaction.type === 'despesa' && transaction.date.startsWith(currentMonth))
         .reduce((sum, transaction) => sum + transaction.amount, 0);
 
-    if (monthlyExpenses > monthlyLimit) {
+    if (monthlyLimit > 0 && monthlyExpenses > monthlyLimit) {
         showAlert(`Você ultrapassou seu limite de gastos mensais! Limite: ${formatCurrency(monthlyLimit)}, Gastos: ${formatCurrency(monthlyExpenses)}`);
     }
 }
@@ -1132,6 +1133,7 @@ function openTrendAnalysisModal() {
     const modal = document.getElementById('trendAnalysisModal');
     modal.style.display = 'block';
     modal.style.animation = 'fadein 0.5s';
+    analyzeSpendingPatterns();  // Execute pattern analysis when opening modal
 }
 
 function closeTrendAnalysisModal() {
@@ -1143,14 +1145,14 @@ function closeTrendAnalysisModal() {
 }
 
 function analyzeSpendingPatterns() {
-    // Implementação de machine learning para identificar padrões de gastos.
-    // Aqui você pode utilizar bibliotecas como TensorFlow.js ou outras para analisar os dados e identificar padrões.
+    // Here you would implement the machine learning model to identify spending patterns.
+    // For now, we will just simulate the analysis.
     alert("Análise de padrões de gastos em desenvolvimento.");
 }
 
 function forecastFinancialTrends() {
-    // Implementação de previsão financeira baseada em dados históricos.
-    // Aqui você pode utilizar técnicas de análise de série temporal para prever tendências financeiras.
+    // Here you would implement the time series analysis for financial trend forecasting.
+    // For now, we will just simulate the forecast.
     alert("Previsão financeira em desenvolvimento.");
 }
 
@@ -1169,12 +1171,11 @@ function closeBankIntegrationModal() {
 }
 
 function importBankTransactions() {
-    // Implementação da importação automática de transações bancárias.
-    // Aqui você pode utilizar APIs de bancos para importar transações automaticamente.
+    // Here you would implement the automatic import of bank transactions.
+    // For now, we will just simulate the import.
     alert("Importação automática de transações em desenvolvimento.");
 }
-        
-        
+
     </script>
 </body>
 </html>
