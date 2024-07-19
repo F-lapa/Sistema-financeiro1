@@ -17,32 +17,32 @@
             min-height: 100vh;
         }
         .sidebar {
-            width: 200px;
+            width: 220px;
             background-color: #34495e;
-            padding: 10px;
+            padding: 20px;
             box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
             position: fixed;
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: space-between;
         }
         .sidebar h3 {
             text-align: center;
             color: #ecf0f1;
-            margin-bottom: 15px;
-            font-size: 1.2em;
+            margin-bottom: 20px;
+            font-size: 1.4em;
             font-weight: 500;
         }
         .sidebar .menu-icons {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
         .sidebar .menu-icons i {
             margin: 0 5px;
             cursor: pointer;
             color: #ecf0f1;
-            font-size: 1.2em;
+            font-size: 1.5em;
         }
         .sidebar .buttons {
             display: flex;
@@ -51,22 +51,44 @@
         }
         .sidebar button {
             width: 90%;
-            padding: 6px;
+            padding: 10px;
             background-color: #3498db;
             color: #ecf0f1;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 14px;
             transition: background-color 0.3s ease, transform 0.2s ease;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sidebar button i {
+            margin-right: 8px;
         }
         .sidebar button:hover {
             background-color: #2980b9;
             transform: scale(1.05);
         }
+        .sidebar .theme-selector {
+            margin-top: 20px;
+        }
+        .sidebar .theme-selector label {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .sidebar .theme-selector select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            border: none;
+            background-color: #ecf0f1;
+            color: #34495e;
+            font-size: 14px;
+        }
         .container {
-            margin-left: 220px;
+            margin-left: 240px;
             padding: 20px;
             flex: 1;
         }
@@ -125,10 +147,10 @@
         }
         .container input[type="text"], .container input[type="number"], .container input[type="date"], .container select, .container input[type="password"] {
             width: 100%;
-            padding: 6px;
+            padding: 8px;
             margin-bottom: 8px;
             border: 1px solid #444;
-            border-radius: 6px;
+            border-radius: 8px;
             box-sizing: border-box;
             font-size: 14px;
             background-color: #2c3e50;
@@ -141,11 +163,11 @@
         }
         .container button {
             width: 50%;
-            padding: 6px;
+            padding: 10px;
             background-color: #3498db;
             color: #ecf0f1;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             transition: background-color 0.3s ease, transform 0.2s ease;
@@ -306,11 +328,22 @@
         </div>
         <h3>Menu</h3>
         <div class="buttons">
-            <button onclick="openFilterPeriodModal()">Filtrar Período</button>
-            <button onclick="goToLimitPage()">Definir Limite de Gastos</button>
-            <button onclick="openSpecificTransactionsModal()">Transações Específicas</button>
-            <button onclick="openFinancialPerformanceModal()">Desempenho Financeiro</button>
-            <button onclick="openTrendAnalysisModal()">Análise de Tendências</button>
+            <button onclick="openFilterPeriodModal()"><i class="fas fa-filter"></i> Filtrar Período</button>
+            <button onclick="goToLimitPage()"><i class="fas fa-money-check-alt"></i> Definir Limite de Gastos</button>
+            <button onclick="openSpecificTransactionsModal()"><i class="fas fa-search-dollar"></i> Transações Específicas</button>
+            <button onclick="openFinancialPerformanceModal()"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
+            <button onclick="openTrendAnalysisModal()"><i class="fas fa-chart-pie"></i> Análise de Tendências</button>
+            <button id="adminButton" onclick="toggleAdminSection()"><i class="fas fa-user-shield"></i> Área do Administrador</button>
+        </div>
+        <div class="theme-selector">
+            <label for="theme">Selecionar Tema:</label>
+            <select id="theme" onchange="changeTheme()">
+                <option value="default">Padrão</option>
+                <option value="dark">Escuro</option>
+                <option value="light">Claro</option>
+                <option value="blue">Azul</option>
+                <option value="green">Verde</option>
+            </select>
         </div>
     </div>
     <div class="container">
@@ -561,9 +594,12 @@
         }
 
         function checkAdmin(email) {
+            const adminButton = document.getElementById('adminButton');
             if (email === 'fernandolapa1987@gmail.com') {
-                document.getElementById('adminIcon').style.display = 'block';
+                adminButton.style.display = 'block';
                 loadAllUsers();
+            } else {
+                adminButton.style.display = 'none';
             }
         }
 
@@ -1169,6 +1205,37 @@
             console.log('Previsão de receitas futuras:', mediaMensalReceitas);
             console.log('Previsão de despesas futuras:', mediaMensalDespesas);
             alert('Previsão financeira concluída. Verifique o console para mais detalhes.');
+        }
+
+        function changeTheme() {
+            const theme = document.getElementById('theme').value;
+            switch (theme) {
+                case 'dark':
+                    document.documentElement.style.setProperty('--background-color', '#2c3e50');
+                    document.documentElement.style.setProperty('--text-color', '#ecf0f1');
+                    document.documentElement.style.setProperty('--primary-color', '#3498db');
+                    break;
+                case 'light':
+                    document.documentElement.style.setProperty('--background-color', '#ecf0f1');
+                    document.documentElement.style.setProperty('--text-color', '#2c3e50');
+                    document.documentElement.style.setProperty('--primary-color', '#3498db');
+                    break;
+                case 'blue':
+                    document.documentElement.style.setProperty('--background-color', '#34495e');
+                    document.documentElement.style.setProperty('--text-color', '#ecf0f1');
+                    document.documentElement.style.setProperty('--primary-color', '#2980b9');
+                    break;
+                case 'green':
+                    document.documentElement.style.setProperty('--background-color', '#2ecc71');
+                    document.documentElement.style.setProperty('--text-color', '#ecf0f1');
+                    document.documentElement.style.setProperty('--primary-color', '#27ae60');
+                    break;
+                default:
+                    document.documentElement.style.setProperty('--background-color', '#2c3e50');
+                    document.documentElement.style.setProperty('--text-color', '#ecf0f1');
+                    document.documentElement.style.setProperty('--primary-color', '#3498db');
+                    break;
+            }
         }
     </script>
 </body>
