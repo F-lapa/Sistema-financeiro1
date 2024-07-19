@@ -117,6 +117,12 @@
             margin-bottom: 15px;
             font-size: 1.2em;
         }
+        .container .logo {
+            display: block;
+            margin: 0 auto 20px;
+            width: 150px; /* Ajuste o tamanho conforme necessário */
+            height: auto;
+        }
         .container .form-header {
             text-align: center;
             color: var(--text-color);
@@ -368,6 +374,7 @@
     </div>
     <div class="container">
         <div class="greeting" id="userGreeting"></div>
+        <img src="logo.png" alt="Logomarca" class="logo">
         <div class="form-header">Nova Transação</div>
         
         <input type="text" style="display:none;" autocomplete="username">
@@ -1040,12 +1047,12 @@
                             displayColors: false,
                             titleColor: '#fff',
                             bodyColor: '#fff',
-                            borderColor: '#3498db',
+                            borderColor: var(--button-color),
                             borderWidth: 1
                         },
                         legend: {
                             labels: {
-                                color: '#ecf0f1',
+                                color: var(--text-color),
                                 font: {
                                     size: 14,
                                     weight: 'bold'
@@ -1157,19 +1164,19 @@
                         },
                         legend: {
                             labels: {
-                                color: '#ecf0f1'
+                                color: var(--text-color)
                             }
                         }
                     },
                     scales: {
                         x: {
                             ticks: {
-                                color: '#ecf0f1'
+                                color: var(--text-color)
                             }
                         },
                         y: {
                             ticks: {
-                                color: '#ecf0f1'
+                                color: var(--text-color)
                             }
                         }
                     }
