@@ -5,26 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Roboto', sans-serif;
+            background-color: #2c3e50;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            color: #ecf0f1;
         }
         .login-container {
-            background: #ffffff;
+            background: #34495e;
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             text-align: center;
+            position: relative;
+            max-width: 400px;
+            width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
         }
         h1 {
             margin-bottom: 20px;
-            color: #333;
+            color: #ecf0f1;
+            font-size: 28px;
         }
         .form-group {
             margin-bottom: 15px;
@@ -34,27 +45,40 @@
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
+            color: #bdc3c7;
         }
         input[type="text"], input[type="password"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 1px solid #444;
+            border-radius: 6px;
             box-sizing: border-box;
-            font-size: 16px;
+            font-size: 14px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            border: 2px solid #3498db;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+            outline: none;
         }
         button {
-            padding: 10px 20px;
-            background: #007bff;
-            color: white;
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: #ecf0f1;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+            width: 100%;
         }
         button:hover {
-            background: #0056b3;
+            background-color: #2980b9;
+            transform: scale(1.05);
         }
         .show-password-container {
             position: relative;
@@ -65,11 +89,21 @@
             right: 10px;
             transform: translateY(-50%);
             cursor: pointer;
+            color: #3498db;
+        }
+        .logo {
+            width: 120px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
     <div class="login-container">
+        <img src="logo.png" alt="Logo do Sistema" class="logo">
         <h1>Login</h1>
         <div class="form-group">
             <label for="email">Email:</label>
@@ -90,13 +124,13 @@
         // Configuração do Firebase
         var firebaseConfig = {
             apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-  projectId: "sistema-de-receitas-e-despesas",
-  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-  messagingSenderId: "252102478972",
-  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-  measurementId: "G-K2HCS7WNZV"
+            authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+            databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+            projectId: "sistema-de-receitas-e-despesas",
+            storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+            messagingSenderId: "252102478972",
+            appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
+            measurementId: "G-K2HCS7WNZV"
         };
         // Inicialize o Firebase
         firebase.initializeApp(firebaseConfig);
