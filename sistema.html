@@ -7,12 +7,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --background-color: #2c3e50;
+            --text-color: #ecf0f1;
+            --primary-color: #3498db;
+        }
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #2c3e50;
+            background-color: var(--background-color);
             margin: 0;
             padding: 0;
-            color: #ecf0f1;
+            color: var(--text-color);
             display: flex;
             min-height: 100vh;
         }
@@ -25,11 +30,11 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
         }
         .sidebar h3 {
             text-align: center;
-            color: #ecf0f1;
+            color: var(--text-color);
             margin-bottom: 20px;
             font-size: 1.4em;
             font-weight: 500;
@@ -41,19 +46,20 @@
         .sidebar .menu-icons i {
             margin: 0 5px;
             cursor: pointer;
-            color: #ecf0f1;
+            color: var(--text-color);
             font-size: 1.5em;
         }
         .sidebar .buttons {
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-bottom: 20px;
         }
         .sidebar button {
             width: 90%;
             padding: 10px;
-            background-color: #3498db;
-            color: #ecf0f1;
+            background-color: var(--primary-color);
+            color: var(--text-color);
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -68,22 +74,26 @@
             margin-right: 8px;
         }
         .sidebar button:hover {
-            background-color: #2980b9;
+            background-color: darken(var(--primary-color), 10%);
             transform: scale(1.05);
         }
         .sidebar .theme-selector {
             margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .sidebar .theme-selector label {
             font-size: 14px;
             margin-bottom: 5px;
+            color: var(--text-color);
         }
         .sidebar .theme-selector select {
-            width: 100%;
+            width: 90%;
             padding: 8px;
             border-radius: 8px;
             border: none;
-            background-color: #ecf0f1;
+            background-color: var(--text-color);
             color: #34495e;
             font-size: 14px;
         }
@@ -94,20 +104,20 @@
         }
         .container h1 {
             text-align: center;
-            color: #ecf0f1;
+            color: var(--text-color);
             margin-bottom: 15px;
             font-size: 1.8em;
             font-weight: 500;
         }
         .container .greeting {
             text-align: center;
-            color: #ecf0f1;
+            color: var(--text-color);
             margin-bottom: 15px;
             font-size: 1.2em;
         }
         .container .form-header {
             text-align: center;
-            color: #ecf0f1;
+            color: var(--text-color);
             margin-bottom: 15px;
             font-size: 1.2em;
             font-weight: 500;
@@ -116,7 +126,7 @@
             position: absolute;
             top: 10px;
             cursor: pointer;
-            color: #ecf0f1;
+            color: var(--text-color);
             font-size: 1.2em;
         }
         .container .logout {
@@ -130,7 +140,7 @@
             top: 10px;
             left: 10px;
             cursor: pointer;
-            color: #ecf0f1;
+            color: var(--text-color);
             font-size: 1.2em;
             display: none;
         }
@@ -153,19 +163,19 @@
             border-radius: 8px;
             box-sizing: border-box;
             font-size: 14px;
-            background-color: #2c3e50;
-            color: #ecf0f1;
+            background-color: var(--background-color);
+            color: var(--text-color);
             transition: all 0.3s ease;
         }
         .container input.highlight, .container select.highlight {
-            border: 2px solid #3498db;
+            border: 2px solid var(--primary-color);
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
         .container button {
             width: 50%;
             padding: 10px;
-            background-color: #3498db;
-            color: #ecf0f1;
+            background-color: var(--primary-color);
+            color: var(--text-color);
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -175,7 +185,7 @@
             display: block;
         }
         .container button:hover {
-            background-color: #2980b9;
+            background-color: darken(var(--primary-color), 10%);
             transform: scale(1.05);
         }
         .container table {
@@ -190,7 +200,7 @@
             background-color: #34495e;
         }
         .container th {
-            background-color: #2c3e50;
+            background-color: var(--background-color);
             color: #bdc3c7;
         }
         .container tbody tr {
@@ -207,11 +217,11 @@
         }
         .container .totals p, .container .filter p {
             font-size: 16px;
-            color: #ecf0f1;
+            color: var(--text-color);
         }
         .container .totals span, .container .filter span {
             font-weight: bold;
-            color: #3498db;
+            color: var(--primary-color);
         }
         .container .negative {
             color: red !important;
@@ -240,7 +250,7 @@
         }
         .container .admin-section h2 {
             text-align: center;
-            color: #ecf0f1;
+            color: var(--text-color);
         }
         .container .admin-section .form-group {
             display: flex;
@@ -270,7 +280,7 @@
             right: 10px;
             top: 12px;
             cursor: pointer;
-            color: #3498db;
+            color: var(--primary-color);
         }
         .container .modal {
             display: none;
@@ -292,17 +302,17 @@
             max-width: 400px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            color: #ecf0f1;
+            color: var(--text-color);
         }
         .container .close {
-            color: #ecf0f1;
+            color: var(--text-color);
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
         .container .close:hover,
         .container .close:focus {
-            color: #3498db;
+            color: var(--primary-color);
             text-decoration: none;
             cursor: pointer;
         }
@@ -315,7 +325,7 @@
             100% { background-position: 200px; }
         }
         .container input[type="text"]:hover, .container input[type="number"]:hover, .container input[type="date"]:hover, .container select:hover, .container input[type="password"]:hover {
-            border-color: #3498db;
+            border-color: var(--primary-color);
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
     </style>
@@ -343,6 +353,9 @@
                 <option value="light">Claro</option>
                 <option value="blue">Azul</option>
                 <option value="green">Verde</option>
+                <option value="red">Vermelho</option>
+                <option value="purple">Roxo</option>
+                <option value="orange">Laranja</option>
             </select>
         </div>
     </div>
@@ -1229,6 +1242,21 @@
                     document.documentElement.style.setProperty('--background-color', '#2ecc71');
                     document.documentElement.style.setProperty('--text-color', '#ecf0f1');
                     document.documentElement.style.setProperty('--primary-color', '#27ae60');
+                    break;
+                case 'red':
+                    document.documentElement.style.setProperty('--background-color', '#e74c3c');
+                    document.documentElement.style.setProperty('--text-color', '#ecf0f1');
+                    document.documentElement.style.setProperty('--primary-color', '#c0392b');
+                    break;
+                case 'purple':
+                    document.documentElement.style.setProperty('--background-color', '#8e44ad');
+                    document.documentElement.style.setProperty('--text-color', '#ecf0f1');
+                    document.documentElement.style.setProperty('--primary-color', '#9b59b6');
+                    break;
+                case 'orange':
+                    document.documentElement.style.setProperty('--background-color', '#e67e22');
+                    document.documentElement.style.setProperty('--text-color', '#ecf0f1');
+                    document.documentElement.style.setProperty('--primary-color', '#d35400');
                     break;
                 default:
                     document.documentElement.style.setProperty('--background-color', '#2c3e50');
