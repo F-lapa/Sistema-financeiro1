@@ -11,6 +11,8 @@
             --background-color: #2c3e50;
             --text-color: #ecf0f1;
             --primary-color: #3498db;
+            --button-color: #3498db;
+            --input-border-color: #3498db;
         }
         body {
             font-family: 'Roboto', sans-serif;
@@ -58,7 +60,7 @@
         .sidebar button {
             width: 90%;
             padding: 10px;
-            background-color: var(--primary-color);
+            background-color: var(--button-color);
             color: var(--text-color);
             border: none;
             border-radius: 8px;
@@ -74,7 +76,7 @@
             margin-right: 8px;
         }
         .sidebar button:hover {
-            background-color: darken(var(--primary-color), 10%);
+            background-color: darken(var(--button-color), 10%);
             transform: scale(1.05);
         }
         .sidebar .theme-selector {
@@ -159,7 +161,7 @@
             width: 100%;
             padding: 8px;
             margin-bottom: 8px;
-            border: 1px solid #444;
+            border: 1px solid var(--input-border-color);
             border-radius: 8px;
             box-sizing: border-box;
             font-size: 14px;
@@ -174,7 +176,7 @@
         .container button {
             width: 50%;
             padding: 10px;
-            background-color: var(--primary-color);
+            background-color: var(--button-color);
             color: var(--text-color);
             border: none;
             border-radius: 8px;
@@ -185,7 +187,7 @@
             display: block;
         }
         .container button:hover {
-            background-color: darken(var(--primary-color), 10%);
+            background-color: darken(var(--button-color), 10%);
             transform: scale(1.05);
         }
         .container table {
@@ -280,7 +282,7 @@
             right: 10px;
             top: 12px;
             cursor: pointer;
-            color: var(--primary-color);
+            color: var(--button-color);
         }
         .container .modal {
             display: none;
@@ -312,7 +314,7 @@
         }
         .container .close:hover,
         .container .close:focus {
-            color: var(--primary-color);
+            color: var(--button-color);
             text-decoration: none;
             cursor: pointer;
         }
@@ -325,7 +327,7 @@
             100% { background-position: 200px; }
         }
         .container input[type="text"]:hover, .container input[type="number"]:hover, .container input[type="date"]:hover, .container select:hover, .container input[type="password"]:hover {
-            border-color: var(--primary-color);
+            border-color: var(--input-border-color);
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
     </style>
@@ -357,6 +359,10 @@
                 <option value="red">Vermelho</option>
                 <option value="purple">Roxo</option>
                 <option value="orange">Laranja</option>
+                <option value="pink">Rosa</option>
+                <option value="yellow">Amarelo</option>
+                <option value="cyan">Ciano</option>
+                <option value="brown">Marrom</option>
             </select>
         </div>
     </div>
@@ -597,6 +603,7 @@
                         '<span>Olá, <strong>' + userName + '</strong>!</span>';
                     loadTransactions();
                     checkAdmin(user.email);
+                    loadTheme(); // Carrega o tema salvo
                 });
             } else {
                 window.location.href = 'index.html';  
@@ -1322,47 +1329,67 @@
 
         function changeTheme() {
             const theme = document.getElementById('theme').value;
+            let buttonColor, inputBorderColor;
             switch (theme) {
                 case 'dark':
-                    document.documentElement.style.setProperty('--background-color', '#2c3e50');
-                    document.documentElement.style.setProperty('--text-color', '#ecf0f1');
-                    document.documentElement.style.setProperty('--primary-color', '#3498db');
+                    buttonColor = '#34495e';
+                    inputBorderColor = '#34495e';
                     break;
                 case 'light':
-                    document.documentElement.style.setProperty('--background-color', '#ecf0f1');
-                    document.documentElement.style.setProperty('--text-color', '#2c3e50');
-                    document.documentElement.style.setProperty('--primary-color', '#3498db');
+                    buttonColor = '#ecf0f1';
+                    inputBorderColor = '#ecf0f1';
                     break;
                 case 'blue':
-                    document.documentElement.style.setProperty('--background-color', '#34495e');
-                    document.documentElement.style.setProperty('--text-color', '#ecf0f1');
-                    document.documentElement.style.setProperty('--primary-color', '#2980b9');
+                    buttonColor = '#2980b9';
+                    inputBorderColor = '#2980b9';
                     break;
                 case 'green':
-                    document.documentElement.style.setProperty('--background-color', '#2ecc71');
-                    document.documentElement.style.setProperty('--text-color', '#ecf0f1');
-                    document.documentElement.style.setProperty('--primary-color', '#27ae60');
+                    buttonColor = '#27ae60';
+                    inputBorderColor = '#27ae60';
                     break;
                 case 'red':
-                    document.documentElement.style.setProperty('--background-color', '#e74c3c');
-                    document.documentElement.style.setProperty('--text-color', '#ecf0f1');
-                    document.documentElement.style.setProperty('--primary-color', '#c0392b');
+                    buttonColor = '#c0392b';
+                    inputBorderColor = '#c0392b';
                     break;
                 case 'purple':
-                    document.documentElement.style.setProperty('--background-color', '#8e44ad');
-                    document.documentElement.style.setProperty('--text-color', '#ecf0f1');
-                    document.documentElement.style.setProperty('--primary-color', '#9b59b6');
+                    buttonColor = '#9b59b6';
+                    inputBorderColor = '#9b59b6';
                     break;
                 case 'orange':
-                    document.documentElement.style.setProperty('--background-color', '#e67e22');
-                    document.documentElement.style.setProperty('--text-color', '#ecf0f1');
-                    document.documentElement.style.setProperty('--primary-color', '#d35400');
+                    buttonColor = '#d35400';
+                    inputBorderColor = '#d35400';
+                    break;
+                case 'pink':
+                    buttonColor = '#e91e63';
+                    inputBorderColor = '#e91e63';
+                    break;
+                case 'yellow':
+                    buttonColor = '#f1c40f';
+                    inputBorderColor = '#f1c40f';
+                    break;
+                case 'cyan':
+                    buttonColor = '#00bcd4';
+                    inputBorderColor = '#00bcd4';
+                    break;
+                case 'brown':
+                    buttonColor = '#8d6e63';
+                    inputBorderColor = '#8d6e63';
                     break;
                 default:
-                    document.documentElement.style.setProperty('--background-color', '#2c3e50');
-                    document.documentElement.style.setProperty('--text-color', '#ecf0f1');
-                    document.documentElement.style.setProperty('--primary-color', '#3498db');
+                    buttonColor = '#3498db';
+                    inputBorderColor = '#3498db';
                     break;
+            }
+            document.documentElement.style.setProperty('--button-color', buttonColor);
+            document.documentElement.style.setProperty('--input-border-color', inputBorderColor);
+            localStorage.setItem('theme', theme);
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.getElementById('theme').value = savedTheme;
+                changeTheme();
             }
         }
     </script>
