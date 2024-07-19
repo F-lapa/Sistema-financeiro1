@@ -1045,8 +1045,8 @@
                             bodyFont: { size: 14 },
                             footerFont: { size: 14 },
                             displayColors: false,
-                            titleColor: '#fff',
-                            bodyColor: '#fff',
+                            titleColor: var(--text-color),
+                            bodyColor: var(--text-color),
                             borderColor: var(--button-color),
                             borderWidth: 1
                         },
@@ -1327,9 +1327,9 @@
             paymentReminders.forEach(reminder => {
                 const reminderDate = new Date(today.getFullYear(), today.getMonth(), reminder.date);
                 const differenceInTime = reminderDate.getTime() - today.getTime();
-                const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+                const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
                 if (differenceInDays === 2) {
-                    alert(`Lembrete: ${reminder.description} está próximo da data de pagamento.`);
+                    showAlert(`Lembrete: ${reminder.description} está próximo da data de pagamento.`);
                 }
             });
         }
