@@ -343,6 +343,7 @@
             <button onclick="openSpecificTransactionsModal()"><i class="fas fa-search-dollar"></i> Transações Específicas</button>
             <button onclick="openFinancialPerformanceModal()"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
             <button onclick="openTrendAnalysisModal()"><i class="fas fa-chart-pie"></i> Análise de Tendências</button>
+            <button onclick="openPaymentReminderModal()"><i class="fas fa-bell"></i> Lembrete de Pagamento</button>
             <button id="adminButton" onclick="toggleAdminSection()"><i class="fas fa-user-shield"></i> Área do Administrador</button>
         </div>
         <div class="theme-selector">
@@ -515,6 +516,25 @@
             </div>
         </div>
 
+        <div id="paymentReminderModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closePaymentReminderModal()">&times;</span>
+                <h2>Lembrete de Pagamento</h2>
+                <div class="form-group">
+                    <label for="reminderDescription">Descrição:</label>
+                    <input type="text" id="reminderDescription" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="reminderDate">Dia do Mês:</label>
+                    <input type="number" id="reminderDate" class="highlight" min="1" max="31">
+                </div>
+                <button onclick="addPaymentReminder()">Adicionar Lembrete</button>
+                <div id="paymentReminders">
+                    <!-- Reminders will be displayed here -->
+                </div>
+            </div>
+        </div>
+
         <div class="admin-section" id="adminSection">
             <h2>Gerenciamento de Usuários</h2>
             <div class="form-group">
@@ -584,6 +604,7 @@
         });
 
         let transactions = [];
+        let paymentReminders = [];
         let lastTransactionId = localStorage.getItem('lastTransactionId');
         let allUsers = [];
         let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
@@ -842,6 +863,8 @@
             const dateInput = document.getElementById('date');
             dateInput.value = getCurrentDate();
             updateFilteredView();
+            loadPaymentReminders();
+            checkReminders();
         });
 
         function logout() {
@@ -1218,6 +1241,83 @@
             console.log('Previsão de receitas futuras:', mediaMensalReceitas);
             console.log('Previsão de despesas futuras:', mediaMensalDespesas);
             alert('Previsão financeira concluída. Verifique o console para mais detalhes.');
+        }
+
+        function openPaymentReminderModal() {
+            const modal = document.getElementById('paymentReminderModal');
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+        }
+
+        function closePaymentReminderModal() {
+            const modal = document.getElementById('paymentReminderModal');
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
+        function addPaymentReminder() {
+            const description = document.getElementById('reminderDescription').value;
+            const date = document.getElementById('reminderDate').value;
+            const reminder = { id: generateTransactionId(), description, date };
+            paymentReminders.push(reminder);
+            saveReminders();
+            loadPaymentReminders();
+            clearReminderForm();
+        }
+
+        function clearReminderForm() {
+            document.getElementById('reminderDescription').value = '';
+            document.getElementById('reminderDate').value = '';
+        }
+
+        function saveReminders() {
+            const userId = auth.currentUser.uid;
+            database.ref('reminders/' + userId).set(paymentReminders);
+        }
+
+        function loadPaymentReminders() {
+            const userId = auth.currentUser.uid;
+            database.ref('reminders/' + userId).once('value', function(snapshot) {
+                if (snapshot.val()) {
+                    paymentReminders = snapshot.val();
+                    displayReminders();
+                }
+            });
+        }
+
+        function displayReminders() {
+            const remindersDiv = document.getElementById('paymentReminders');
+            remindersDiv.innerHTML = '';
+            paymentReminders.forEach(reminder => {
+                const reminderDiv = document.createElement('div');
+                reminderDiv.className = 'reminder';
+                reminderDiv.innerHTML = `
+                    <p><strong>Descrição:</strong> ${reminder.description}</p>
+                    <p><strong>Dia do Mês:</strong> ${reminder.date}</p>
+                    <button onclick="removeReminder('${reminder.id}')">Remover</button>
+                `;
+                remindersDiv.appendChild(reminderDiv);
+            });
+        }
+
+        function removeReminder(id) {
+            paymentReminders = paymentReminders.filter(reminder => reminder.id !== id);
+            saveReminders();
+            displayReminders();
+        }
+
+        function checkReminders() {
+            const today = new Date();
+            paymentReminders.forEach(reminder => {
+                const reminderDate = new Date(today.getFullYear(), today.getMonth(), reminder.date);
+                const differenceInTime = reminderDate.getTime() - today.getTime();
+                const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+                if (differenceInDays === 2) {
+                    alert(`Lembrete: ${reminder.description} está próximo da data de pagamento.`);
+                }
+            });
         }
 
         function changeTheme() {
