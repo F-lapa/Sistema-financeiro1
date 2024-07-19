@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
+        
         body {
     font-family: 'Roboto', sans-serif;
     background-color: #2c3e50;
@@ -26,7 +27,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: center; /* Centraliza os elementos na sidebar */
+    align-items: center;
 }
 .sidebar h3 {
     text-align: center;
@@ -309,9 +310,10 @@
 }
 .container input[type="text"]:hover, .container input[type="number"]:hover, .container input[type="date"]:hover, .container select:hover, .container input[type="password"]:hover {
     border-color: #3498db;
-    box-shadow: 0 0 10
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
 
-            
+        Inclua o CSS atualizado aqui */
     </style>
 </head>
 <body>
@@ -332,10 +334,8 @@
     </div>
     <div class="container">
         <div class="greeting" id="userGreeting"></div>
-        <div class="logo"></div>
-        <img src="logo.png" alt="Logo do Sistema" class="logo">
         <div class="form-header">Nova Transação</div>
-
+        
         <input type="text" style="display:none;" autocomplete="username">
         <input type="password" style="display:none;" autocomplete="new-password">
         
@@ -359,28 +359,6 @@
             </select>
         </div>
         <button onclick="addTransaction()">Adicionar Transação</button>
-
-        <div class="form-group">
-            <label for="themeSelector">Escolha o Tema:</label>
-            <select id="themeSelector" onchange="changeTheme()">
-                <option value="default">Padrão</option>
-                <option value="dark">Escuro</option>
-                <option value="light">Claro</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="widgetSelector">Escolha Widgets:</label>
-            <select id="widgetSelector" onchange="addWidget()">
-                <option value="balance">Saldo</option>
-                <option value="transactions">Transações Recentes</option>
-                <option value="expenses">Despesas Mensais</option>
-            </select>
-        </div>
-
-        <div id="widgetContainer">
-            <!-- Widgets serão adicionados aqui -->
-        </div>
 
         <table id="transactionsTable">
             <thead>
@@ -609,7 +587,6 @@
                     updateFilteredView();
                     calculateBalances();
                     checkMonthlyLimit();
-                    updateWidgets();  // Atualiza os widgets com dados atuais
                 }
             });
         }
@@ -655,7 +632,6 @@
             updateFilteredView();
             calculateBalances();
             checkMonthlyLimit();
-            updateWidgets();  // Atualiza os widgets com dados atuais
 
             document.getElementById('date').value = getCurrentDate();
             document.getElementById('description').value = '';
@@ -721,7 +697,6 @@
             updateFilteredView();
             calculateBalances();
             checkMonthlyLimit();
-            updateWidgets();  // Atualiza os widgets com dados atuais
         }
 
         function calculateBalances() {
@@ -1170,8 +1145,8 @@
         }
 
         function analyzeSpendingPatterns() {
-            // Aqui você implementaria o modelo de machine learning para identificar padrões de gastos.
-            // Por enquanto, vamos apenas simular a análise.
+            // Here you would implement the machine learning model to identify spending patterns.
+            // For now, we will just simulate the analysis.
             let despesas = transactions.filter(t => t.type === 'despesa');
             let categorias = {};
 
@@ -1192,8 +1167,8 @@
         }
 
         function forecastFinancialTrends() {
-            // Aqui você implementaria a análise de séries temporais para previsão de tendências financeiras.
-            // Por enquanto, vamos apenas simular a previsão.
+            // Here you would implement the time series analysis for financial trend forecasting.
+            // For now, we will just simulate the forecast.
             let receitas = transactions.filter(t => t.type === 'receita');
             let despesas = transactions.filter(t => t.type === 'despesa');
 
@@ -1260,7 +1235,6 @@
             updateFilteredView();
             calculateBalances();
             checkMonthlyLimit();
-            updateWidgets();  // Atualiza os widgets com dados atuais
 
             alert('Importação de transações bancárias concluída.');
         }
@@ -1271,78 +1245,6 @@
                 { date: '2023-07-01', description: 'Salário', amount: '5000,00', type: 'credit' },
                 { date: '2023-07-02', description: 'Supermercado', amount: '200,00', type: 'debit' }
             ];
-        }
-
-        function changeTheme() {
-            const theme = document.getElementById('themeSelector').value;
-            const body = document.body;
-            switch (theme) {
-                case 'dark':
-                    body.style.backgroundColor = '#2c3e50';
-                    body.style.color = '#ecf0f1';
-                    break;
-                case 'light':
-                    body.style.backgroundColor = '#ecf0f1';
-                    body.style.color = '#2c3e50';
-                    break;
-                default:
-                    body.style.backgroundColor = '#2c3e50';
-                    body.style.color = '#ecf0f1';
-            }
-        }
-
-        function addWidget() {
-            const widgetType = document.getElementById('widgetSelector').value;
-            const widgetContainer = document.getElementById('widgetContainer');
-            let widget;
-            switch (widgetType) {
-                case 'balance':
-                    widget = '<div class="widget"><h3>Saldo</h3><p id="widgetBalance">R$ 0,00</p></div>';
-                    break;
-                case 'transactions':
-                    widget = '<div class="widget"><h3>Transações Recentes</h3><ul id="widgetTransactions"></ul></div>';
-                    break;
-                case 'expenses':
-                    widget = '<div class="widget"><h3>Despesas Mensais</h3><p id="widgetExpenses">R$ 0,00</p></div>';
-                    break;
-            }
-            widgetContainer.innerHTML += widget;
-            updateWidgets();  // Atualiza os widgets com dados atuais
-        }
-
-        function updateWidgets() {
-            const balance = calculateBalance();
-            const transactions = getRecentTransactions();
-            const expenses = calculateMonthlyExpenses();
-
-            document.getElementById('widgetBalance').innerText = formatCurrency(balance);
-            const transactionsList = document.getElementById('widgetTransactions');
-            transactionsList.innerHTML = '';
-            transactions.forEach(transaction => {
-                const li = document.createElement('li');
-                li.innerText = `${transaction.date} - ${transaction.description} - ${formatCurrency(transaction.amount)}`;
-                transactionsList.appendChild(li);
-            });
-            document.getElementById('widgetExpenses').innerText = formatCurrency(expenses);
-        }
-
-        function calculateBalance() {
-            let balance = transactions.reduce((sum, transaction) => {
-                return transaction.type === 'receita' ? sum + transaction.amount : sum - transaction.amount;
-            }, 0);
-            return balance;
-        }
-
-        function getRecentTransactions() {
-            return transactions.slice(-5); // Últimas 5 transações
-        }
-
-        function calculateMonthlyExpenses() {
-            const currentMonth = getCurrentDate().slice(0, 7);
-            let monthlyExpenses = transactions
-                .filter(transaction => transaction.type === 'despesa' && transaction.date.startsWith(currentMonth))
-                .reduce((sum, transaction) => sum + transaction.amount, 0);
-            return monthlyExpenses;
         }
     </script>
 </body>
