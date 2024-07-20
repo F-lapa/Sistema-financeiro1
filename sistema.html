@@ -22,6 +22,7 @@
             color: var(--text-color);
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
         }
         .content {
             display: flex;
@@ -104,6 +105,7 @@
         .container {
             flex: 1;
             padding: 20px;
+            margin-left: 240px;
         }
         .container h1 {
             text-align: center;
@@ -138,18 +140,10 @@
         .container .change-password {
             right: 10px;
         }
-        .container .admin-icon {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            cursor: pointer;
-            color: var(--text-color);
-            font-size: 1.2em;
-            display: none;
-        }
         .container .form-group {
             margin-bottom: 10px;
-            width: 50%;
+            width: 100%;
+            max-width: 400px;
             margin: 0 auto;
         }
         .container label {
@@ -175,7 +169,8 @@
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
         .container button {
-            width: 50%;
+            width: 100%;
+            max-width: 400px;
             padding: 10px;
             background-color: var(--button-color);
             color: var(--text-color);
@@ -194,96 +189,35 @@
         .container table {
             width: 100%;
             margin-top: 10px;
-            border-collapse: separate;
-            border-spacing: 0 8px;
+            border-collapse: collapse;
         }
         .container th, .container td {
             padding: 10px;
             text-align: left;
             background-color: #34495e;
+            border: 1px solid #2c3e50;
         }
         .container th {
             background-color: var(--background-color);
             color: #bdc3c7;
         }
-        .container tbody tr {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 6px;
-            overflow: hidden;
-        }
         .container tbody tr:hover {
             background-color: #3b4b5e;
         }
-        .container .totals, .container .filter {
+        .container .totals {
             margin-top: 10px;
             text-align: center;
         }
-        .container .totals p, .container .filter p {
+        .container .totals p {
             font-size: 16px;
             color: var(--text-color);
         }
-        .container .totals span, .container .filter span {
+        .container .totals span {
             font-weight: bold;
             color: var(--primary-color);
         }
         .container .negative {
             color: red !important;
-        }
-        .container .transaction-description {
-            display: flex;
-            align-items: center;
-        }
-        .container .transaction-amount {
-            text-align: left;
-            color: green;
-        }
-        .container .transaction-amount.despesa {
-            color: red;
-        }
-        .container .transaction-icon {
-            margin-right: 10px;
-            font-size: 1.2em;
-        }
-        .container .filter-results {
-            margin-top: 10px;
-        }
-        .container .admin-section {
-            display: none;
-            margin-top: 10px;
-        }
-        .container .admin-section h2 {
-            text-align: center;
-            color: var(--text-color);
-        }
-        .container .admin-section .form-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .container .admin-section input, .container .admin-section select {
-            width: 100%;
-            margin-bottom: 8px;
-        }
-        .container .admin-section .buttons {
-            flex-direction: column;
-        }
-        .container .admin-section button {
-            width: 100%;
-            margin-bottom: 8px;
-        }
-        .container .password-field {
-            position: relative;
-        }
-        .container .password-field input {
-            width: calc(100% - 40px);
-            margin-bottom: 0;
-        }
-        .container .password-field i {
-            position: absolute;
-            right: 10px;
-            top: 12px;
-            cursor: pointer;
-            color: var(--button-color);
         }
         .container .modal {
             display: none;
@@ -323,24 +257,7 @@
             cursor: pointer;
             color: red;
         }
-        @keyframes shine {
-            0% { background-position: -200px; }
-            100% { background-position: 200px; }
-        }
-        .container input[type="text"]:hover, .container input[type="number"]:hover, .container input[type="date"]:hover, .container select:hover, .container input[type="password"]:hover {
-            border-color: var(--input-border-color);
-            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
-        }
-        .logo-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo-container img {
-            width: 100px;
-            height: auto;
-        }
 
-        /* Ajustes para dispositivos móveis */
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
@@ -354,9 +271,6 @@
             .container {
                 margin-left: 0;
                 padding: 15px;
-            }
-            .sidebar .menu-icons {
-                justify-content: space-between;
             }
             .sidebar .buttons button {
                 width: 100%;
@@ -390,13 +304,8 @@
                 padding-right: 10px;
                 white-space: nowrap;
             }
-            .container .totals,
-            .container .filter {
-                text-align: center;
-            }
         }
 
-        /* Ajustes para tablets */
         @media (max-width: 1024px) {
             .sidebar {
                 width: 200px;
