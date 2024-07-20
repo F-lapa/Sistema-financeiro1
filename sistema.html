@@ -335,34 +335,18 @@
             margin-bottom: 20px;
         }
         .logo-container img {
-            width: 50px; /* Ajuste para um tamanho menor */
+            width: 100px;
             height: auto;
         }
-
-        /* Responsividade */
         @media (max-width: 768px) {
             .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                box-shadow: none;
+                width: 180px;
             }
             .container {
-                margin-left: 0;
+                margin-left: 200px;
                 padding: 10px;
             }
-            .container .form-group {
-                width: 100%;
-            }
-            .container button {
-                width: 100%;
-            }
-        }
-        @media (max-width: 480px) {
             .sidebar h3 {
-                font-size: 1.2em;
-            }
-            .sidebar .menu-icons i {
                 font-size: 1.2em;
             }
             .sidebar button {
@@ -370,31 +354,38 @@
                 padding: 8px;
             }
             .container h1 {
-                font-size: 1.4em;
+                font-size: 1.5em;
             }
-            .container .form-header {
-                font-size: 1em;
-            }
-            .container .greeting {
-                font-size: 1em;
-            }
-            .container label {
-                font-size: 12px;
-            }
-            .container input, .container select {
-                font-size: 12px;
-                padding: 6px;
+            .container .form-group {
+                width: 80%;
             }
             .container button {
-                font-size: 12px;
-                padding: 8px;
+                width: 80%;
             }
-            .container .totals p {
-                font-size: 14px;
+        }
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 150px;
             }
-            .container table th, .container table td {
-                font-size: 12px;
-                padding: 8px;
+            .container {
+                margin-left: 160px;
+                padding: 5px;
+            }
+            .sidebar h3 {
+                font-size: 1em;
+            }
+            .sidebar button {
+                font-size: 10px;
+                padding: 6px;
+            }
+            .container h1 {
+                font-size: 1.2em;
+            }
+            .container .form-group {
+                width: 100%;
+            }
+            .container button {
+                width: 100%;
             }
         }
     </style>
@@ -670,6 +661,7 @@
                     localStorage.setItem('username', userName);
                     document.getElementById('userGreeting').innerHTML = '<span>Olá, <strong>' + userName + '</strong>!</span>';
                     loadTransactions();
+                    loadPaymentReminders();
                     checkAdmin(user.email);
                     loadTheme(); // Carrega o tema salvo
                 });
