@@ -21,18 +21,15 @@
             padding: 0;
             color: var(--text-color);
             display: flex;
-            flex-direction: column;
             min-height: 100vh;
-        }
-        .content {
-            display: flex;
-            flex: 1;
         }
         .sidebar {
             width: 220px;
             background-color: #34495e;
             padding: 20px;
             box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
+            position: fixed;
+            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -103,12 +100,9 @@
             font-size: 14px;
         }
         .container {
-            flex: 1;
+            margin-left: 240px;
             padding: 20px;
-            margin-left: 220px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex: 1;
         }
         .container h1 {
             text-align: center;
@@ -143,10 +137,19 @@
         .container .change-password {
             right: 10px;
         }
+        .container .admin-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+            color: var(--text-color);
+            font-size: 1.2em;
+            display: none;
+        }
         .container .form-group {
             margin-bottom: 10px;
-            width: 100%;
-            max-width: 400px;
+            width: 50%;
+            margin: 0 auto;
         }
         .container label {
             display: block;
@@ -171,8 +174,7 @@
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
         .container button {
-            width: 100%;
-            max-width: 400px;
+            width: 50%;
             padding: 10px;
             background-color: var(--button-color);
             color: var(--text-color);
@@ -181,7 +183,8 @@
             cursor: pointer;
             font-size: 14px;
             transition: background-color 0.3s ease, transform 0.2s ease;
-            margin: 10px 0;
+            margin: 10px auto;
+            display: block;
         }
         .container button:hover {
             background-color: darken(var(--button-color), 10%);
@@ -190,35 +193,96 @@
         .container table {
             width: 100%;
             margin-top: 10px;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0 8px;
         }
         .container th, .container td {
             padding: 10px;
             text-align: left;
             background-color: #34495e;
-            border: 1px solid #2c3e50;
         }
         .container th {
             background-color: var(--background-color);
             color: #bdc3c7;
         }
+        .container tbody tr {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+        }
         .container tbody tr:hover {
             background-color: #3b4b5e;
         }
-        .container .totals {
+        .container .totals, .container .filter {
             margin-top: 10px;
             text-align: center;
         }
-        .container .totals p {
+        .container .totals p, .container .filter p {
             font-size: 16px;
-            color: var(--text-color);
+            color: var (--text-color);
         }
-        .container .totals span {
+        .container .totals span, .container .filter span {
             font-weight: bold;
             color: var(--primary-color);
         }
         .container .negative {
             color: red !important;
+        }
+        .container .transaction-description {
+            display: flex;
+            align-items: center;
+        }
+        .container .transaction-amount {
+            text-align: left;
+            color: green;
+        }
+        .container .transaction-amount.despesa {
+            color: red;
+        }
+        .container .transaction-icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        .container .filter-results {
+            margin-top: 10px;
+        }
+        .container .admin-section {
+            display: none;
+            margin-top: 10px;
+        }
+        .container .admin-section h2 {
+            text-align: center;
+            color: var(--text-color);
+        }
+        .container .admin-section .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container .admin-section input, .container .admin-section select {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        .container .admin-section .buttons {
+            flex-direction: column;
+        }
+        .container .admin-section button {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        .container .password-field {
+            position: relative;
+        }
+        .container .password-field input {
+            width: calc(100% - 40px);
+            margin-bottom: 0;
+        }
+        .container .password-field i {
+            position: absolute;
+            right: 10px;
+            top: 12px;
+            cursor: pointer;
+            color: var(--button-color);
         }
         .container .modal {
             display: none;
@@ -236,7 +300,7 @@
             margin: 15% auto;
             padding: 15px;
             border: 1px solid #444;
-            width: 90%;
+            width: 70%;
             max-width: 400px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -258,318 +322,264 @@
             cursor: pointer;
             color: red;
         }
+        @keyframes shine {
+            0% { background-position: -200px; }
+            100% { background-position: 200px; }
+        }
+        .container input[type="text"]:hover, .container input[type="number"]:hover, .container input[type="date"]:hover, .container select:hover, .container input[type="password"]:hover {
+            border-color: var(--input-border-color);
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
         .logo-container {
             text-align: center;
             margin-bottom: 20px;
         }
         .logo-container img {
-            width: 80px;
+            width: 100px;
             height: auto;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                padding: 10px;
-                box-shadow: none;
-            }
-            .content {
-                flex-direction: column;
-            }
-            .container {
-                margin-left: 0;
-                padding: 15px;
-            }
-            .sidebar .buttons button {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-            .container .form-group {
-                width: 100%;
-            }
-            .container button {
-                width: 100%;
-            }
-            .container table, 
-            .container table th, 
-            .container table td {
-                display: block;
-                width: 100%;
-            }
-            .container table th {
-                text-align: left;
-            }
-            .container table td {
-                text-align: left;
-                padding-left: 50%;
-                position: relative;
-            }
-            .container table td:before {
-                content: attr(data-label);
-                position: absolute;
-                left: 10px;
-                width: 50%;
-                padding-right: 10px;
-                white-space: nowrap;
-            }
-        }
-
-        @media (max-width: 1024px) {
-            .sidebar {
-                width: 200px;
-            }
-            .container {
-                margin-left: 200px;
-            }
-            .sidebar .buttons button {
-                width: 95%;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="content">
-        <div class="sidebar">
-            <div class="menu-icons">
-                <i class="fas fa-key change-password" onclick="openChangePasswordModal()" title="Alterar Senha"></i>
-                <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
-            </div>
-            <h3>Menu</h3>
-            <div class="buttons">
-                <button onclick="openFilterPeriodModal()"><i class="fas fa-filter"></i> Filtrar Período</button>
-                <button onclick="goToLimitPage()"><i class="fas fa-money-check-alt"></i> Definir Limite de Gastos</button>
-                <button onclick="openSpecificTransactionsModal()"><i class="fas fa-search-dollar"></i> Transações Específicas</button>
-                <button onclick="openFinancialPerformanceModal()"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
-                <button onclick="openTrendAnalysisModal()"><i class="fas fa-chart-pie"></i> Análise de Tendências</button>
-                <button onclick="openPaymentReminderModal()"><i class="fas fa-bell"></i> Lembrete de Pagamento</button>
-                <button id="adminButton" onclick="toggleAdminSection()"><i class="fas fa-user-shield"></i> Área do Administrador</button>
-            </div>
-            <div class="theme-selector">
-                <label for="theme">Selecionar Tema:</label>
-                <select id="theme" onchange="changeTheme()">
-                    <option value="default">Padrão</option>
-                    <option value="dark">Escuro</option>
-                    <option value="light">Claro</option>
-                    <option value="blue">Azul</option>
-                    <option value="green">Verde</option>
-                    <option value="red">Vermelho</option>
-                    <option value="purple">Roxo</option>
-                    <option value="orange">Laranja</option>
-                    <option value="pink">Rosa</option>
-                    <option value="yellow">Amarelo</option>
-                    <option value="cyan">Ciano</option>
-                    <option value="brown">Marrom</option>
-                </select>
+    <div class="sidebar">
+        <div class="menu-icons">
+            <i class="fas fa-key change-password" onclick="openChangePasswordModal()" title="Alterar Senha"></i>
+            <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
+        </div>
+        <h3>Menu</h3>
+        <div class="buttons">
+            <button onclick="openFilterPeriodModal()"><i class="fas fa-filter"></i> Filtrar Período</button>
+            <button onclick="goToLimitPage()"><i class="fas fa-money-check-alt"></i> Definir Limite de Gastos</button>
+            <button onclick="openSpecificTransactionsModal()"><i class="fas fa-search-dollar"></i> Transações Específicas</button>
+            <button onclick="openFinancialPerformanceModal()"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
+            <button onclick="openTrendAnalysisModal()"><i class="fas fa-chart-pie"></i> Análise de Tendências</button>
+            <button onclick="openPaymentReminderModal()"><i class="fas fa-bell"></i> Lembrete de Pagamento</button>
+            <button id="adminButton" onclick="toggleAdminSection()"><i class="fas fa-user-shield"></i> Área do Administrador</button>
+        </div>
+        <div class="theme-selector">
+            <label for="theme">Selecionar Tema:</label>
+            <select id="theme" onchange="changeTheme()">
+                <option value="default">Padrão</option>
+                <option value="dark">Escuro</option>
+                <option value="light">Claro</option>
+                <option value="blue">Azul</option>
+                <option value="green">Verde</option>
+                <option value="red">Vermelho</option>
+                <option value="purple">Roxo</option>
+                <option value="orange">Laranja</option>
+                <option value="pink">Rosa</option>
+                <option value="yellow">Amarelo</option>
+                <option value="cyan">Ciano</option>
+                <option value="brown">Marrom</option>
+            </select>
+        </div>
+    </div>
+    <div class="container">
+        <div class="greeting" id="userGreeting"></div>
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <div class="form-header">Nova Transação</div>
+        
+        <input type="text" style="display:none;" autocomplete="username">
+        <input type="password" style="display:none;" autocomplete="new-password">
+        
+        <div class="form-group">
+            <label for="date">Data:</label>
+            <input type="date" id="date" class="highlight" onchange="updateFilteredView()">
+        </div>
+        <div class="form-group">
+            <label for="description">Descrição:</label>
+            <input type="text" id="description" class="highlight">
+        </div>
+        <div class="form-group">
+            <label for="amount">Valor (R$):</label>
+            <input type="text" id="amount" name="amount_field" placeholder="0,00" value="0,00" class="highlight" autocomplete="off" oninput="validateAmount()">
+        </div>
+        <div class="form-group">
+            <label for="type">Tipo:</label>
+            <select id="type" class="highlight">
+                <option value="receita">Receita</option>
+                <option value="despesa">Despesa</option>
+            </select>
+        </div>
+        <button onclick="addTransaction()">Adicionar Transação</button>
+
+        <table id="transactionsTable">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Tipo</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Transactions will be added here -->
+            </tbody>
+        </table>
+
+        <div class="totals">
+            <p>Saldo do Dia: <span id="dailyBalance">R$ 0,00</span></p>
+            <p>Saldo do Mês: <span id="monthlyBalance">R$ 0,00</span></p>
+            <p>Saldo do Ano: <span id="annualBalance">R$ 0,00</span></p>
+        </div>
+
+        <div id="filterPeriodModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeFilterPeriodModal()">&times;</span>
+                <h2>Filtrar por Período</h2>
+                <div class="form-group">
+                    <label for="startDate">Data Inicial:</label>
+                    <input type="date" id="startDate" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="endDate">Data Final:</label>
+                    <input type="date" id="endDate" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="filterType">Tipo:</label>
+                    <select id="filterType" class="highlight">
+                        <option value="">Todos</option>
+                        <option value="receita">Receita</option>
+                        <option value="despesa">Despesa</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filterDescription">Descrição:</label>
+                    <select id="filterDescription" class="highlight">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <button onclick="filterByPeriod()">Filtrar</button>
+                <button onclick="clearFilter()">Limpar Filtro</button>
+                <div id="filteredResults">
+                    <p>Total Receitas: <span id="totalReceitas">R$ 0,00</span></p>
+                    <p>Total Despesas: <span id="totalDespesas" class="negative">R$ 0,00</span></p>
+                    <p>Saldo: <span id="totalSaldo">R$ 0,00</span></p>
+                </div>
+                <div class="filter-results" id="filterResults">
+                    <h3>Extrato</h3>
+                    <table id="filteredTransactionsTable">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th>Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Filtered transactions will be added here -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        <div class="container">
-            <div class="greeting" id="userGreeting"></div>
-            <div class="logo-container">
-                <img src="logo.png" alt="Logo">
-            </div>
-            <div class="form-header">Nova Transação</div>
-            
-            <input type="text" style="display:none;" autocomplete="username">
-            <input type="password" style="display:none;" autocomplete="new-password">
-            
-            <div class="form-group">
-                <label for="date">Data:</label>
-                <input type="date" id="date" class="highlight" onchange="updateFilteredView()">
-            </div>
-            <div class="form-group">
-                <label for="description">Descrição:</label>
-                <input type="text" id="description" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="amount">Valor (R$):</label>
-                <input type="text" id="amount" name="amount_field" placeholder="0,00" value="0,00" class="highlight" autocomplete="off" oninput="validateAmount()">
-            </div>
-            <div class="form-group">
-                <label for="type">Tipo:</label>
-                <select id="type" class="highlight">
-                    <option value="receita">Receita</option>
-                    <option value="despesa">Despesa</option>
-                </select>
-            </div>
-            <button onclick="addTransaction()">Adicionar Transação</button>
 
-            <table id="transactionsTable">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Descrição</th>
-                        <th>Valor</th>
-                        <th>Tipo</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Transactions will be added here -->
-                </tbody>
-            </table>
-
-            <div class="totals">
-                <p>Saldo do Dia: <span id="dailyBalance">R$ 0,00</span></p>
-                <p>Saldo do Mês: <span id="monthlyBalance">R$ 0,00</span></p>
-                <p>Saldo do Ano: <span id="annualBalance">R$ 0,00</span></p>
-            </div>
-
-            <div id="filterPeriodModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeFilterPeriodModal()">&times;</span>
-                    <h2>Filtrar por Período</h2>
-                    <div class="form-group">
-                        <label for="startDate">Data Inicial:</label>
-                        <input type="date" id="startDate" class="highlight">
-                    </div>
-                    <div class="form-group">
-                        <label for="endDate">Data Final:</label>
-                        <input type="date" id="endDate" class="highlight">
-                    </div>
-                    <div class="form-group">
-                        <label for="filterType">Tipo:</label>
-                        <select id="filterType" class="highlight">
-                            <option value="">Todos</option>
-                            <option value="receita">Receita</option>
-                            <option value="despesa">Despesa</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="filterDescription">Descrição:</label>
-                        <select id="filterDescription" class="highlight">
-                            <option value="">Todos</option>
-                        </select>
-                    </div>
-                    <button onclick="filterByPeriod()">Filtrar</button>
-                    <button onclick="clearFilter()">Limpar Filtro</button>
-                    <div id="filteredResults">
-                        <p>Total Receitas: <span id="totalReceitas">R$ 0,00</span></p>
-                        <p>Total Despesas: <span id="totalDespesas" class="negative">R$ 0,00</span></p>
-                        <p>Saldo: <span id="totalSaldo">R$ 0,00</span></p>
-                    </div>
-                    <div class="filter-results" id="filterResults">
-                        <h3>Extrato</h3>
-                        <table id="filteredTransactionsTable">
-                            <thead>
-                                <tr>
-                                    <th>Data</th>
-                                    <th>Descrição</th>
-                                    <th>Valor</th>
-                                    <th>Tipo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Filtered transactions will be added here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div id="changePasswordModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeChangePasswordModal()">&times;</span>
-                    <h2>Alterar Senha</h2>
-                    <div class="form-group password-field">
-                        <label for="newPassword">Nova Senha:</label>
-                        <input type="password" id="newPassword" class="highlight">
-                        <i class="fas fa-eye" id="toggleChangePassword" onclick="togglePasswordVisibility('newPassword')"></i>
-                    </div>
-                    <button onclick="changePassword()">Alterar Senha</button>
-                </div>
-            </div>
-
-            <div id="specificTransactionsModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeSpecificTransactionsModal()">&times;</span>
-                    <h2>Transações Específicas</h2>
-                    <div class="form-group">
-                        <label for="specificStartDate">Data Inicial:</label>
-                        <input type="date" id="specificStartDate" class="highlight">
-                    </div>
-                    <div class="form-group">
-                        <label for="specificEndDate">Data Final:</label>
-                        <input type="date" id="specificEndDate" class="highlight">
-                    </div>
-                    <div class="form-group">
-                        <label for="specificType">Tipo:</label>
-                        <select id="specificType" class="highlight">
-                            <option value="receita">Receita</option>
-                            <option value="despesa">Despesa</option>
-                        </select>
-                    </div>
-                    <button onclick="generateSpecificTransactionsReport()">Gerar Relatório</button>
-                    <canvas id="specificTransactionsChart" style="margin-top: 20px;"></canvas>
-                </div>
-            </div>
-
-            <div id="financialPerformanceModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeFinancialPerformanceModal()">&times;</span>
-                    <h2>Desempenho Financeiro</h2>
-                    <canvas id="financialPerformanceChart" style="margin-top: 20px;"></canvas>
-                </div>
-            </div>
-
-            <div id="trendAnalysisModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeTrendAnalysisModal()">&times;</span>
-                    <h2>Análise de Tendências</h2>
-                    <button onclick="analyzeSpendingPatterns()">Identificação de Padrões de Gasto</button>
-                    <button onclick="forecastFinancialTrends()">Previsão Financeira</button>
-                    <canvas id="trendAnalysisChart" style="margin-top: 20px;"></canvas>
-                </div>
-            </div>
-
-            <div id="paymentReminderModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closePaymentReminderModal()">&times;</span>
-                    <h2>Lembrete de Pagamento</h2>
-                    <div class="form-group">
-                        <label for="reminderDescription">Descrição:</label>
-                        <input type="text" id="reminderDescription" class="highlight">
-                    </div>
-                    <div class="form-group">
-                        <label for="reminderDate">Dia do Mês:</label>
-                        <input type="number" id="reminderDate" class="highlight" min="1" max="31">
-                    </div>
-                    <button onclick="addPaymentReminder()">Adicionar Lembrete</button>
-                    <div id="paymentReminders">
-                        <!-- Reminders will be displayed here -->
-                    </div>
-                </div>
-            </div>
-
-            <div class="admin-section" id="adminSection">
-                <h2>Gerenciamento de Usuários</h2>
-                <div class="form-group">
-                    <label for="newUserName">Nome do Novo Usuário:</label>
-                    <input type="text" id="newUserName" class="highlight">
-                </div>
-                <div class="form-group">
-                    <label for="newUserEmail">Email do Novo Usuário:</label>
-                    <input type="text" id="newUserEmail" class="highlight">
-                </div>
+        <div id="changePasswordModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeChangePasswordModal()">&times;</span>
+                <h2>Alterar Senha</h2>
                 <div class="form-group password-field">
-                    <label for="newUserPassword">Senha do Novo Usuário:</label>
-                    <input type="password" id="newUserPassword" class="highlight" value="">
-                    <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility('newUserPassword')"></i>
+                    <label for="newPassword">Nova Senha:</label>
+                    <input type="password" id="newPassword" class="highlight">
+                    <i class="fas fa-eye" id="toggleChangePassword" onclick="togglePasswordVisibility('newPassword')"></i>
                 </div>
-                <div class="buttons">
-                    <button onclick="registerNewUser()">Registrar Novo Usuário</button>
-                </div>
+                <button onclick="changePassword()">Alterar Senha</button>
             </div>
-
-            <div id="alertModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeAlertModal()">&times;</span>
-                    <h2>Alerta</h2>
-                    <p id="alertMessage"></p>
-                </div>
-            </div>
-
         </div>
+
+        <div id="specificTransactionsModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeSpecificTransactionsModal()">&times;</span>
+                <h2>Transações Específicas</h2>
+                <div class="form-group">
+                    <label for="specificStartDate">Data Inicial:</label>
+                    <input type="date" id="specificStartDate" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="specificEndDate">Data Final:</label>
+                    <input type="date" id="specificEndDate" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="specificType">Tipo:</label>
+                    <select id="specificType" class="highlight">
+                        <option value="receita">Receita</option>
+                        <option value="despesa">Despesa</option>
+                    </select>
+                </div>
+                <button onclick="generateSpecificTransactionsReport()">Gerar Relatório</button>
+                <canvas id="specificTransactionsChart" style="margin-top: 20px;"></canvas>
+            </div>
+        </div>
+
+        <div id="financialPerformanceModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeFinancialPerformanceModal()">&times;</span>
+                <h2>Desempenho Financeiro</h2>
+                <canvas id="financialPerformanceChart" style="margin-top: 20px;"></canvas>
+            </div>
+        </div>
+
+        <div id="trendAnalysisModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeTrendAnalysisModal()">&times;</span>
+                <h2>Análise de Tendências</h2>
+                <button onclick="analyzeSpendingPatterns()">Identificação de Padrões de Gasto</button>
+                <button onclick="forecastFinancialTrends()">Previsão Financeira</button>
+                <canvas id="trendAnalysisChart" style="margin-top: 20px;"></canvas>
+            </div>
+        </div>
+
+        <div id="paymentReminderModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closePaymentReminderModal()">&times;</span>
+                <h2>Lembrete de Pagamento</h2>
+                <div class="form-group">
+                    <label for="reminderDescription">Descrição:</label>
+                    <input type="text" id="reminderDescription" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="reminderDate">Dia do Mês:</label>
+                    <input type="number" id="reminderDate" class="highlight" min="1" max="31">
+                </div>
+                <button onclick="addPaymentReminder()">Adicionar Lembrete</button>
+                <div id="paymentReminders">
+                    <!-- Reminders will be displayed here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-section" id="adminSection">
+            <h2>Gerenciamento de Usuários</h2>
+            <div class="form-group">
+                <label for="newUserName">Nome do Novo Usuário:</label>
+                <input type="text" id="newUserName" class="highlight">
+            </div>
+            <div class="form-group">
+                <label for="newUserEmail">Email do Novo Usuário:</label>
+                <input type="text" id="newUserEmail" class="highlight">
+            </div>
+            <div class="form-group password-field">
+                <label for="newUserPassword">Senha do Novo Usuário:</label>
+                <input type="password" id="newUserPassword" class="highlight" value="">
+                <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility('newUserPassword')"></i>
+            </div>
+            <div class="buttons">
+                <button onclick="registerNewUser()">Registrar Novo Usuário</button>
+            </div>
+        </div>
+
+        <div id="alertModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeAlertModal()">&times;</span>
+                <h2>Alerta</h2>
+                <p id="alertMessage"></p>
+            </div>
+        </div>
+
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
@@ -579,24 +589,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         var firebaseConfig = {
-            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-  projectId: "sistema-de-receitas-e-despesas",
-  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-  messagingSenderId: "252102478972",
-  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-  measurementId: "G-K2HCS7WNZV"
+            apiKey: "API_KEY",
+            authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+            databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+            projectId: "sistema-de-receitas-e-despesas",
+            storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+            messagingSenderId: "SENDER_ID",
+            appId: "APP_ID",
+            measurementId: "MEASUREMENT_ID"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const auth = firebase.auth();
-
-        let transactions = [];
-        let paymentReminders = [];
-        let lastTransactionId = localStorage.getItem('lastTransactionId');
-        let allUsers = [];
-        let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
 
         auth.onAuthStateChanged(user => {
             if (user) {
@@ -605,9 +609,7 @@
                     const userData = snapshot.val();
                     const userName = userData ? userData.name : "Usuário";
                     localStorage.setItem('username', userName);
-                    document.getElementById('userGreeting').innerHTML = user.email === 'fernandolapa1987@gmail.com' ? 
-                        '<span>Olá, <strong>Administrador!</strong></span>' : 
-                        '<span>Olá, <strong>' + userName + '</strong>!</span>';
+                    document.getElementById('userGreeting').innerHTML = '<span>Olá, <strong>' + userName + '</strong>!</span>';
                     loadTransactions();
                     checkAdmin(user.email);
                     loadTheme(); // Carrega o tema salvo
@@ -616,6 +618,12 @@
                 window.location.href = 'index.html';  
             }
         });
+
+        let transactions = [];
+        let paymentReminders = [];
+        let lastTransactionId = localStorage.getItem('lastTransactionId');
+        let allUsers = [];
+        let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
 
         function saveTransactions() {
             const userId = auth.currentUser.uid;
@@ -717,12 +725,6 @@
                     const cellType = row.insertCell(3);
                     const cellAction = row.insertCell(4);
 
-                    cellDate.setAttribute('data-label', 'Data');
-                    cellDescription.setAttribute('data-label', 'Descrição');
-                    cellAmount.setAttribute('data-label', 'Valor');
-                    cellType.setAttribute('data-label', 'Tipo');
-                    cellAction.setAttribute('data-label', 'Ação');
-
                     cellDate.innerText = transaction.date;
                     cellDescription.innerHTML = `<div class="transaction-description">
                                                     <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
@@ -818,11 +820,6 @@
                 const cellDescription = row.insertCell(1);
                 const cellAmount = row.insertCell(2);
                 const cellType = row.insertCell(3);
-
-                cellDate.setAttribute('data-label', 'Data');
-                cellDescription.setAttribute('data-label', 'Descrição');
-                cellAmount.setAttribute('data-label', 'Valor');
-                cellType.setAttribute('data-label', 'Tipo');
 
                 cellDate.innerText = transaction.date;
                 cellDescription.innerHTML = `<div class="transaction-description">
