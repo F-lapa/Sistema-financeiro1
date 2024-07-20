@@ -149,8 +149,7 @@
         }
         .container .form-group {
             margin-bottom: 10px;
-            width: 50%;
-            margin: 0 auto;
+            width: 100%;
         }
         .container label {
             display: block;
@@ -175,7 +174,7 @@
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
         .container button {
-            width: 50%;
+            width: 100%;
             padding: 10px;
             background-color: var(--button-color);
             color: var(--text-color);
@@ -220,11 +219,11 @@
         }
         .container .totals p, .container .filter p {
             font-size: 16px;
-            color: var(--text-color);
+            color: var (--text-color);
         }
         .container .totals span, .container .filter span {
             font-weight: bold;
-            color: var(--primary-color);
+            color: var (--primary-color);
         }
         .container .negative {
             color: red !important;
@@ -339,63 +338,21 @@
             width: 100px;
             height: auto;
         }
-        .reminder-item {
-            background-color: #34495e;
+        .reminder-list {
+            list-style: none;
+            padding: 0;
+        }
+        .reminder-list li {
+            background-color: #3b4b5e;
+            margin: 10px 0;
             padding: 10px;
             border-radius: 8px;
-            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .reminder-item p {
+        .reminder-list li p {
             margin: 0;
-            font-size: 14px;
-        }
-        .reminder-item button {
-            margin-left: 10px;
-            background-color: #e74c3c;
-            border: none;
-            color: #ecf0f1;
-            padding: 5px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-        .reminder-item button:hover {
-            background-color: #c0392b;
-            transform: scale(1.05);
-        }
-        .alert-modal .modal-content {
-            width: 80%;
-            max-width: 500px;
-        }
-        .alert-modal .modal-content h2 {
-            font-size: 1.4em;
-            margin-bottom: 15px;
-        }
-        .alert-modal .modal-content p {
-            font-size: 1.1em;
-            margin-bottom: 20px;
-        }
-        .alert-modal .modal-content .actions {
-            display: flex;
-            justify-content: space-around;
-        }
-        .alert-modal .modal-content .actions button {
-            background-color: var(--button-color);
-            color: var(--text-color);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-        .alert-modal .modal-content .actions button:hover {
-            background-color: darken(var(--button-color), 10%);
-            transform: scale(1.05);
         }
     </style>
 </head>
@@ -605,9 +562,9 @@
                     <input type="number" id="reminderDate" class="highlight" min="1" max="31">
                 </div>
                 <button onclick="addPaymentReminder()">Adicionar Lembrete</button>
-                <div id="paymentReminders">
+                <ul id="paymentReminders" class="reminder-list">
                     <!-- Reminders will be displayed here -->
-                </div>
+                </ul>
             </div>
         </div>
 
@@ -631,15 +588,23 @@
             </div>
         </div>
 
-        <div id="alertModal" class="modal alert-modal">
+        <div id="alertModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeAlertModal()">&times;</span>
-                <h2>Alerta de Pagamento</h2>
+                <h2>Alerta</h2>
                 <p id="alertMessage"></p>
-                <div class="actions">
-                    <button onclick="markAsPaid()">Já foi pago</button>
-                    <button onclick="keepAlert()">Não foi pago</button>
-                </div>
+                <button id="markAsPaidButton" onclick="markAsPaid()">Foi Pago</button>
+                <button id="notPaidButton" onclick="notPaid()">Não Foi Pago</button>
+            </div>
+        </div>
+
+        <div id="confirmRemoveModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeConfirmRemoveModal()">&times;</span>
+                <h2>Confirmação</h2>
+                <p>Tem certeza que deseja remover este lembrete?</p>
+                <button id="confirmRemoveButton">Confirmar</button>
+                <button onclick="closeConfirmRemoveModal()">Cancelar</button>
             </div>
         </div>
 
@@ -672,10 +637,12 @@
                     const userData = snapshot.val();
                     const userName = userData ? userData.name : "Usuário";
                     localStorage.setItem('username', userName);
-                    document.getElementById('userGreeting').innerHTML = 'Olá, <strong>' + userName + '</strong>';
+                    document.getElementById('userGreeting').innerHTML = '<span>Olá, <strong>' + userName + '</strong>!</span>';
                     loadTransactions();
                     checkAdmin(user.email);
-                    loadTheme(); // Carrega o tema salvo
+                    loadTheme();
+                    loadPaymentReminders(); // Carrega os lembretes de pagamento
+                    checkReminders(); // Verifica lembretes
                 });
             } else {
                 window.location.href = 'index.html';  
@@ -803,9 +770,12 @@
         }
 
         function confirmRemoveTransaction(transactionId) {
-            if (confirm('Tem certeza que deseja remover esta transação?')) {
+            const confirmRemoveModal = document.getElementById('confirmRemoveModal');
+            confirmRemoveModal.style.display = 'block';
+            document.getElementById('confirmRemoveButton').onclick = function() {
                 removeTransaction(transactionId);
-            }
+                closeConfirmRemoveModal();
+            };
         }
 
         function removeTransaction(transactionId) {
@@ -815,6 +785,11 @@
             updateFilteredView();
             calculateBalances();
             checkMonthlyLimit();
+        }
+
+        function closeConfirmRemoveModal() {
+            const confirmRemoveModal = document.getElementById('confirmRemoveModal');
+            confirmRemoveModal.style.display = 'none';
         }
 
         function calculateBalances() {
@@ -1325,7 +1300,7 @@
         function addPaymentReminder() {
             const description = document.getElementById('reminderDescription').value;
             const date = document.getElementById('reminderDate').value;
-            const reminder = { id: generateTransactionId(), description, date, paid: false, missed: false };
+            const reminder = { id: generateTransactionId(), description, date, paid: false };
             paymentReminders.push(reminder);
             saveReminders();
             loadPaymentReminders();
@@ -1356,25 +1331,24 @@
             const remindersDiv = document.getElementById('paymentReminders');
             remindersDiv.innerHTML = '';
             paymentReminders.forEach(reminder => {
-                const reminderDiv = document.createElement('div');
-                reminderDiv.className = 'reminder-item';
-                reminderDiv.innerHTML = `
-                    <div>
-                        <p><strong>Descrição:</strong> ${reminder.description}</p>
-                        <p><strong>Dia do Mês:</strong> ${reminder.date}</p>
-                    </div>
-                    <div>
-                        <button onclick="confirmRemoveReminder('${reminder.id}')">Remover</button>
-                    </div>
+                const reminderItem = document.createElement('li');
+                reminderItem.className = 'reminder';
+                reminderItem.innerHTML = `
+                    <p><strong>Descrição:</strong> ${reminder.description}</p>
+                    <p><strong>Dia do Mês:</strong> ${reminder.date}</p>
+                    <button onclick="confirmRemoveReminder('${reminder.id}')">Remover</button>
                 `;
-                remindersDiv.appendChild(reminderDiv);
+                remindersDiv.appendChild(reminderItem);
             });
         }
 
         function confirmRemoveReminder(id) {
-            if (confirm('Tem certeza que deseja remover este lembrete?')) {
+            const confirmRemoveModal = document.getElementById('confirmRemoveModal');
+            confirmRemoveModal.style.display = 'block';
+            document.getElementById('confirmRemoveButton').onclick = function() {
                 removeReminder(id);
-            }
+                closeConfirmRemoveModal();
+            };
         }
 
         function removeReminder(id) {
@@ -1383,45 +1357,49 @@
             displayReminders();
         }
 
+        function closeConfirmRemoveModal() {
+            const confirmRemoveModal = document.getElementById('confirmRemoveModal');
+            confirmRemoveModal.style.display = 'none';
+        }
+
         function checkReminders() {
             const today = new Date();
-            const userId = auth.currentUser.uid;
             paymentReminders.forEach(reminder => {
                 const reminderDate = new Date(today.getFullYear(), today.getMonth(), reminder.date);
                 const differenceInTime = reminderDate.getTime() - today.getTime();
                 const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
 
-                if (differenceInDays === 2 && !reminder.paid && !reminder.missed) {
-                    showReminderAlert(reminder, 'Seu pagamento está próximo da data de vencimento.');
-                } else if (differenceInDays < 0 && !reminder.paid) {
-                    showReminderAlert(reminder, 'Seu pagamento está vencido.');
+                if (differenceInDays === 2) {
+                    showAlertReminder(reminder);
                 }
             });
         }
 
-        function showReminderAlert(reminder, message) {
+        function showAlertReminder(reminder) {
             const modal = document.getElementById('alertModal');
-            document.getElementById('alertMessage').innerText = `${message} Descrição: ${reminder.description}`;
+            document.getElementById('alertMessage').innerText = `Lembrete: ${reminder.description} está próximo da data de pagamento.`;
+            document.getElementById('markAsPaidButton').onclick = function() {
+                markAsPaid(reminder.id);
+            };
+            document.getElementById('notPaidButton').onclick = function() {
+                notPaid(reminder.id);
+            };
             modal.style.display = 'block';
             modal.style.animation = 'fadein 0.5s';
-
-            window.currentReminder = reminder;
         }
 
-        function markAsPaid() {
-            if (window.currentReminder) {
-                window.currentReminder.paid = true;
-                saveReminders();
-                closeAlertModal();
-            }
+        function markAsPaid(id) {
+            const reminder = paymentReminders.find(reminder => reminder.id === id);
+            reminder.paid = true;
+            saveReminders();
+            closeAlertModal();
         }
 
-        function keepAlert() {
-            if (window.currentReminder) {
-                window.currentReminder.missed = true;
-                saveReminders();
-                closeAlertModal();
-            }
+        function notPaid(id) {
+            const reminder = paymentReminders.find(reminder => reminder.id === id);
+            reminder.paid = false;
+            saveReminders();
+            closeAlertModal();
         }
 
         function changeTheme() {
