@@ -76,7 +76,7 @@
             margin-right: 8px;
         }
         .sidebar button:hover {
-            background-color: darken(var(--button-color), 10%);
+            background-color: var(--button-color);
             transform: scale(1.05);
         }
         .sidebar .theme-selector {
@@ -116,6 +116,12 @@
             color: var(--text-color);
             margin-bottom: 15px;
             font-size: 1.2em;
+        }
+        .container .logo {
+            display: block;
+            margin: 0 auto 20px;
+            width: 150px;
+            height: auto;
         }
         .container .form-header {
             text-align: center;
@@ -187,7 +193,7 @@
             display: block;
         }
         .container button:hover {
-            background-color: darken(var(--button-color), 10%);
+            background-color: var(--button-color);
             transform: scale(1.05);
         }
         .container table {
@@ -368,6 +374,7 @@
     </div>
     <div class="container">
         <div class="greeting" id="userGreeting"></div>
+        <img src="logo.png" alt="Logomarca" class="logo">
         <div class="form-header">Nova Transação</div>
         
         <input type="text" style="display:none;" autocomplete="username">
@@ -577,6 +584,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
+        // Configuração do Firebase
         var firebaseConfig = {
             apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
             authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
@@ -870,8 +878,14 @@
             const dateInput = document.getElementById('date');
             dateInput.value = getCurrentDate();
             updateFilteredView();
-            loadPaymentReminders();
-            checkReminders();
+            
+            // Verifique se o usuário está autenticado antes de carregar os lembretes de pagamento
+            if (auth.currentUser) {
+                loadPaymentReminders();
+                checkReminders();
+            } else {
+                console.warn("Usuário não autenticado. Lembretes de pagamento não foram carregados.");
+            }
         });
 
         function logout() {
@@ -1038,14 +1052,14 @@
                             bodyFont: { size: 14 },
                             footerFont: { size: 14 },
                             displayColors: false,
-                            titleColor: '#fff',
-                            bodyColor: '#fff',
-                            borderColor: '#3498db',
+                            titleColor: var(--text-color),
+                            bodyColor: var(--text-color),
+                            borderColor: var(--button-color),
                             borderWidth: 1
                         },
                         legend: {
                             labels: {
-                                color: '#ecf0f1',
+                                color: var(--text-color),
                                 font: {
                                     size: 14,
                                     weight: 'bold'
@@ -1157,19 +1171,19 @@
                         },
                         legend: {
                             labels: {
-                                color: '#ecf0f1'
+                                color: var(--text-color)
                             }
                         }
                     },
                     scales: {
                         x: {
                             ticks: {
-                                color: '#ecf0f1'
+                                color: var(--text-color)
                             }
                         },
                         y: {
                             ticks: {
-                                color: '#ecf0f1'
+                                color: var(--text-color)
                             }
                         }
                     }
@@ -1280,18 +1294,26 @@
         }
 
         function saveReminders() {
-            const userId = auth.currentUser.uid;
-            database.ref('reminders/' + userId).set(paymentReminders);
+            const userId = auth.currentUser ? auth.currentUser.uid : null;
+            if (userId) {
+                database.ref('reminders/' + userId).set(paymentReminders);
+            } else {
+                console.warn("Usuário não autenticado. Não foi possível salvar os lembretes de pagamento.");
+            }
         }
 
         function loadPaymentReminders() {
-            const userId = auth.currentUser.uid;
-            database.ref('reminders/' + userId).once('value', function(snapshot) {
-                if (snapshot.val()) {
-                    paymentReminders = snapshot.val();
-                    displayReminders();
-                }
-            });
+            const userId = auth.currentUser ? auth.currentUser.uid : null;
+            if (userId) {
+                database.ref('reminders/' + userId).once('value', function(snapshot) {
+                    if (snapshot.val()) {
+                        paymentReminders = snapshot.val();
+                        displayReminders();
+                    }
+                });
+            } else {
+                console.warn("Usuário não autenticado. Não foi possível carregar os lembretes de pagamento.");
+            }
         }
 
         function displayReminders() {
@@ -1320,9 +1342,9 @@
             paymentReminders.forEach(reminder => {
                 const reminderDate = new Date(today.getFullYear(), today.getMonth(), reminder.date);
                 const differenceInTime = reminderDate.getTime() - today.getTime();
-                const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+                const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
                 if (differenceInDays === 2) {
-                    alert(`Lembrete: ${reminder.description} está próximo da data de pagamento.`);
+                    showAlert(`Lembrete: ${reminder.description} está próximo da data de pagamento.`);
                 }
             });
         }
