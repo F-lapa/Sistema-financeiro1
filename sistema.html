@@ -79,25 +79,23 @@
             background-color: darken(var(--button-color), 10%);
             transform: scale(1.05);
         }
-        .sidebar .theme-selector {
+        .theme-selector {
             margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
-        .sidebar .theme-selector label {
+        .theme-selector label {
             font-size: 14px;
             margin-bottom: 5px;
             color: var(--text-color);
         }
-        .sidebar .theme-selector select {
-            width: 90%;
-            padding: 8px;
-            border-radius: 8px;
-            border: none;
-            background-color: var(--text-color);
-            color: #34495e;
-            font-size: 14px;
+        .theme-selector .color-grid {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .theme-selector .color-grid div {
+            width: 30px;
+            height: 30px;
+            margin: 5px;
+            cursor: pointer;
         }
         .container {
             margin-left: 240px;
@@ -149,7 +147,7 @@
         .container .form-group {
             margin-bottom: 10px;
             width: 100%;
-            max-width: 500px;
+            max-width: 400px;
             margin: 0 auto;
         }
         .container label {
@@ -324,43 +322,6 @@
             cursor: pointer;
             color: red;
         }
-        .reminder-list {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .reminder-item {
-            background-color: #34495e;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .reminder-item p {
-            margin: 0;
-        }
-        .reminder-item button {
-            background-color: var(--button-color);
-            color: var(--text-color);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            padding: 5px 10px;
-            margin-left: 10px;
-            transition: background-color 0.3s ease;
-        }
-        .reminder-item button:hover {
-            background-color: darken(var(--button-color), 10%);
-        }
-        @keyframes shine {
-            0% { background-position: -200px; }
-            100% { background-position: 200px; }
-        }
-        .container input[type="text"]:hover, .container input[type="number"]:hover, .container input[type="date"]:hover, .container select:hover, .container input[type="password"]:hover {
-            border-color: var(--input-border-color);
-            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
-        }
         .logo-container {
             text-align: center;
             margin-bottom: 20px;
@@ -368,6 +329,33 @@
         .logo-container img {
             width: 100px;
             height: auto;
+        }
+        .reminder-list {
+            margin-top: 20px;
+        }
+        .reminder {
+            background-color: #2c3e50;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .reminder p {
+            margin: 0;
+            color: var(--text-color);
+        }
+        .reminder button {
+            background-color: var(--button-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .reminder button:hover {
+            background-color: darken(var(--button-color), 10%);
         }
     </style>
 </head>
@@ -388,21 +376,10 @@
             <button id="adminButton" onclick="toggleAdminSection()"><i class="fas fa-user-shield"></i> Área do Administrador</button>
         </div>
         <div class="theme-selector">
-            <label for="theme">Selecionar Tema:</label>
-            <select id="theme" onchange="changeTheme()">
-                <option value="default">Padrão</option>
-                <option value="dark">Escuro</option>
-                <option value="light">Claro</option>
-                <option value="blue">Azul</option>
-                <option value="green">Verde</option>
-                <option value="red">Vermelho</option>
-                <option value="purple">Roxo</option>
-                <option value="orange">Laranja</option>
-                <option value="pink">Rosa</option>
-                <option value="yellow">Amarelo</option>
-                <option value="cyan">Ciano</option>
-                <option value="brown">Marrom</option>
-            </select>
+            <label>Selecionar Tema:</label>
+            <div class="color-grid" id="themeGrid"></div>
+            <label>Selecionar Fundo:</label>
+            <div class="color-grid" id="backgroundGrid"></div>
         </div>
     </div>
     <div class="container">
@@ -577,13 +554,23 @@
                     <input type="number" id="reminderDate" class="highlight" min="1" max="31">
                 </div>
                 <button onclick="addPaymentReminder()">Adicionar Lembrete</button>
-                <div id="paymentReminders" class="reminder-list">
+                <div class="reminder-list" id="paymentReminders">
                     <!-- Reminders will be displayed here -->
                 </div>
             </div>
         </div>
 
-        <div id="adminSection" class="admin-section">
+        <div id="alertModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeAlertModal()">&times;</span>
+                <h2>Alerta de Lembrete</h2>
+                <p id="alertMessage"></p>
+                <button onclick="markReminderPaid()">Já foi pago</button>
+                <button onclick="markReminderNotPaid()">Ainda não foi pago</button>
+            </div>
+        </div>
+
+        <div class="admin-section" id="adminSection">
             <h2>Gerenciamento de Usuários</h2>
             <div class="form-group">
                 <label for="newUserName">Nome do Novo Usuário:</label>
@@ -600,26 +587,6 @@
             </div>
             <div class="buttons">
                 <button onclick="registerNewUser()">Registrar Novo Usuário</button>
-            </div>
-        </div>
-
-        <div id="alertModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeAlertModal()">&times;</span>
-                <h2>Alerta</h2>
-                <p id="alertMessage"></p>
-                <button onclick="markAsPaid()">Já foi pago</button>
-                <button onclick="markAsUnpaid()">Não foi pago</button>
-            </div>
-        </div>
-
-        <div id="confirmRemoveModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeConfirmRemoveModal()">&times;</span>
-                <h2>Confirmação</h2>
-                <p>Tem certeza que deseja remover este lembrete?</p>
-                <button onclick="confirmRemove()">Sim</button>
-                <button onclick="closeConfirmRemoveModal()">Não</button>
             </div>
         </div>
     </div>
@@ -651,13 +618,10 @@
                     const userData = snapshot.val();
                     const userName = userData ? userData.name : "Usuário";
                     localStorage.setItem('username', userName);
-                    document.getElementById('userGreeting').innerHTML = user.email === 'fernandolapa1987@gmail.com' ? 
-                        '<span>Olá, <strong>Administrador!</strong></span>' : 
-                        '<span>Olá, <strong>' + userName + '</strong>!</span>';
+                    document.getElementById('userGreeting').innerHTML = `Olá, <strong>${userName}</strong>!`;
                     loadTransactions();
+                    loadPaymentReminders();
                     checkAdmin(user.email);
-                    loadReminders(); // Load reminders after login
-                    checkReminders(); // Check for reminders after login
                     loadTheme(); // Carrega o tema salvo
                 });
             } else {
@@ -670,7 +634,6 @@
         let lastTransactionId = localStorage.getItem('lastTransactionId');
         let allUsers = [];
         let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
-        let currentReminderId = null;
 
         function saveTransactions() {
             const userId = auth.currentUser.uid;
@@ -1355,34 +1318,20 @@
             remindersDiv.innerHTML = '';
             paymentReminders.forEach(reminder => {
                 const reminderDiv = document.createElement('div');
-                reminderDiv.className = 'reminder-item';
+                reminderDiv.className = 'reminder';
                 reminderDiv.innerHTML = `
-                    <p><strong>${reminder.description}</strong> - Dia: ${reminder.date}</p>
-                    <button onclick="openConfirmRemoveModal('${reminder.id}')">Remover</button>
+                    <p><strong>Descrição:</strong> ${reminder.description}</p>
+                    <p><strong>Dia do Mês:</strong> ${reminder.date}</p>
+                    <button onclick="confirmRemoveReminder('${reminder.id}')">Remover</button>
                 `;
                 remindersDiv.appendChild(reminderDiv);
             });
         }
 
-        function openConfirmRemoveModal(id) {
-            currentReminderId = id;
-            const modal = document.getElementById('confirmRemoveModal');
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-        }
-
-        function closeConfirmRemoveModal() {
-            const modal = document.getElementById('confirmRemoveModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-                currentReminderId = null;
-            }, 500);
-        }
-
-        function confirmRemove() {
-            removeReminder(currentReminderId);
-            closeConfirmRemoveModal();
+        function confirmRemoveReminder(id) {
+            if (confirm('Tem certeza que deseja remover este lembrete?')) {
+                removeReminder(id);
+            }
         }
 
         function removeReminder(id) {
@@ -1396,27 +1345,38 @@
             paymentReminders.forEach(reminder => {
                 const reminderDate = new Date(today.getFullYear(), today.getMonth(), reminder.date);
                 const differenceInTime = reminderDate.getTime() - today.getTime();
-                const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-
+                const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
                 if (differenceInDays === 2 && !reminder.paid) {
-                    showAlert(`Lembrete: ${reminder.description} está próximo da data de pagamento.`);
-                } else if (differenceInDays < 0 && !reminder.paid) {
-                    showAlert(`Seu pagamento para ${reminder.description} está vencido.`);
+                    showAlertModal(reminder);
+                }
+                if (differenceInDays < 0 && !reminder.paid) {
+                    showAlertModal(reminder, true);
                 }
             });
         }
 
-        function markAsPaid() {
-            const reminderId = currentReminderId;
+        function showAlertModal(reminder, overdue = false) {
+            const modal = document.getElementById('alertModal');
+            const message = overdue ? `Seu pagamento ${reminder.description} está vencido.` : `Lembrete: ${reminder.description} está próximo da data de pagamento.`;
+            document.getElementById('alertMessage').innerText = message;
+            modal.dataset.reminderId = reminder.id;
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+        }
+
+        function markReminderPaid() {
+            const reminderId = document.getElementById('alertModal').dataset.reminderId;
             const reminder = paymentReminders.find(r => r.id === reminderId);
-            if (reminder) {
-                reminder.paid = true;
-                saveReminders();
-            }
+            reminder.paid = true;
+            saveReminders();
             closeAlertModal();
         }
 
-        function markAsUnpaid() {
+        function markReminderNotPaid() {
+            const reminderId = document.getElementById('alertModal').dataset.reminderId;
+            const reminder = paymentReminders.find(r => r.id === reminderId);
+            reminder.paid = false;
+            saveReminders();
             closeAlertModal();
         }
 
@@ -1485,6 +1445,30 @@
                 changeTheme();
             }
         }
+
+        const colorGridData = [
+            '#34495e', '#ecf0f1', '#2980b9', '#27ae60', '#c0392b', 
+            '#9b59b6', '#d35400', '#e91e63', '#f1c40f', '#00bcd4', 
+            '#8d6e63', '#3498db'
+        ];
+
+        function createColorGrid(gridId, property) {
+            const grid = document.getElementById(gridId);
+            colorGridData.forEach(color => {
+                const colorDiv = document.createElement('div');
+                colorDiv.style.backgroundColor = color;
+                colorDiv.addEventListener('mouseover', () => {
+                    document.documentElement.style.setProperty(property, color);
+                });
+                colorDiv.addEventListener('click', () => {
+                    localStorage.setItem(gridId, color);
+                });
+                grid.appendChild(colorDiv);
+            });
+        }
+
+        createColorGrid('themeGrid', '--button-color');
+        createColorGrid('backgroundGrid', '--background-color');
     </script>
 </body>
-</html>
+</html
