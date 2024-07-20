@@ -219,11 +219,11 @@
         }
         .container .totals p, .container .filter p {
             font-size: 16px;
-            color: var(--text-color);
+            color: var (--text-color);
         }
         .container .totals span, .container .filter span {
             font-weight: bold;
-            color: var(--primary-color);
+            color: var (--primary-color);
         }
         .container .negative {
             color: red !important;
@@ -337,21 +337,6 @@
         .logo-container img {
             width: 100px;
             height: auto;
-        }
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                position: relative;
-                height: auto;
-                box-shadow: none;
-            }
-            .container {
-                margin-left: 0;
-                padding: 10px;
-            }
-            .container .form-group, .container button {
-                width: 100%;
-            }
         }
     </style>
 </head>
@@ -567,13 +552,33 @@
             </div>
         </div>
 
-        <div id="confirmRemoveReminderModal" class="modal">
+        <div id="confirmRemoveModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeConfirmRemoveReminderModal()">&times;</span>
+                <span class="close" onclick="closeConfirmRemoveModal()">&times;</span>
                 <h2>Confirmar Remoção</h2>
-                <p>Tem certeza que deseja remover este lembrete?</p>
-                <button onclick="removeReminderConfirmed()">Sim</button>
-                <button onclick="closeConfirmRemoveReminderModal()">Não</button>
+                <p>Você tem certeza que deseja remover este lembrete?</p>
+                <button onclick="confirmRemoveReminder()">Sim</button>
+                <button onclick="closeConfirmRemoveModal()">Não</button>
+            </div>
+        </div>
+
+        <div class="admin-section" id="adminSection">
+            <h2>Gerenciamento de Usuários</h2>
+            <div class="form-group">
+                <label for="newUserName">Nome do Novo Usuário:</label>
+                <input type="text" id="newUserName" class="highlight">
+            </div>
+            <div class="form-group">
+                <label for="newUserEmail">Email do Novo Usuário:</label>
+                <input type="text" id="newUserEmail" class="highlight">
+            </div>
+            <div class="form-group password-field">
+                <label for="newUserPassword">Senha do Novo Usuário:</label>
+                <input type="password" id="newUserPassword" class="highlight" value="">
+                <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility('newUserPassword')"></i>
+            </div>
+            <div class="buttons">
+                <button onclick="registerNewUser()">Registrar Novo Usuário</button>
             </div>
         </div>
 
@@ -582,8 +587,6 @@
                 <span class="close" onclick="closeAlertModal()">&times;</span>
                 <h2>Alerta</h2>
                 <p id="alertMessage"></p>
-                <button onclick="markAsPaid()">Foi Pago</button>
-                <button onclick="markAsNotPaid()">Não Foi Pago</button>
             </div>
         </div>
 
@@ -596,14 +599,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         var firebaseConfig = {
-           apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-  projectId: "sistema-de-receitas-e-despesas",
-  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-  messagingSenderId: "252102478972",
-  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-  measurementId: "G-K2HCS7WNZV"
+            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
+            authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+            databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+            projectId: "sistema-de-receitas-e-despesas",
+            storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+            messagingSenderId: "252102478972",
+            appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
+            measurementId: "G-K2HCS7WNZV"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -616,10 +619,9 @@
                     const userData = snapshot.val();
                     const userName = userData ? userData.name : "Usuário";
                     localStorage.setItem('username', userName);
-                    document.getElementById('userGreeting').innerHTML = user.email === 'fernandolapa1987@gmail.com' ? 
-                        '<span>Olá, <strong>Administrador!</strong></span>' : 
-                        '<span>Olá, <strong>' + userName + '</strong>!</span>';
+                    document.getElementById('userGreeting').innerHTML = '<span>Olá, <strong>' + userName + '</strong>!</span>';
                     loadTransactions();
+                    loadPaymentReminders();
                     checkAdmin(user.email);
                     loadTheme(); // Carrega o tema salvo
                 });
@@ -633,7 +635,6 @@
         let lastTransactionId = localStorage.getItem('lastTransactionId');
         let allUsers = [];
         let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
-        let currentReminderIdToRemove = null;
 
         function saveTransactions() {
             const userId = auth.currentUser.uid;
@@ -991,20 +992,6 @@
             }, 500);
         }
 
-        function openFilterPeriodModal() {
-            const modal = document.getElementById('filterPeriodModal');
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-        }
-
-        function closeFilterPeriodModal() {
-            const modal = document.getElementById('filterPeriodModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
-
         let specificTransactionsChart;
 
         function generateSpecificTransactionsReport() {
@@ -1286,7 +1273,7 @@
         function addPaymentReminder() {
             const description = document.getElementById('reminderDescription').value;
             const date = document.getElementById('reminderDate').value;
-            const reminder = { id: generateTransactionId(), description, date, paid: false };
+            const reminder = { id: generateTransactionId(), description, date, status: 'pending' };
             paymentReminders.push(reminder);
             saveReminders();
             loadPaymentReminders();
@@ -1322,36 +1309,38 @@
                 reminderDiv.innerHTML = `
                     <p><strong>Descrição:</strong> ${reminder.description}</p>
                     <p><strong>Dia do Mês:</strong> ${reminder.date}</p>
-                    <button onclick="confirmRemoveReminder('${reminder.id}')">Remover</button>
+                    <button onclick="removeReminder('${reminder.id}')">Remover</button>
                 `;
                 remindersDiv.appendChild(reminderDiv);
             });
         }
 
-        function confirmRemoveReminder(id) {
-            currentReminderIdToRemove = id;
-            const modal = document.getElementById('confirmRemoveReminderModal');
+        let removeReminderId = null;
+
+        function removeReminder(id) {
+            removeReminderId = id;
+            openConfirmRemoveModal();
+        }
+
+        function confirmRemoveReminder() {
+            paymentReminders = paymentReminders.filter(reminder => reminder.id !== removeReminderId);
+            saveReminders();
+            displayReminders();
+            closeConfirmRemoveModal();
+        }
+
+        function openConfirmRemoveModal() {
+            const modal = document.getElementById('confirmRemoveModal');
             modal.style.display = 'block';
             modal.style.animation = 'fadein 0.5s';
         }
 
-        function closeConfirmRemoveReminderModal() {
-            const modal = document.getElementById('confirmRemoveReminderModal');
+        function closeConfirmRemoveModal() {
+            const modal = document.getElementById('confirmRemoveModal');
             modal.style.animation = 'fadeout 0.5s';
             setTimeout(() => {
                 modal.style.display = 'none';
             }, 500);
-        }
-
-        function removeReminderConfirmed() {
-            removeReminder(currentReminderIdToRemove);
-            closeConfirmRemoveReminderModal();
-        }
-
-        function removeReminder(id) {
-            paymentReminders = paymentReminders.filter(reminder => reminder.id !== id);
-            saveReminders();
-            displayReminders();
         }
 
         function checkReminders() {
@@ -1360,26 +1349,39 @@
                 const reminderDate = new Date(today.getFullYear(), today.getMonth(), reminder.date);
                 const differenceInTime = reminderDate.getTime() - today.getTime();
                 const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-                if (differenceInDays === 2 && !reminder.paid) {
-                    showAlert(`Lembrete: ${reminder.description} está próximo da data de pagamento.`);
-                } else if (differenceInDays < 0 && !reminder.paid) {
-                    showAlert(`Lembrete: ${reminder.description} está vencido.`);
+
+                if (differenceInDays === 2) {
+                    showPaymentReminder(reminder, 'O pagamento está próximo do vencimento.');
+                } else if (differenceInDays < 0 && reminder.status !== 'paid') {
+                    showPaymentReminder(reminder, 'Seu pagamento está vencido.');
                 }
             });
         }
 
-        function markAsPaid() {
-            paymentReminders = paymentReminders.map(reminder => {
-                if (reminder.id === currentReminderIdToRemove) {
-                    reminder.paid = true;
-                }
-                return reminder;
-            });
+        function showPaymentReminder(reminder, message) {
+            const modal = document.getElementById('alertModal');
+            document.getElementById('alertMessage').innerHTML = `
+                <p>${message}</p>
+                <p>Descrição: ${reminder.description}</p>
+                <p>Dia do Mês: ${reminder.date}</p>
+                <button onclick="markAsPaid('${reminder.id}')">Já foi pago</button>
+                <button onclick="markAsUnpaid('${reminder.id}')">Não foi pago</button>
+            `;
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+        }
+
+        function markAsPaid(id) {
+            const reminder = paymentReminders.find(r => r.id === id);
+            reminder.status = 'paid';
             saveReminders();
             closeAlertModal();
         }
 
-        function markAsNotPaid() {
+        function markAsUnpaid(id) {
+            const reminder = paymentReminders.find(r => r.id === id);
+            reminder.status = 'unpaid';
+            saveReminders();
             closeAlertModal();
         }
 
