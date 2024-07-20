@@ -338,6 +338,84 @@
             width: 100px;
             height: auto;
         }
+
+        /* Ajustes para dispositivos móveis */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                box-shadow: none;
+            }
+
+            .container {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .sidebar .menu-icons {
+                justify-content: space-between;
+            }
+
+            .sidebar .buttons button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .container .form-group {
+                width: 100%;
+            }
+
+            .container button {
+                width: 100%;
+            }
+
+            .container table, 
+            .container table th, 
+            .container table td {
+                display: block;
+                width: 100%;
+            }
+
+            .container table th {
+                text-align: right;
+            }
+
+            .container table td {
+                text-align: left;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            .container table td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                width: 50%;
+                padding-right: 10px;
+                white-space: nowrap;
+            }
+
+            .container .totals,
+            .container .filter {
+                text-align: center;
+            }
+        }
+
+        /* Ajustes para tablets */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .container {
+                margin-left: 220px;
+            }
+
+            .sidebar .buttons button {
+                width: 95%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -727,6 +805,12 @@
                     const cellType = row.insertCell(3);
                     const cellAction = row.insertCell(4);
 
+                    cellDate.setAttribute('data-label', 'Data');
+                    cellDescription.setAttribute('data-label', 'Descrição');
+                    cellAmount.setAttribute('data-label', 'Valor');
+                    cellType.setAttribute('data-label', 'Tipo');
+                    cellAction.setAttribute('data-label', 'Ação');
+
                     cellDate.innerText = transaction.date;
                     cellDescription.innerHTML = `<div class="transaction-description">
                                                     <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
@@ -822,6 +906,11 @@
                 const cellDescription = row.insertCell(1);
                 const cellAmount = row.insertCell(2);
                 const cellType = row.insertCell(3);
+
+                cellDate.setAttribute('data-label', 'Data');
+                cellDescription.setAttribute('data-label', 'Descrição');
+                cellAmount.setAttribute('data-label', 'Valor');
+                cellType.setAttribute('data-label', 'Tipo');
 
                 cellDate.innerText = transaction.date;
                 cellDescription.innerHTML = `<div class="transaction-description">
