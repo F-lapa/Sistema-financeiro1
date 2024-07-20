@@ -169,8 +169,8 @@
             color: var(--text-color);
             transition: all 0.3s ease;
         }
-        .container input.highlight, .container select.highlight {
-            border: 2px solid var(--primary-color);
+        .container input:focus, .container select:focus, .container input:focus-visible, .container select:focus-visible {
+            border: 2px solid var(--button-color);
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
         .container button {
@@ -330,6 +330,14 @@
             border-color: var(--input-border-color);
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo-container img {
+            width: 100px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -368,6 +376,9 @@
     </div>
     <div class="container">
         <div class="greeting" id="userGreeting"></div>
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo">
+        </div>
         <div class="form-header">Nova Transação</div>
         
         <input type="text" style="display:none;" autocomplete="username">
