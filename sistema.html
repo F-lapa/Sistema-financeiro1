@@ -90,15 +90,6 @@
             margin-bottom: 5px;
             color: var(--text-color);
         }
-        .sidebar .theme-selector select {
-            width: 90%;
-            padding: 8px;
-            border-radius: 8px;
-            border: none;
-            background-color: var(--text-color);
-            color: #34495e;
-            font-size: 14px;
-        }
         .container {
             margin-left: 240px;
             padding: 20px;
@@ -305,7 +296,6 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             color: var(--text-color);
-            text-align: center;
         }
         .container .close {
             color: var(--text-color);
@@ -371,6 +361,7 @@
         <div class="theme-selector">
             <label for="theme">Selecionar Tema:</label>
             <button id="themeButton" onclick="openThemeSelectorModal()">Clique para escolher</button>
+            <button id="backgroundButton" onclick="openBackgroundSelectorModal()">Selecionar Fundo</button>
         </div>
     </div>
     <div class="container">
@@ -552,12 +543,13 @@
             </div>
         </div>
 
-        <div id="reminderAlertModal" class="modal">
+        <div id="backgroundSelectorModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeReminderAlertModal()">&times;</span>
-                <div id="reminderAlertMessage"></div>
-                <button onclick="markAsPaid()">Já foi Pago</button>
-                <button onclick="snoozeReminder()">Não foi Pago</button>
+                <span class="close" onclick="closeBackgroundSelectorModal()">&times;</span>
+                <h2>Selecionar Fundo</h2>
+                <div class="color-grid">
+                    <!-- As cores serão inseridas aqui -->
+                </div>
             </div>
         </div>
 
@@ -1170,81 +1162,24 @@
             });
         }
 
-        function checkReminders() {
-            const currentDate = new Date();
-            const reminders = paymentReminders.filter(reminder => {
-                const reminderDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), reminder.day);
-                const differenceInDays = Math.floor((reminderDate - currentDate) / (1000 * 60 * 60 * 24));
-                console.log(`Reminder for ${reminder.description} is due in ${differenceInDays} days.`);
-                return (differenceInDays === 2 || (differenceInDays < 0 && differenceInDays >= -7)) && !reminder.paid;
-            });
-
-            if (reminders.length > 0) {
-                reminderAlertDay = reminders[0].day;
-                const modal = document.getElementById('reminderAlertModal');
-                document.getElementById('reminderAlertMessage').innerHTML = `
-                    Você tem um pagamento de <strong>${reminders[0].description}</strong> com vencimento no dia <strong>${reminders[0].day}</strong>.
-                `;
-                modal.style.display = 'block';
-                modal.style.animation = 'fadein 0.5s';
-                document.getElementById('alertSound').play();
-            }
-        }
-
-        function closeReminderAlertModal() {
-            const modal = document.getElementById('reminderAlertModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
-
-        function loadPaymentReminders() {
-            const userId = auth.currentUser.uid;
-            database.ref('paymentReminders/' + userId).once('value').then((snapshot) => {
-                paymentReminders = snapshot.val() || [];
-                checkReminders();
-            });
-        }
-
-        function savePaymentReminders() {
-            const userId = auth.currentUser.uid;
-            database.ref('paymentReminders/' + userId).set(paymentReminders);
-        }
-
-        function markAsPaid() {
-            const reminder = paymentReminders.find(r => r.day === reminderAlertDay);
-            reminder.paid = true;
-            savePaymentReminders();
-            closeReminderAlertModal();
-        }
-
-        function snoozeReminder() {
-            closeReminderAlertModal();
-        }
-
-        function openPaymentRemindersPage() {
-            window.location.href = 'payment_reminders.html';
-        }
-
-        function openThemeSelectorModal() {
-            const modal = document.getElementById('themeSelectorModal');
+        function openBackgroundSelectorModal() {
+            const modal = document.getElementById('backgroundSelectorModal');
             modal.style.display = 'block';
             modal.style.animation = 'fadein 0.5s';
-            const colorGrid = document.querySelector('.color-grid');
+            const colorGrid = document.querySelector('#backgroundSelectorModal .color-grid');
             colorGrid.innerHTML = ''; // Limpar cores anteriores
             const colors = generateColorArray();
             colors.forEach(color => {
                 const colorBox = document.createElement('div');
                 colorBox.classList.add('color-box');
                 colorBox.style.backgroundColor = color;
-                colorBox.onclick = () => selectThemeColor(color);
+                colorBox.onclick = () => selectBackgroundColor(color);
                 colorGrid.appendChild(colorBox);
             });
         }
 
-        function closeThemeSelectorModal() {
-            const modal = document.getElementById('themeSelectorModal');
+        function closeBackgroundSelectorModal() {
+            const modal = document.getElementById('backgroundSelectorModal');
             modal.style.animation = 'fadeout 0.5s';
             setTimeout(() => {
                 modal.style.display = 'none';
@@ -1254,8 +1189,8 @@
         function generateColorArray() {
             const colors = [];
             for (let r = 0; r <= 255; r += 51) {
-                for (let g = 0; g <= 255; g += 51) {
-                    for (let b = 0; b <= 255; b += 51) {
+                for (let g = 0; r <= 255; g += 51) {
+                    for (let b = 0; r <= 255; b += 51) {
                         colors.push(`rgb(${r},${g},${b})`);
                     }
                 }
@@ -1263,11 +1198,11 @@
             return colors;
         }
 
-        function selectThemeColor(color) {
-            document.documentElement.style.setProperty('--button-color', color);
-            document.documentElement.style.setProperty('--input-border-color', color);
-            localStorage.setItem('theme', color);
-            closeThemeSelectorModal();
+        function selectBackgroundColor(color) {
+            document.documentElement.style.setProperty('--background-color', color);
+            localStorage.setItem('background-color', color);
+            closeBackgroundSelectorModal();
+            adjustTextColor();
         }
 
         function loadTheme() {
@@ -1276,6 +1211,27 @@
                 document.documentElement.style.setProperty('--button-color', savedTheme);
                 document.documentElement.style.setProperty('--input-border-color', savedTheme);
             }
+            const savedBackgroundColor = localStorage.getItem('background-color');
+            if (savedBackgroundColor) {
+                document.documentElement.style.setProperty('--background-color', savedBackgroundColor);
+            }
+            adjustTextColor();
+        }
+
+        function adjustTextColor() {
+            const backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim();
+            const buttonColor = getComputedStyle(document.documentElement).getPropertyValue('--button-color').trim();
+            if (isColorLight(backgroundColor) || isColorLight(buttonColor)) {
+                document.documentElement.style.setProperty('--text-color', '#2c3e50');
+            } else {
+                document.documentElement.style.setProperty('--text-color', '#ecf0f1');
+            }
+        }
+
+        function isColorLight(color) {
+            const rgb = color.match(/\d+/g);
+            const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000;
+            return brightness > 186;
         }
     </script>
 </body>
