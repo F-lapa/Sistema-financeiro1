@@ -1175,6 +1175,7 @@
             const reminders = paymentReminders.filter(reminder => {
                 const reminderDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), reminder.day);
                 const differenceInDays = Math.floor((reminderDate - currentDate) / (1000 * 60 * 60 * 24));
+                console.log(`Reminder for ${reminder.description} is due in ${differenceInDays} days.`);
                 return (differenceInDays === 2 || (differenceInDays < 0 && differenceInDays >= -7)) && !reminder.paid;
             });
 
