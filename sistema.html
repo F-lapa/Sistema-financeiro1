@@ -581,6 +581,8 @@
         const database = firebase.database();
         const auth = firebase.auth();
 
+        let reminderAlertDay;
+
         auth.onAuthStateChanged(user => {
             if (user) {
                 const userId = user.uid;
@@ -1174,9 +1176,10 @@
             });
 
             reminders.forEach(reminder => {
+                reminderAlertDay = reminder.day;
                 const modal = document.getElementById('reminderAlertModal');
                 document.getElementById('reminderAlertMessage').innerHTML = `
-                    Você tem um pagamento de <strong>${reminder.description}</strong> no valor de <strong>${formatCurrency(reminder.amount)}</strong> com vencimento no dia <strong>${reminder.day}</strong>.
+                    Você tem um pagamento de <strong>${reminder.description}</strong> com vencimento no dia <strong>${reminder.day}</strong>.
                 `;
                 modal.style.display = 'block';
                 modal.style.animation = 'fadein 0.5s';
