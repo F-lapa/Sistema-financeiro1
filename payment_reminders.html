@@ -175,20 +175,6 @@
 
         let paymentReminders = [];
 
-        function formatCurrency(value) {
-            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        }
-
-        function parseCurrency(value) {
-            return parseFloat(value.replace(/\./g, '').replace(',', '.').replace('R$', '')) || 0;
-        }
-
-        function validateAmount() {
-            const amountInput = document.getElementById('reminderAmount');
-            amountInput.value = amountInput.value.replace(/[^\d,]/g, '');
-            amountInput.value = amountInput.value.replace(/(,.*?),(.*?)/g, '$1');
-        }
-
         function addReminder() {
             const day = document.getElementById('reminderDay').value;
             const description = document.getElementById('reminderDescription').value;
