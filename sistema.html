@@ -550,6 +550,15 @@
                 </div>
             </div>
         </div>
+
+        <div id="reminderAlertModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeReminderAlertModal()">&times;</span>
+                <div id="reminderAlertMessage"></div>
+                <button onclick="markAsPaid()">Já foi Pago</button>
+                <button onclick="snoozeReminder()">Não foi Pago</button>
+            </div>
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
@@ -559,14 +568,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         var firebaseConfig = {
-            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-  projectId: "sistema-de-receitas-e-despesas",
-  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-  messagingSenderId: "252102478972",
-  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-  measurementId: "G-K2HCS7WNZV"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID",
+            measurementId: "YOUR_MEASUREMENT_ID"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -1157,18 +1166,17 @@
         }
 
         function checkReminders() {
-            const currentDate = getCurrentDate();
+            const currentDate = new Date();
             const reminders = paymentReminders.filter(reminder => {
-                const reminderDate = new Date(reminder.date);
-                const currentDateObj = new Date(currentDate);
-                const differenceInDays = Math.floor((reminderDate - currentDateObj) / (1000 * 60 * 60 * 24));
-                return differenceInDays === 2 || (differenceInDays < 0 && differenceInDays >= -5);
+                const reminderDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), reminder.day);
+                const differenceInDays = Math.floor((reminderDate - currentDate) / (1000 * 60 * 60 * 24));
+                return (differenceInDays === 2 || (differenceInDays < 0 && differenceInDays >= -5)) && !reminder.paid;
             });
 
             reminders.forEach(reminder => {
                 const modal = document.getElementById('reminderAlertModal');
                 document.getElementById('reminderAlertMessage').innerHTML = `
-                    Você tem um pagamento de <strong>${reminder.description}</strong> no valor de <strong>${formatCurrency(reminder.amount)}</strong> com vencimento em <strong>${reminder.date}</strong>.
+                    Você tem um pagamento de <strong>${reminder.description}</strong> no valor de <strong>${formatCurrency(reminder.amount)}</strong> com vencimento no dia <strong>${reminder.day}</strong>.
                 `;
                 modal.style.display = 'block';
                 modal.style.animation = 'fadein 0.5s';
@@ -1197,7 +1205,7 @@
         }
 
         function markAsPaid() {
-            const reminder = paymentReminders.find(r => r.date === reminderAlertDate);
+            const reminder = paymentReminders.find(r => r.day === reminderAlertDay);
             reminder.paid = true;
             savePaymentReminders();
             closeReminderAlertModal();
