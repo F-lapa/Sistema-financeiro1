@@ -129,10 +129,6 @@
             <label for="reminderDescription">Descrição:</label>
             <input type="text" id="reminderDescription" class="highlight">
         </div>
-        <div class="form-group">
-            <label for="reminderAmount">Valor (R$):</label>
-            <input type="text" id="reminderAmount" class="highlight" placeholder="0,00" value="0,00" autocomplete="off" oninput="validateAmount()">
-        </div>
         <button onclick="addReminder()">Adicionar Lembrete</button>
 
         <table id="remindersTable">
@@ -140,7 +136,6 @@
                 <tr>
                     <th>Dia</th>
                     <th>Descrição</th>
-                    <th>Valor</th>
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -155,14 +150,14 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script>
         var firebaseConfig = {
-            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-  projectId: "sistema-de-receitas-e-despesas",
-  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-  messagingSenderId: "252102478972",
-  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-  measurementId: "G-K2HCS7WNZV"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID",
+            measurementId: "YOUR_MEASUREMENT_ID"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -172,6 +167,7 @@
             if (user) {
                 const userId = user.uid;
                 loadPaymentReminders();
+                loadTheme(); // Carregar o tema salvo
             } else {
                 window.location.href = 'index.html';
             }
@@ -196,9 +192,8 @@
         function addReminder() {
             const day = document.getElementById('reminderDay').value;
             const description = document.getElementById('reminderDescription').value;
-            const amount = parseCurrency(document.getElementById('reminderAmount').value);
 
-            const reminder = { id: generateReminderId(), day, description, amount, paid: false };
+            const reminder = { id: generateReminderId(), day, description, paid: false };
             paymentReminders.push(reminder);
 
             savePaymentReminders();
@@ -206,7 +201,6 @@
 
             document.getElementById('reminderDay').value = '';
             document.getElementById('reminderDescription').value = '';
-            document.getElementById('reminderAmount').value = '0,00';
         }
 
         function generateReminderId() {
@@ -221,12 +215,10 @@
                 const row = tbody.insertRow();
                 const cellDay = row.insertCell(0);
                 const cellDescription = row.insertCell(1);
-                const cellAmount = row.insertCell(2);
-                const cellAction = row.insertCell(3);
+                const cellAction = row.insertCell(2);
 
                 cellDay.innerText = reminder.day;
                 cellDescription.innerText = reminder.description;
-                cellAmount.innerText = formatCurrency(reminder.amount);
                 cellAction.innerHTML = `<i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')" style="cursor:pointer; color:red;"></i>`;
             });
         }
@@ -250,6 +242,14 @@
                 paymentReminders = snapshot.val() || [];
                 updateRemindersTable();
             });
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.style.setProperty('--button-color', savedTheme);
+                document.documentElement.style.setProperty('--input-border-color', savedTheme);
+            }
         }
     </script>
 </body>
