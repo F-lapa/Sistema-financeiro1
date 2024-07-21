@@ -99,18 +99,6 @@
             color: #34495e;
             font-size: 14px;
         }
-        .theme-color-grid {
-            display: none;
-            flex-wrap: wrap;
-            gap: 5px;
-            padding: 10px;
-        }
-        .theme-color-grid div {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
         .container {
             margin-left: 240px;
             padding: 20px;
@@ -160,8 +148,7 @@
         }
         .container .form-group {
             margin-bottom: 10px;
-            width: 100%;
-            max-width: 400px;
+            width: 50%;
             margin: 0 auto;
         }
         .container label {
@@ -187,8 +174,7 @@
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
         .container button {
-            width: 100%;
-            max-width: 400px;
+            width: 50%;
             padding: 10px;
             background-color: var(--button-color);
             color: var(--text-color);
@@ -308,7 +294,6 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
-            animation: fade-in 0.5s;
         }
         .container .modal-content {
             background-color: #34495e;
@@ -320,7 +305,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             color: var(--text-color);
-            animation: fade-in 0.5s;
+            animation: fadein 0.5s;
         }
         .container .close {
             color: var(--text-color);
@@ -338,17 +323,17 @@
             cursor: pointer;
             color: red;
         }
-        @keyframes shine {
-            0% { background-position: -200px; }
-            100% { background-position: 200px; }
-        }
-        @keyframes fade-in {
+        @keyframes fadein {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        @keyframes fade-out {
+        @keyframes fadeout {
             from { opacity: 1; }
             to { opacity: 0; }
+        }
+        @keyframes shine {
+            0% { background-position: -200px; }
+            100% { background-position: 200px; }
         }
         .container input[type="text"]:hover, .container input[type="number"]:hover, .container input[type="date"]:hover, .container select:hover, .container input[type="password"]:hover {
             border-color: var(--input-border-color);
@@ -361,6 +346,47 @@
         .logo-container img {
             width: 100px;
             height: auto;
+        }
+        .reminder-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #3b4b5e;
+            border-radius: 5px;
+        }
+        .reminder-item p {
+            margin: 0;
+            color: var(--text-color);
+        }
+        .reminder-item button {
+            padding: 5px 10px;
+            margin-left: 10px;
+            background-color: var(--button-color);
+            border: none;
+            border-radius: 5px;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+        .reminder-item button:hover {
+            background-color: darken(var(--button-color), 10%);
+        }
+        .color-grid {
+            display: none;
+            flex-wrap: wrap;
+            max-width: 200px;
+            margin-top: 10px;
+        }
+        .color-grid div {
+            width: 20px;
+            height: 20px;
+            margin: 2px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
+        .color-grid div:hover {
+            border: 2px solid #000;
         }
     </style>
 </head>
@@ -382,10 +408,10 @@
         </div>
         <div class="theme-selector">
             <label for="theme">Selecionar Tema:</label>
-            <select id="theme" onclick="toggleColorGrid('theme')">
+            <select id="theme" onchange="toggleColorGrid('theme')">
                 <option value="default">Padrão</option>
             </select>
-            <div id="themeColorGrid" class="theme-color-grid"></div>
+            <div id="themeColorGrid" class="color-grid"></div>
         </div>
     </div>
     <div class="container">
@@ -566,37 +592,15 @@
             </div>
         </div>
 
-        <div class="admin-section" id="adminSection">
-            <h2>Gerenciamento de Usuários</h2>
-            <div class="form-group">
-                <label for="newUserName">Nome do Novo Usuário:</label>
-                <input type="text" id="newUserName" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="newUserEmail">Email do Novo Usuário:</label>
-                <input type="text" id="newUserEmail" class="highlight">
-            </div>
-            <div class="form-group password-field">
-                <label for="newUserPassword">Senha do Novo Usuário:</label>
-                <input type="password" id="newUserPassword" class="highlight" value="">
-                <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility('newUserPassword')"></i>
-            </div>
-            <div class="buttons">
-                <button onclick="registerNewUser()">Registrar Novo Usuário</button>
-            </div>
-        </div>
-
         <div id="alertModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeAlertModal()">&times;</span>
                 <h2>Alerta</h2>
                 <p id="alertMessage"></p>
-                <div>
-                    <button onclick="markAsPaid()">Pago</button>
-                    <button onclick="markAsUnpaid()">Não Pago</button>
-                </div>
+                <div id="alertButtons"></div>
             </div>
         </div>
+
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
@@ -626,11 +630,14 @@
                     const userData = snapshot.val();
                     const userName = userData ? userData.name : "Usuário";
                     localStorage.setItem('username', userName);
-                    document.getElementById('userGreeting').innerHTML = '<span>Olá, <strong>' + userName + '</strong>!</span>';
+                    document.getElementById('userGreeting').innerHTML = user.email === 'fernandolapa1987@gmail.com' ? 
+                        '<span>Olá, <strong>Administrador!</strong></span>' : 
+                        '<span>Olá, <strong>' + userName + '</strong>!</span>';
                     loadTransactions();
+                    loadPaymentReminders(); // Carrega os lembretes de pagamento
                     checkAdmin(user.email);
-                    loadTheme();
-                    loadReminders();
+                    loadTheme(); // Carrega o tema salvo
+                    checkReminders(); // Verifica lembretes de pagamento
                 });
             } else {
                 window.location.href = 'index.html';  
@@ -642,7 +649,6 @@
         let lastTransactionId = localStorage.getItem('lastTransactionId');
         let allUsers = [];
         let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
-        let alertReminderId = null;
 
         function saveTransactions() {
             const userId = auth.currentUser.uid;
@@ -759,9 +765,9 @@
         }
 
         function confirmRemoveTransaction(transactionId) {
-            if (confirm('Tem certeza que deseja remover esta transação?')) {
+            showModal('Tem certeza que deseja remover esta transação?', () => {
                 removeTransaction(transactionId);
-            }
+            });
         }
 
         function removeTransaction(transactionId) {
@@ -945,12 +951,12 @@
         function openChangePasswordModal() {
             const modal = document.getElementById('changePasswordModal');
             modal.style.display = 'block';
-            modal.style.animation = 'fade-in 0.5s';
+            modal.style.animation = 'fadein 0.5s';
         }
 
         function closeChangePasswordModal() {
             const modal = document.getElementById('changePasswordModal');
-            modal.style.animation = 'fade-out 0.5s';
+            modal.style.animation = 'fadeout 0.5s';
             setTimeout(() => {
                 modal.style.display = 'none';
             }, 500);
@@ -989,12 +995,12 @@
         function openSpecificTransactionsModal() {
             const modal = document.getElementById('specificTransactionsModal');
             modal.style.display = 'block';
-            modal.style.animation = 'fade-in 0.5s';
+            modal.style.animation = 'fadein 0.5s';
         }
 
         function closeSpecificTransactionsModal() {
             const modal = document.getElementById('specificTransactionsModal');
-            modal.style.animation = 'fade-out 0.5s';
+            modal.style.animation = 'fadeout 0.5s';
             setTimeout(() => {
                 modal.style.display = 'none';
             }, 500);
@@ -1003,12 +1009,12 @@
         function openFilterPeriodModal() {
             const modal = document.getElementById('filterPeriodModal');
             modal.style.display = 'block';
-            modal.style.animation = 'fade-in 0.5s';
+            modal.style.animation = 'fadein 0.5s';
         }
 
         function closeFilterPeriodModal() {
             const modal = document.getElementById('filterPeriodModal');
-            modal.style.animation = 'fade-out 0.5s';
+            modal.style.animation = 'fadeout 0.5s';
             setTimeout(() => {
                 modal.style.display = 'none';
             }, 500);
@@ -1100,12 +1106,12 @@
             const modal = document.getElementById('alertModal');
             document.getElementById('alertMessage').innerText = message;
             modal.style.display = 'block';
-            modal.style.animation = 'fade-in 0.5s';
+            modal.style.animation = 'fadein 0.5s';
         }
 
         function closeAlertModal() {
             const modal = document.getElementById('alertModal');
-            modal.style.animation = 'fade-out 0.5s';
+            modal.style.animation = 'fadeout 0.5s';
             setTimeout(() => {
                 modal.style.display = 'none';
             }, 500);
@@ -1114,13 +1120,13 @@
         function openFinancialPerformanceModal() {
             const modal = document.getElementById('financialPerformanceModal');
             modal.style.display = 'block';
-            modal.style.animation = 'fade-in 0.5s';
+            modal.style.animation = 'fadein 0.5s';
             generateFinancialPerformanceChart();
         }
 
         function closeFinancialPerformanceModal() {
             const modal = document.getElementById('financialPerformanceModal');
-            modal.style.animation = 'fade-out 0.5s';
+            modal.style.animation = 'fadeout 0.5s';
             setTimeout(() => {
                 modal.style.display = 'none';
             }, 500);
@@ -1208,21 +1214,21 @@
         function openTrendAnalysisModal() {
             const modal = document.getElementById('trendAnalysisModal');
             modal.style.display = 'block';
-            modal.style.animation = 'fade-in 0.5s';
+            modal.style.animation = 'fadein 0.5s';
             analyzeSpendingPatterns();  // Execute pattern analysis when opening modal
         }
 
         function closeTrendAnalysisModal() {
             const modal = document.getElementById('trendAnalysisModal');
-            modal.style.animation = 'fade-out 0.5s';
+            modal.style.animation = 'fadeout 0.5s';
             setTimeout(() => {
                 modal.style.display = 'none';
             }, 500);
         }
 
         function analyzeSpendingPatterns() {
-            // Here you would implement the machine learning model to identify spending patterns.
-            // For now, we will just simulate the analysis.
+            // Aqui você implementaria o modelo de aprendizado de máquina para identificar padrões de gastos.
+            // Por enquanto, vamos apenas simular a análise.
             let despesas = transactions.filter(t => t.type === 'despesa');
             let categorias = {};
 
@@ -1243,8 +1249,8 @@
         }
 
         function forecastFinancialTrends() {
-            // Here you would implement the time series analysis for financial trend forecasting.
-            // For now, we will just simulate the forecast.
+            // Aqui você implementaria a análise de séries temporais para previsão de tendências financeiras.
+            // Por enquanto, vamos apenas simular a previsão.
             let receitas = transactions.filter(t => t.type === 'receita');
             let despesas = transactions.filter(t => t.type === 'despesa');
 
@@ -1281,12 +1287,12 @@
         function openPaymentReminderModal() {
             const modal = document.getElementById('paymentReminderModal');
             modal.style.display = 'block';
-            modal.style.animation = 'fade-in 0.5s';
+            modal.style.animation = 'fadein 0.5s';
         }
 
         function closePaymentReminderModal() {
             const modal = document.getElementById('paymentReminderModal');
-            modal.style.animation = 'fade-out 0.5s';
+            modal.style.animation = 'fadeout 0.5s';
             setTimeout(() => {
                 modal.style.display = 'none';
             }, 500);
@@ -1295,7 +1301,7 @@
         function addPaymentReminder() {
             const description = document.getElementById('reminderDescription').value;
             const date = document.getElementById('reminderDate').value;
-            const reminder = { id: generateTransactionId(), description, date };
+            const reminder = { id: generateTransactionId(), description, date, paid: false };
             paymentReminders.push(reminder);
             saveReminders();
             loadPaymentReminders();
@@ -1327,39 +1333,22 @@
             remindersDiv.innerHTML = '';
             paymentReminders.forEach(reminder => {
                 const reminderDiv = document.createElement('div');
-                reminderDiv.className = 'reminder';
+                reminderDiv.className = 'reminder-item';
                 reminderDiv.innerHTML = `
                     <p><strong>Descrição:</strong> ${reminder.description}</p>
                     <p><strong>Dia do Mês:</strong> ${reminder.date}</p>
-                    <button onclick="confirmRemoveReminder('${reminder.id}')">Remover</button>
+                    <button onclick="removeReminder('${reminder.id}')">Remover</button>
                 `;
                 remindersDiv.appendChild(reminderDiv);
             });
         }
 
-        function confirmRemoveReminder(id) {
-            const modal = document.getElementById('confirmRemoveModal');
-            document.getElementById('confirmRemoveMessage').innerText = 'Tem certeza que deseja remover este lembrete?';
-            document.getElementById('confirmRemoveYes').onclick = function() {
-                removeReminder(id);
-                closeConfirmRemoveModal();
-            };
-            modal.style.display = 'block';
-            modal.style.animation = 'fade-in 0.5s';
-        }
-
-        function closeConfirmRemoveModal() {
-            const modal = document.getElementById('confirmRemoveModal');
-            modal.style.animation = 'fade-out 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
-
         function removeReminder(id) {
-            paymentReminders = paymentReminders.filter(reminder => reminder.id !== id);
-            saveReminders();
-            displayReminders();
+            showModal('Tem certeza que deseja remover este lembrete?', () => {
+                paymentReminders = paymentReminders.filter(reminder => reminder.id !== id);
+                saveReminders();
+                displayReminders();
+            });
         }
 
         function checkReminders() {
@@ -1367,160 +1356,95 @@
             paymentReminders.forEach(reminder => {
                 const reminderDate = new Date(today.getFullYear(), today.getMonth(), reminder.date);
                 const differenceInTime = reminderDate.getTime() - today.getTime();
-                const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-
-                if (differenceInDays === 2) {
-                    showAlertReminder(reminder);
-                } else if (differenceInDays === 0) {
-                    showAlertReminder(reminder, true);
+                const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+                if (differenceInDays === 2 && !reminder.paid) {
+                    showReminderAlert(`Lembrete: ${reminder.description} está próximo da data de pagamento.`, reminder);
+                } else if (differenceInDays < 0 && !reminder.paid) {
+                    showReminderAlert(`Seu pagamento de ${reminder.description} está vencido!`, reminder);
                 }
             });
         }
 
-        function showAlertReminder(reminder, isDue = false) {
+        function showReminderAlert(message, reminder) {
             const modal = document.getElementById('alertModal');
-            document.getElementById('alertMessage').innerText = isDue ? 
-                `Seu pagamento de ${reminder.description} está vencido!` :
-                `Lembrete: ${reminder.description} está próximo da data de pagamento.`;
-            alertReminderId = reminder.id;
+            document.getElementById('alertMessage').innerText = message;
+            const alertButtons = document.getElementById('alertButtons');
+            alertButtons.innerHTML = `
+                <button onclick="markAsPaid('${reminder.id}')">Já foi pago</button>
+                <button onclick="keepUnpaid('${reminder.id}')">Não foi pago</button>
+            `;
             modal.style.display = 'block';
-            modal.style.animation = 'fade-in 0.5s';
+            modal.style.animation = 'fadein 0.5s';
         }
 
-        function markAsPaid() {
-            closeAlertModal();
-            // Handle the logic for marking as paid
-        }
-
-        function markAsUnpaid() {
-            closeAlertModal();
-            // Handle the logic for marking as unpaid
-        }
-
-        function changeTheme() {
-            const theme = document.getElementById('theme').value;
-            let buttonColor, inputBorderColor, backgroundColor, textColor;
-            switch (theme) {
-                case 'dark':
-                    buttonColor = '#34495e';
-                    inputBorderColor = '#34495e';
-                    backgroundColor = '#2c3e50';
-                    textColor = '#ecf0f1';
-                    break;
-                case 'light':
-                    buttonColor = '#ecf0f1';
-                    inputBorderColor = '#ecf0f1';
-                    backgroundColor = '#ffffff';
-                    textColor = '#34495e';
-                    break;
-                case 'blue':
-                    buttonColor = '#2980b9';
-                    inputBorderColor = '#2980b9';
-                    backgroundColor = '#3498db';
-                    textColor = '#ecf0f1';
-                    break;
-                case 'green':
-                    buttonColor = '#27ae60';
-                    inputBorderColor = '#27ae60';
-                    backgroundColor = '#2ecc71';
-                    textColor = '#ecf0f1';
-                    break;
-                case 'red':
-                    buttonColor = '#c0392b';
-                    inputBorderColor = '#c0392b';
-                    backgroundColor = '#e74c3c';
-                    textColor = '#ecf0f1';
-                    break;
-                case 'purple':
-                    buttonColor = '#9b59b6';
-                    inputBorderColor = '#9b59b6';
-                    backgroundColor = '#8e44ad';
-                    textColor = '#ecf0f1';
-                    break;
-                case 'orange':
-                    buttonColor = '#d35400';
-                    inputBorderColor = '#d35400';
-                    backgroundColor = '#e67e22';
-                    textColor = '#ecf0f1';
-                    break;
-                case 'pink':
-                    buttonColor = '#e91e63';
-                    inputBorderColor = '#e91e63';
-                    backgroundColor = '#ec407a';
-                    textColor = '#ecf0f1';
-                    break;
-                case 'yellow':
-                    buttonColor = '#f1c40f';
-                    inputBorderColor = '#f1c40f';
-                    backgroundColor = '#f39c12';
-                    textColor = '#34495e';
-                    break;
-                case 'cyan':
-                    buttonColor = '#00bcd4';
-                    inputBorderColor = '#00bcd4';
-                    backgroundColor = '#00acc1';
-                    textColor = '#34495e';
-                    break;
-                case 'brown':
-                    buttonColor = '#8d6e63';
-                    inputBorderColor = '#8d6e63';
-                    backgroundColor = '#795548';
-                    textColor = '#ecf0f1';
-                    break;
-                default:
-                    buttonColor = '#3498db';
-                    inputBorderColor = '#3498db';
-                    backgroundColor = '#2c3e50';
-                    textColor = '#ecf0f1';
-                    break;
+        function markAsPaid(id) {
+            const reminder = paymentReminders.find(r => r.id === id);
+            if (reminder) {
+                reminder.paid = true;
+                saveReminders();
+                closeAlertModal();
             }
-            document.documentElement.style.setProperty('--button-color', buttonColor);
-            document.documentElement.style.setProperty('--input-border-color', inputBorderColor);
-            document.documentElement.style.setProperty('--background-color', backgroundColor);
-            document.documentElement.style.setProperty('--text-color', textColor);
-            localStorage.setItem('theme', theme);
+        }
+
+        function keepUnpaid(id) {
+            const reminder = paymentReminders.find(r => r.id === id);
+            if (reminder) {
+                reminder.paid = false;
+                closeAlertModal();
+            }
+        }
+
+        function toggleColorGrid(type) {
+            const grid = document.getElementById(`${type}ColorGrid`);
+            grid.style.display = grid.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        document.getElementById('themeColorGrid').innerHTML = generateColorGridHtml('theme');
+
+        function generateColorGridHtml(type) {
+            const colors = [
+                '#2c3e50', '#34495e', '#2980b9', '#27ae60', '#c0392b', '#9b59b6', '#d35400', '#e91e63',
+                '#f1c40f', '#00bcd4', '#8d6e63', '#7f8c8d', '#e74c3c', '#2ecc71', '#3498db', '#9b59b6'
+            ];
+            return colors.map(color => `<div style="background-color: ${color};" onclick="changeTheme('${color}')"></div>`).join('');
+        }
+
+        function changeTheme(color) {
+            document.documentElement.style.setProperty('--button-color', color);
+            document.documentElement.style.setProperty('--input-border-color', color);
+            localStorage.setItem('theme', color);
         }
 
         function loadTheme() {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme) {
-                document.getElementById('theme').value = savedTheme;
-                changeTheme();
+                changeTheme(savedTheme);
             }
         }
 
-        function toggleColorGrid(id) {
-            const grid = document.getElementById(id + 'ColorGrid');
-            grid.style.display = grid.style.display === 'flex' ? 'none' : 'flex';
-            if (grid.children.length === 0) {
-                populateColorGrid(grid);
-            }
+        function showModal(message, onConfirm) {
+            const modal = document.getElementById('alertModal');
+            document.getElementById('alertMessage').innerText = message;
+            const alertButtons = document.getElementById('alertButtons');
+            alertButtons.innerHTML = `
+                <button onclick="confirmModal()">Confirmar</button>
+                <button onclick="closeAlertModal()">Cancelar</button>
+            `;
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+
+            window.confirmModal = function() {
+                onConfirm();
+                closeAlertModal();
+            };
         }
 
-        function populateColorGrid(grid) {
-            const colors = generateColorArray(200);
-            colors.forEach(color => {
-                const colorDiv = document.createElement('div');
-                colorDiv.style.backgroundColor = color;
-                colorDiv.onclick = () => selectColor(color);
-                grid.appendChild(colorDiv);
-            });
-        }
-
-        function generateColorArray(count) {
-            const colors = [];
-            for (let i = 0; i < count; i++) {
-                const color = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
-                colors.push(color);
-            }
-            return colors;
-        }
-
-        function selectColor(color) {
-            document.documentElement.style.setProperty('--button-color', color);
-            document.documentElement.style.setProperty('--input-border-color', color);
-            localStorage.setItem('theme', color);
-            document.getElementById('themeColorGrid').style.display = 'none';
+        function closeAlertModal() {
+            const modal = document.getElementById('alertModal');
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
         }
     </script>
 </body>
