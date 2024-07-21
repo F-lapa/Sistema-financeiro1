@@ -365,6 +365,7 @@
             <button onclick="openSpecificTransactionsModal()"><i class="fas fa-search-dollar"></i> Transações Específicas</button>
             <button onclick="openFinancialPerformanceModal()"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
             <button id="adminButton" onclick="toggleAdminSection()"><i class="fas fa-user-shield"></i> Área do Administrador</button>
+            <button onclick="openPaymentRemindersPage()"><i class="fas fa-bell"></i> Lembrete de Pagamentos</button>
         </div>
         <div class="theme-selector">
             <label for="theme">Selecionar Tema:</label>
@@ -372,183 +373,7 @@
         </div>
     </div>
     <div class="container">
-        <div class="greeting" id="userGreeting"></div>
-        <div class="logo-container">
-            <img src="logo.png" alt="Logo">
-        </div>
-        <div class="form-header">Nova Transação</div>
-        
-        <input type="text" style="display:none;" autocomplete="username">
-        <input type="password" style="display:none;" autocomplete="new-password">
-        
-        <div class="form-group">
-            <label for="date">Data:</label>
-            <input type="date" id="date" class="highlight" onchange="updateFilteredView()">
-        </div>
-        <div class="form-group">
-            <label for="description">Descrição:</label>
-            <input type="text" id="description" class="highlight">
-        </div>
-        <div class="form-group">
-            <label for="amount">Valor (R$):</label>
-            <input type="text" id="amount" name="amount_field" placeholder="0,00" value="0,00" class="highlight" autocomplete="off" oninput="validateAmount()">
-        </div>
-        <div class="form-group">
-            <label for="type">Tipo:</label>
-            <select id="type" class="highlight">
-                <option value="receita">Receita</option>
-                <option value="despesa">Despesa</option>
-            </select>
-        </div>
-        <button onclick="addTransaction()">Adicionar Transação</button>
-
-        <table id="transactionsTable">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Descrição</th>
-                    <th>Valor</th>
-                    <th>Tipo</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Transactions will be added here -->
-            </tbody>
-        </table>
-
-        <div class="totals">
-            <p>Saldo do Dia: <span id="dailyBalance">R$ 0,00</span></p>
-            <p>Saldo do Mês: <span id="monthlyBalance">R$ 0,00</span></p>
-            <p>Saldo do Ano: <span id="annualBalance">R$ 0,00</span></p>
-        </div>
-
-        <div id="filterPeriodModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeFilterPeriodModal()">&times;</span>
-                <h2>Filtrar por Período</h2>
-                <div class="form-group">
-                    <label for="startDate">Data Inicial:</label>
-                    <input type="date" id="startDate" class="highlight">
-                </div>
-                <div class="form-group">
-                    <label for="endDate">Data Final:</label>
-                    <input type="date" id="endDate" class="highlight">
-                </div>
-                <div class="form-group">
-                    <label for="filterType">Tipo:</label>
-                    <select id="filterType" class="highlight">
-                        <option value="">Todos</option>
-                        <option value="receita">Receita</option>
-                        <option value="despesa">Despesa</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="filterDescription">Descrição:</label>
-                    <select id="filterDescription" class="highlight">
-                        <option value="">Todos</option>
-                    </select>
-                </div>
-                <button onclick="filterByPeriod()">Filtrar</button>
-                <button onclick="clearFilter()">Limpar Filtro</button>
-                <div id="filteredResults">
-                    <p>Total Receitas: <span id="totalReceitas">R$ 0,00</span></p>
-                    <p>Total Despesas: <span id="totalDespesas" class="negative">R$ 0,00</span></p>
-                    <p>Saldo: <span id="totalSaldo">R$ 0,00</span></p>
-                </div>
-                <div class="filter-results" id="filterResults">
-                    <h3>Extrato</h3>
-                    <table id="filteredTransactionsTable">
-                        <thead>
-                            <tr>
-                                <th>Data</th>
-                                <th>Descrição</th>
-                                <th>Valor</th>
-                                <th>Tipo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Filtered transactions will be added here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="changePasswordModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeChangePasswordModal()">&times;</span>
-                <h2>Alterar Senha</h2>
-                <div class="form-group password-field">
-                    <label for="newPassword">Nova Senha:</label>
-                    <input type="password" id="newPassword" class="highlight">
-                    <i class="fas fa-eye" id="toggleChangePassword" onclick="togglePasswordVisibility('newPassword')"></i>
-                </div>
-                <button onclick="changePassword()">Alterar Senha</button>
-            </div>
-        </div>
-
-        <div id="specificTransactionsModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeSpecificTransactionsModal()">&times;</span>
-                <h2>Transações Específicas</h2>
-                <div class="form-group">
-                    <label for="specificStartDate">Data Inicial:</label>
-                    <input type="date" id="specificStartDate" class="highlight">
-                </div>
-                <div class="form-group">
-                    <label for="specificEndDate">Data Final:</label>
-                    <input type="date" id="specificEndDate" class="highlight">
-                </div>
-                <div class="form-group">
-                    <label for="specificType">Tipo:</label>
-                    <select id="specificType" class="highlight">
-                        <option value="receita">Receita</option>
-                        <option value="despesa">Despesa</option>
-                    </select>
-                </div>
-                <button onclick="generateSpecificTransactionsReport()">Gerar Relatório</button>
-                <canvas id="specificTransactionsChart" style="margin-top: 20px;"></canvas>
-            </div>
-        </div>
-
-        <div id="financialPerformanceModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeFinancialPerformanceModal()">&times;</span>
-                <h2>Desempenho Financeiro</h2>
-                <canvas id="financialPerformanceChart" style="margin-top: 20px;"></canvas>
-            </div>
-        </div>
-
-        <div class="admin-section" id="adminSection">
-            <h2>Gerenciamento de Usuários</h2>
-            <div class="form-group">
-                <label for="newUserName">Nome do Novo Usuário:</label>
-                <input type="text" id="newUserName" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="newUserEmail">Email do Novo Usuário:</label>
-                <input type="text" id="newUserEmail" class="highlight">
-            </div>
-            <div class="form-group password-field">
-                <label for="newUserPassword">Senha do Novo Usuário:</label>
-                <input type="password" id="newUserPassword" class="highlight" value="">
-                <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility('newUserPassword')"></i>
-            </div>
-            <div class="buttons">
-                <button onclick="registerNewUser()">Registrar Novo Usuário</button>
-            </div>
-        </div>
-
-        <div id="themeSelectorModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeThemeSelectorModal()">&times;</span>
-                <h2>Selecionar Tema</h2>
-                <div class="color-grid">
-                    <!-- As cores serão inseridas aqui -->
-                </div>
-            </div>
-        </div>
+        <!-- Container content here -->
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
@@ -582,6 +407,7 @@
                     loadTransactions();
                     checkAdmin(user.email);
                     loadTheme(); // Carrega o tema salvo
+                    checkReminders(); // Verifica lembretes de pagamento
                 });
             } else {
                 window.location.href = 'index.html';  
@@ -1155,7 +981,75 @@
         }
 
         function checkReminders() {
-            // Função para verificar lembretes e mostrar alertas quando apropriado
+            const currentDate = getCurrentDate();
+            const reminders = paymentReminders.filter(reminder => {
+                const reminderDate = new Date(reminder.date);
+                const currentDateObj = new Date(currentDate);
+                const differenceInDays = Math.floor((reminderDate - currentDateObj) / (1000 * 60 * 60 * 24));
+                return differenceInDays === 2 || (differenceInDays < 0 && differenceInDays >= -5);
+            });
+
+            reminders.forEach(reminder => {
+                const modal = document.createElement('div');
+                modal.classList.add('modal');
+                modal.style.display = 'block';
+                modal.style.animation = 'fadein 0.5s';
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <span class="close" onclick="closeReminderModal(this)">&times;</span>
+                        <h2>Lembrete de Pagamento</h2>
+                        <p>Você tem um pagamento de <strong>${reminder.description}</strong> no valor de <strong>${formatCurrency(reminder.amount)}</strong> com vencimento em <strong>${reminder.date}</strong>.</p>
+                        <button onclick="markAsPaid('${reminder.id}', this)">Já foi pago</button>
+                        <button onclick="snoozeReminder('${reminder.id}')">Não foi pago</button>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+            });
+        }
+
+        function closeReminderModal(element) {
+            element.parentElement.parentElement.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                element.parentElement.parentElement.remove();
+            }, 500);
+        }
+
+        function markAsPaid(reminderId, element) {
+            paymentReminders = paymentReminders.filter(reminder => reminder.id !== reminderId);
+            savePaymentReminders();
+            closeReminderModal(element);
+        }
+
+        function snoozeReminder(reminderId) {
+            const reminder = paymentReminders.find(reminder => reminder.id === reminderId);
+            if (reminder) {
+                const reminderDate = new Date(reminder.date);
+                const currentDate = new Date(getCurrentDate());
+                const differenceInDays = Math.floor((reminderDate - currentDate) / (1000 * 60 * 60 * 24));
+                if (differenceInDays < -5) {
+                    paymentReminders = paymentReminders.filter(reminder => reminder.id !== reminderId);
+                }
+                savePaymentReminders();
+            }
+        }
+
+        function savePaymentReminders() {
+            const userId = auth.currentUser.uid;
+            database.ref('paymentReminders/' + userId).set(paymentReminders);
+        }
+
+        function loadPaymentReminders() {
+            const userId = auth.currentUser.uid;
+            database.ref('paymentReminders/' + userId).once('value', function(snapshot) {
+                if (snapshot.val()) {
+                    paymentReminders = snapshot.val();
+                    checkReminders();
+                }
+            });
+        }
+
+        function openPaymentRemindersPage() {
+            window.location.href = 'payment_reminders.html';
         }
 
         function openThemeSelectorModal() {
