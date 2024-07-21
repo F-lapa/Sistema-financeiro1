@@ -568,14 +568,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         var firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            databaseURL: "YOUR_DATABASE_URL",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID",
-            measurementId: "YOUR_MEASUREMENT_ID"
+            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
+  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+  projectId: "sistema-de-receitas-e-despesas",
+  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+  messagingSenderId: "252102478972",
+  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
+  measurementId: "G-K2HCS7WNZV"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -1217,6 +1217,57 @@
 
         function openPaymentRemindersPage() {
             window.location.href = 'payment_reminders.html';
+        }
+
+        function openThemeSelectorModal() {
+            const modal = document.getElementById('themeSelectorModal');
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+            const colorGrid = document.querySelector('.color-grid');
+            colorGrid.innerHTML = ''; // Limpar cores anteriores
+            const colors = generateColorArray();
+            colors.forEach(color => {
+                const colorBox = document.createElement('div');
+                colorBox.classList.add('color-box');
+                colorBox.style.backgroundColor = color;
+                colorBox.onclick = () => selectThemeColor(color);
+                colorGrid.appendChild(colorBox);
+            });
+        }
+
+        function closeThemeSelectorModal() {
+            const modal = document.getElementById('themeSelectorModal');
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
+        function generateColorArray() {
+            const colors = [];
+            for (let r = 0; r <= 255; r += 51) {
+                for (let g = 0; g <= 255; g += 51) {
+                    for (let b = 0; b <= 255; b += 51) {
+                        colors.push(`rgb(${r},${g},${b})`);
+                    }
+                }
+            }
+            return colors;
+        }
+
+        function selectThemeColor(color) {
+            document.documentElement.style.setProperty('--button-color', color);
+            document.documentElement.style.setProperty('--input-border-color', color);
+            localStorage.setItem('theme', color);
+            closeThemeSelectorModal();
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.style.setProperty('--button-color', savedTheme);
+                document.documentElement.style.setProperty('--input-border-color', savedTheme);
+            }
         }
     </script>
 </body>
