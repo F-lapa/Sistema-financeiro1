@@ -13,7 +13,6 @@
             --primary-color: #3498db;
             --button-color: #3498db;
             --input-border-color: #3498db;
-            --button-text-color: #ecf0f1;
         }
         body {
             font-family: 'Roboto', sans-serif;
@@ -62,7 +61,7 @@
             width: 90%;
             padding: 10px;
             background-color: var(--button-color);
-            color: var(--button-text-color);
+            color: var(--text-color);
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -178,7 +177,7 @@
             width: 50%;
             padding: 10px;
             background-color: var(--button-color);
-            color: var(--button-text-color);
+            color: var(--text-color);
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -340,11 +339,16 @@
             height: auto;
         }
         .color-box {
-            width: 30px;
-            height: 30px;
-            margin: 5px;
+            width: 40px;
+            height: 40px;
             display: inline-block;
+            margin: 5px;
             cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+        .color-box:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -364,7 +368,7 @@
         </div>
         <div class="theme-selector">
             <label for="theme">Selecionar Tema:</label>
-            <input type="text" id="theme" placeholder="Clique para escolher" onclick="openThemeSelectorModal()" readonly style="cursor: pointer;">
+            <button id="themeButton" onclick="openThemeSelectorModal()">Clique para escolher</button>
         </div>
     </div>
     <div class="container">
@@ -536,24 +540,15 @@
             </div>
         </div>
 
-        <div id="alertModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeAlertModal()">&times;</span>
-                <h2>Alerta</h2>
-                <p id="alertMessage"></p>
-                <button onclick="markAsPaid()">Já foi pago</button>
-                <button onclick="markAsNotPaid()">Não foi pago</button>
-            </div>
-        </div>
-
         <div id="themeSelectorModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeThemeSelectorModal()">&times;</span>
                 <h2>Selecionar Tema</h2>
-                <div id="colorGrid" style="display: flex; flex-wrap: wrap;"></div>
+                <div class="color-grid">
+                    <!-- As cores serão inseridas aqui -->
+                </div>
             </div>
         </div>
-
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
@@ -563,14 +558,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         var firebaseConfig = {
-             apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-  projectId: "sistema-de-receitas-e-despesas",
-  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-  messagingSenderId: "252102478972",
-  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-  measurementId: "G-K2HCS7WNZV"
+            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
+            authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+            databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+            projectId: "sistema-de-receitas-e-despesas",
+            storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+            messagingSenderId: "252102478972",
+            appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
+            measurementId: "G-K2HCS7WNZV"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -583,12 +578,10 @@
                     const userData = snapshot.val();
                     const userName = userData ? userData.name : "Usuário";
                     localStorage.setItem('username', userName);
-                    document.getElementById('userGreeting').innerHTML = user.email === 'fernandolapa1987@gmail.com' ? 
-                        '<span>Olá, <strong>Administrador!</strong></span>' : 
-                        '<span>Olá, <strong>' + userName + '</strong>!</span>';
+                    document.getElementById('userGreeting').innerHTML = '<span>Olá, <strong>' + userName + '</strong>!</span>';
                     loadTransactions();
-                    loadTheme();
                     checkAdmin(user.email);
+                    loadTheme(); // Carrega o tema salvo
                 });
             } else {
                 window.location.href = 'index.html';  
@@ -596,10 +589,10 @@
         });
 
         let transactions = [];
+        let paymentReminders = [];
         let lastTransactionId = localStorage.getItem('lastTransactionId');
         let allUsers = [];
         let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
-        let selectedTheme = localStorage.getItem('theme');
 
         function saveTransactions() {
             const userId = auth.currentUser.uid;
@@ -855,6 +848,7 @@
             const dateInput = document.getElementById('date');
             dateInput.value = getCurrentDate();
             updateFilteredView();
+            checkReminders();
         });
 
         function logout() {
@@ -1160,11 +1154,24 @@
             });
         }
 
+        function checkReminders() {
+            // Função para verificar lembretes e mostrar alertas quando apropriado
+        }
+
         function openThemeSelectorModal() {
             const modal = document.getElementById('themeSelectorModal');
             modal.style.display = 'block';
             modal.style.animation = 'fadein 0.5s';
-            generateColorGrid();
+            const colorGrid = document.querySelector('.color-grid');
+            colorGrid.innerHTML = ''; // Limpar cores anteriores
+            const colors = generateColorArray();
+            colors.forEach(color => {
+                const colorBox = document.createElement('div');
+                colorBox.classList.add('color-box');
+                colorBox.style.backgroundColor = color;
+                colorBox.onclick = () => selectThemeColor(color);
+                colorGrid.appendChild(colorBox);
+            });
         }
 
         function closeThemeSelectorModal() {
@@ -1175,37 +1182,30 @@
             }, 500);
         }
 
-        function generateColorGrid() {
-            const colorGrid = document.getElementById('colorGrid');
-            colorGrid.innerHTML = '';
-            const colors = ['#2c3e50', '#34495e', '#3498db', '#2980b9', '#1abc9c', '#16a085', '#27ae60', '#2ecc71', '#f1c40f', '#f39c12', '#e67e22', '#d35400', '#e74c3c', '#c0392b', '#ecf0f1', '#bdc3c7', '#95a5a6', '#7f8c8d', '#9b59b6', '#8e44ad', '#2980b9', '#16a085', '#f39c12', '#d35400', '#c0392b', '#bdc3c7', '#7f8c8d'];
-            colors.forEach(color => {
-                const colorBox = document.createElement('div');
-                colorBox.className = 'color-box';
-                colorBox.style.backgroundColor = color;
-                colorBox.onclick = () => selectThemeColor(color);
-                colorGrid.appendChild(colorBox);
-            });
+        function generateColorArray() {
+            const colors = [];
+            for (let r = 0; r <= 255; r += 51) {
+                for (let g = 0; g <= 255; g += 51) {
+                    for (let b = 0; b <= 255; b += 51) {
+                        colors.push(`rgb(${r},${g},${b})`);
+                    }
+                }
+            }
+            return colors;
         }
 
         function selectThemeColor(color) {
             document.documentElement.style.setProperty('--button-color', color);
             document.documentElement.style.setProperty('--input-border-color', color);
-            const lightColors = ['#ecf0f1', '#bdc3c7', '#95a5a6'];
-            if (lightColors.includes(color)) {
-                document.documentElement.style.setProperty('--button-text-color', '#000');
-            } else {
-                document.documentElement.style.setProperty('--button-text-color', '#ecf0f1');
-            }
-            selectedTheme = color;
-            localStorage.setItem('theme', selectedTheme);
+            localStorage.setItem('theme', color);
             closeThemeSelectorModal();
         }
 
         function loadTheme() {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme) {
-                selectThemeColor(savedTheme);
+                document.documentElement.style.setProperty('--button-color', savedTheme);
+                document.documentElement.style.setProperty('--input-border-color', savedTheme);
             }
         }
     </script>
