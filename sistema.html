@@ -143,7 +143,7 @@
             top: 10px;
             left: 10px;
             cursor: pointer;
-            color: var(--text-color);
+            color: var (--text-color);
             font-size: 1.2em;
             display: none;
         }
@@ -188,7 +188,7 @@
             display: block;
         }
         .container button:hover {
-            background-color: darken(var(--button-color), 10%);
+            background-color: darken(var (--button-color), 10%);
             transform: scale(1.05);
         }
         .container table {
@@ -203,7 +203,7 @@
             background-color: #34495e;
         }
         .container th {
-            background-color: var(--background-color);
+            background-color: var (--background-color);
             color: #bdc3c7;
         }
         .container tbody tr {
@@ -224,7 +224,7 @@
         }
         .container .totals span, .container .filter span {
             font-weight: bold;
-            color: var(--primary-color);
+            color: var (--primary-color);
         }
         .container .negative {
             color: red !important;
@@ -401,7 +401,7 @@
             <label for="description">Descrição:</label>
             <input type="text" id="description" class="highlight">
         </div>
-        <div class="form-group">
+        <div class "form-group">
             <label for="amount">Valor (R$):</label>
             <input type="text" id="amount" name="amount_field" placeholder="0,00" value="0,00" class="highlight" autocomplete="off" oninput="validateAmount()">
         </div>
