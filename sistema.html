@@ -382,6 +382,10 @@
             <label for="theme">Selecionar Tema:</label>
             <button id="themeButton" onclick="openThemeSelectorModal()">Clique para escolher</button>
         </div>
+        <div class="theme-selector">
+            <label for="theme">Selecionar Cor:</label>
+            <button id="colorButton" onclick="openColorSelectorModal()">Clique para escolher</button>
+        </div>
     </div>
     <div class="container">
         <div class="greeting" id="userGreeting"></div>
@@ -556,6 +560,16 @@
             <div class="modal-content">
                 <span class="close" onclick="closeThemeSelectorModal()">&times;</span>
                 <h2>Selecionar Tema</h2>
+                <div class="color-grid">
+                    <!-- As cores serão inseridas aqui -->
+                </div>
+            </div>
+        </div>
+
+        <div id="colorSelectorModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeColorSelectorModal()">&times;</span>
+                <h2>Selecionar Cor</h2>
                 <div class="color-grid">
                     <!-- As cores serão inseridas aqui -->
                 </div>
@@ -1243,7 +1257,7 @@
             const modal = document.getElementById('themeSelectorModal');
             modal.style.display = 'block';
             modal.style.animation = 'fadein 0.5s';
-            const colorGrid = document.querySelector('.color-grid');
+            const colorGrid = document.querySelector('#themeSelectorModal .color-grid');
             colorGrid.innerHTML = ''; // Limpar cores anteriores
             const colors = generateColorArray();
             colors.forEach(color => {
@@ -1257,6 +1271,30 @@
 
         function closeThemeSelectorModal() {
             const modal = document.getElementById('themeSelectorModal');
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
+        function openColorSelectorModal() {
+            const modal = document.getElementById('colorSelectorModal');
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+            const colorGrid = document.querySelector('#colorSelectorModal .color-grid');
+            colorGrid.innerHTML = ''; // Limpar cores anteriores
+            const colors = generateColorArray();
+            colors.forEach(color => {
+                const colorBox = document.createElement('div');
+                colorBox.classList.add('color-box');
+                colorBox.style.backgroundColor = color;
+                colorBox.onclick = () => selectBackgroundColor(color);
+                colorGrid.appendChild(colorBox);
+            });
+        }
+
+        function closeColorSelectorModal() {
+            const modal = document.getElementById('colorSelectorModal');
             modal.style.animation = 'fadeout 0.5s';
             setTimeout(() => {
                 modal.style.display = 'none';
@@ -1282,11 +1320,38 @@
             closeThemeSelectorModal();
         }
 
+        function selectBackgroundColor(color) {
+            document.documentElement.style.setProperty('--background-color', color);
+            adjustTextColor(color);
+            localStorage.setItem('background-color', color);
+            closeColorSelectorModal();
+        }
+
+        function adjustTextColor(backgroundColor) {
+            const luminance = getLuminance(backgroundColor);
+            const textColor = luminance > 0.5 ? 'black' : '#ecf0f1';
+            document.documentElement.style.setProperty('--text-color', textColor);
+        }
+
+        function getLuminance(color) {
+            const rgb = color.match(/\d+/g).map(Number);
+            rgb.forEach((value, index) => {
+                rgb[index] = value / 255;
+                rgb[index] = rgb[index] <= 0.03928 ? rgb[index] / 12.92 : Math.pow((rgb[index] + 0.055) / 1.055, 2.4);
+            });
+            return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
+        }
+
         function loadTheme() {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme) {
                 document.documentElement.style.setProperty('--button-color', savedTheme);
                 document.documentElement.style.setProperty('--input-border-color', savedTheme);
+            }
+            const savedBackgroundColor = localStorage.getItem('background-color');
+            if (savedBackgroundColor) {
+                document.documentElement.style.setProperty('--background-color', savedBackgroundColor);
+                adjustTextColor(savedBackgroundColor);
             }
         }
     </script>
