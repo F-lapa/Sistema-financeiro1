@@ -594,7 +594,7 @@
         const database = firebase.database();
         const auth = firebase.auth();
 
-        let reminderAlertDay;
+        let reminderAlertId;
 
         auth.onAuthStateChanged(user => {
             if (user) {
@@ -1183,7 +1183,7 @@
             });
 
             if (reminders.length > 0) {
-                reminderAlertDay = reminders[0].day;
+                reminderAlertId = reminders[0].id;
                 const modal = document.getElementById('reminderAlertModal');
                 document.getElementById('reminderAlertMessage').innerHTML = `
                     Você tem um pagamento de <strong>${reminders[0].description}</strong> com vencimento no dia <strong>${reminders[0].day}</strong> no valor de <strong>R$ ${parseFloat(reminders[0].value).toFixed(2)}</strong>.
@@ -1216,7 +1216,7 @@
         }
 
         function markAsPaid() {
-            const reminder = paymentReminders.find(r => r.day === reminderAlertDay);
+            const reminder = paymentReminders.find(r => r.id === reminderAlertId);
             if (reminder) {
                 reminder.paid = true;
                 const currentDate = new Date();
