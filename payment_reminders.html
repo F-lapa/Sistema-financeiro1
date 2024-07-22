@@ -49,7 +49,7 @@
             font-weight: bold;
             color: #bdc3c7;
         }
-        input[type="text"], input[type="number"], select {
+        input[type="text"], input[type="number"], input[type="date"], select {
             width: 100%;
             padding: 10px;
             margin-bottom: 8px;
@@ -112,7 +112,7 @@
             0% { background-position: -200px; }
             100% { background-position: 200px; }
         }
-        input[type="text"]:hover, input[type="number"]:hover, select:hover {
+        input[type="text"]:hover, input[type="number"]:hover, input[type="date"]:hover, select:hover {
             border-color: var(--input-border-color);
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
@@ -122,8 +122,8 @@
     <div class="container">
         <h1>Lembretes de Pagamento</h1>
         <div class="form-group">
-            <label for="reminderDay">Dia do Mês:</label>
-            <input type="number" id="reminderDay" class="highlight" min="1" max="31">
+            <label for="reminderDate">Data:</label>
+            <input type="date" id="reminderDate" class="highlight">
         </div>
         <div class="form-group">
             <label for="reminderDescription">Descrição:</label>
@@ -138,7 +138,7 @@
         <table id="remindersTable">
             <thead>
                 <tr>
-                    <th>Dia</th>
+                    <th>Data</th>
                     <th>Descrição</th>
                     <th>Valor</th>
                     <th>Ação</th>
@@ -181,17 +181,17 @@
         let paymentReminders = [];
 
         function addReminder() {
-            const day = document.getElementById('reminderDay').value;
+            const date = document.getElementById('reminderDate').value;
             const description = document.getElementById('reminderDescription').value;
             const value = document.getElementById('reminderValue').value;
 
-            const reminder = { id: generateReminderId(), day, description, value, paid: false };
+            const reminder = { id: generateReminderId(), date, description, value, paid: false };
             paymentReminders.push(reminder);
 
             savePaymentReminders();
             updateRemindersTable();
 
-            document.getElementById('reminderDay').value = '';
+            document.getElementById('reminderDate').value = '';
             document.getElementById('reminderDescription').value = '';
             document.getElementById('reminderValue').value = '';
         }
@@ -206,12 +206,12 @@
 
             paymentReminders.forEach(reminder => {
                 const row = tbody.insertRow();
-                const cellDay = row.insertCell(0);
+                const cellDate = row.insertCell(0);
                 const cellDescription = row.insertCell(1);
                 const cellValue = row.insertCell(2);
                 const cellAction = row.insertCell(3);
 
-                cellDay.innerText = reminder.day;
+                cellDate.innerText = new Date(reminder.date).toLocaleDateString('pt-BR');
                 cellDescription.innerText = reminder.description;
                 cellValue.innerText = `R$ ${parseFloat(reminder.value).toFixed(2)}`;
                 cellAction.innerHTML = `<i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')" style="cursor:pointer; color:red;"></i>`;
