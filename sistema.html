@@ -1223,11 +1223,13 @@
         }
 
         function markAsPaid() {
-            const reminder = paymentReminders.find(r => r.day === reminderAlertDay);
-            reminder.paid = true;
-            reminder.lastPaidDate = getCurrentDate();
-            savePaymentReminders();
-            closeReminderAlertModal();
+            const reminderIndex = paymentReminders.findIndex(r => r.day === reminderAlertDay);
+            if (reminderIndex !== -1) {
+                paymentReminders[reminderIndex].paid = true;
+                paymentReminders[reminderIndex].lastPaidDate = getCurrentDate();
+                savePaymentReminders();
+                closeReminderAlertModal();
+            }
         }
 
         function snoozeReminder() {
@@ -1265,7 +1267,7 @@
         function generateColorArray() {
             const colors = [];
             for (let r = 0; r <= 255; r += 51) {
-                for (let g = 0; g <= 255; g += 51) {
+                for (let g = 0; r <= 255; g += 51) {
                     for (let b = 0; b <= 255; b += 51) {
                         colors.push(`rgb(${r},${g},${b})`);
                     }
