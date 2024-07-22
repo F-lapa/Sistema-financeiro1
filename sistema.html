@@ -90,14 +90,15 @@
             margin-bottom: 5px;
             color: var(--text-color);
         }
-        .sidebar .theme-selector select {
+        .sidebar .theme-selector button {
             width: 90%;
             padding: 8px;
             border-radius: 8px;
             border: none;
-            background-color: var(--text-color);
-            color: #34495e;
+            background-color: var(--button-color);
+            color: var(--text-color);
             font-size: 14px;
+            cursor: pointer;
         }
         .container {
             margin-left: 240px;
@@ -580,7 +581,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         var firebaseConfig = {
-            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
+            apiKey: "YOUR_FIREBASE_API_KEY",
             authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
             databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
             projectId: "sistema-de-receitas-e-despesas",
@@ -1265,11 +1266,14 @@
         }
 
         function generateColorArray() {
-            const colors = [
-                '#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#34495e', '#f1c40f', '#e67e22', '#e74c3c',
-                '#ecf0f1', '#95a5a6', '#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2c3e50', '#f39c12',
-                '#d35400', '#c0392b', '#bdc3c7', '#7f8c8d'
-            ];
+            const colors = [];
+            for (let r = 0; r <= 255; r += 51) {
+                for (let g = 0; g <= 255; g += 51) {
+                    for (let b = 0; b <= 255; b += 51) {
+                        colors.push(`rgb(${r},${g},${b})`);
+                    }
+                }
+            }
             return colors;
         }
 
