@@ -1191,7 +1191,7 @@
         function checkReminders() {
             const currentDate = new Date();
             const reminders = paymentReminders.filter(reminder => {
-                const reminderDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), reminder.day);
+                const reminderDate = new Date(reminder.date);
                 const differenceInDays = Math.floor((reminderDate - currentDate) / (1000 * 60 * 60 * 24));
                 return (differenceInDays === 2 || (differenceInDays < 0 && differenceInDays >= -7)) && !reminder.paid;
             });
@@ -1200,7 +1200,7 @@
                 reminderAlertId = reminders[0].id;
                 const modal = document.getElementById('reminderAlertModal');
                 document.getElementById('reminderAlertMessage').innerHTML = `
-                    Você tem um pagamento de <strong>${reminders[0].description}</strong> com vencimento no dia <strong>${reminders[0].day}</strong> no valor de <strong>R$ ${parseFloat(reminders[0].value).toFixed(2)}</strong>.
+                    Você tem um pagamento de <strong>${reminders[0].description}</strong> com vencimento no dia <strong>${reminders[0].date}</strong> no valor de <strong>R$ ${parseFloat(reminders[0].value).toFixed(2)}</strong>.
                 `;
                 modal.style.display = 'block';
                 modal.style.animation = 'fadein 0.5s';
