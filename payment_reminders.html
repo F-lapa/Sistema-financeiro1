@@ -211,7 +211,7 @@
                 const cellValue = row.insertCell(2);
                 const cellAction = row.insertCell(3);
 
-                cellDate.innerText = new Date(reminder.date).toLocaleDateString('pt-BR');
+                cellDate.innerText = reminder.date.split('-').reverse().join('/');
                 cellDescription.innerText = reminder.description;
                 cellValue.innerText = `R$ ${parseFloat(reminder.value).toFixed(2)}`;
                 cellAction.innerHTML = `<i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')" style="cursor:pointer; color:red;"></i>`;
