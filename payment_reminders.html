@@ -49,7 +49,7 @@
             font-weight: bold;
             color: #bdc3c7;
         }
-        input[type="date"], input[type="text"], input[type="number"], select {
+        input[type="text"], input[type="number"], select {
             width: 100%;
             padding: 10px;
             margin-bottom: 8px;
@@ -122,8 +122,8 @@
     <div class="container">
         <h1>Lembretes de Pagamento</h1>
         <div class="form-group">
-            <label for="reminderDate">Data:</label>
-            <input type="date" id="reminderDate" class="highlight">
+            <label for="reminderDay">Dia do Mês:</label>
+            <input type="number" id="reminderDay" class="highlight" min="1" max="31">
         </div>
         <div class="form-group">
             <label for="reminderDescription">Descrição:</label>
@@ -134,7 +134,7 @@
         <table id="remindersTable">
             <thead>
                 <tr>
-                    <th>Data</th>
+                    <th>Dia</th>
                     <th>Descrição</th>
                     <th>Ação</th>
                 </tr>
@@ -150,14 +150,14 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script>
         var firebaseConfig = {
-            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-            authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-            databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-            projectId: "sistema-de-receitas-e-despesas",
-            storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-            messagingSenderId: "252102478972",
-            appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-            measurementId: "G-K2HCS7WNZV"
+           apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
+  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+  projectId: "sistema-de-receitas-e-despesas",
+  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+  messagingSenderId: "252102478972",
+  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
+  measurementId: "G-K2HCS7WNZV"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -176,16 +176,16 @@
         let paymentReminders = [];
 
         function addReminder() {
-            const date = document.getElementById('reminderDate').value;
+            const day = document.getElementById('reminderDay').value;
             const description = document.getElementById('reminderDescription').value;
 
-            const reminder = { id: generateReminderId(), date, description, paid: false };
+            const reminder = { id: generateReminderId(), day, description, paid: false };
             paymentReminders.push(reminder);
 
             savePaymentReminders();
             updateRemindersTable();
 
-            document.getElementById('reminderDate').value = '';
+            document.getElementById('reminderDay').value = '';
             document.getElementById('reminderDescription').value = '';
         }
 
@@ -199,11 +199,11 @@
 
             paymentReminders.forEach(reminder => {
                 const row = tbody.insertRow();
-                const cellDate = row.insertCell(0);
+                const cellDay = row.insertCell(0);
                 const cellDescription = row.insertCell(1);
                 const cellAction = row.insertCell(2);
 
-                cellDate.innerText = reminder.date;
+                cellDay.innerText = reminder.day;
                 cellDescription.innerText = reminder.description;
                 cellAction.innerHTML = `<i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')" style="cursor:pointer; color:red;"></i>`;
             });
