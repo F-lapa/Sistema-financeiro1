@@ -1184,12 +1184,11 @@
             const reminders = paymentReminders.filter(reminder => {
                 const reminderDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), reminder.day);
                 const differenceInDays = Math.floor((reminderDate - currentDate) / (1000 * 60 * 60 * 24));
-                const lastPaidDate = new Date(reminder.lastPaidDate || 0);
-                const daysSinceLastPaid = Math.floor((currentDate - lastPaidDate) / (1000 * 60 * 60 * 24));
+                const lastPaidDate = reminder.lastPaidDate ? new Date(reminder.lastPaidDate) : null;
+                const daysSinceLastPaid = lastPaidDate ? Math.floor((currentDate - lastPaidDate) / (1000 * 60 * 60 * 24)) : null;
 
-                // Verifica se o lembrete deve ser exibido
                 return (differenceInDays === 2 || (differenceInDays < 0 && differenceInDays >= -7)) &&
-                    (!reminder.paid || daysSinceLastPaid >= 30);
+                    (!lastPaidDate || daysSinceLastPaid >= 30);
             });
 
             if (reminders.length > 0) {
@@ -1228,7 +1227,7 @@
         function markAsPaid() {
             const reminder = paymentReminders.find(r => r.day === reminderAlertDay);
             reminder.paid = true;
-            reminder.lastPaidDate = getCurrentDate(); // Adiciona a data do pagamento
+            reminder.lastPaidDate = getCurrentDate();
             savePaymentReminders();
             closeReminderAlertModal();
         }
