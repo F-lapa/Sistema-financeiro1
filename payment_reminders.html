@@ -171,7 +171,7 @@
         auth.onAuthStateChanged(user => {
             if (user) {
                 const userId = user.uid;
-                loadPaymentReminders();
+                loadPaymentReminders(userId);
                 loadTheme(); // Carregar o tema salvo
             } else {
                 window.location.href = 'index.html';
@@ -188,7 +188,8 @@
             const reminder = { id: generateReminderId(), date, description, value, paid: false };
             paymentReminders.push(reminder);
 
-            savePaymentReminders();
+            const userId = auth.currentUser.uid;
+            savePaymentReminders(userId);
             updateRemindersTable();
 
             document.getElementById('reminderDate').value = '';
@@ -221,18 +222,17 @@
         function removeReminder(reminderId) {
             if (confirm('Tem certeza que deseja remover este lembrete?')) {
                 paymentReminders = paymentReminders.filter(reminder => reminder.id !== reminderId);
-                savePaymentReminders();
+                const userId = auth.currentUser.uid;
+                savePaymentReminders(userId);
                 updateRemindersTable();
             }
         }
 
-        function savePaymentReminders() {
-            const userId = auth.currentUser.uid;
+        function savePaymentReminders(userId) {
             database.ref('paymentReminders/' + userId).set(paymentReminders);
         }
 
-        function loadPaymentReminders() {
-            const userId = auth.currentUser.uid;
+        function loadPaymentReminders(userId) {
             database.ref('paymentReminders/' + userId).once('value').then((snapshot) => {
                 paymentReminders = snapshot.val() || [];
                 updateRemindersTable();
