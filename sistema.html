@@ -609,6 +609,7 @@
         const auth = firebase.auth();
 
         let reminderAlertId;
+        let currentReminderIndex = 0;
 
         auth.onAuthStateChanged(user => {
             if (user) {
@@ -1198,9 +1199,17 @@
 
             if (reminders.length > 0) {
                 reminderAlertId = reminders[0].id;
+                currentReminderIndex = 0;
+                showReminderAlert();
+            }
+        }
+
+        function showReminderAlert() {
+            if (currentReminderIndex < paymentReminders.length) {
+                const reminder = paymentReminders[currentReminderIndex];
                 const modal = document.getElementById('reminderAlertModal');
                 document.getElementById('reminderAlertMessage').innerHTML = `
-                    Você tem um pagamento de <strong>${reminders[0].description}</strong> com vencimento no dia <strong>${reminders[0].date}</strong> no valor de <strong>R$ ${parseFloat(reminders[0].value).toFixed(2)}</strong>.
+                    Você tem um pagamento de <strong>${reminder.description}</strong> com vencimento no dia <strong>${reminder.date}</strong> no valor de <strong>R$ ${parseFloat(reminder.value).toFixed(2)}</strong>.
                 `;
                 modal.style.display = 'block';
                 modal.style.animation = 'fadein 0.5s';
@@ -1213,6 +1222,8 @@
             modal.style.animation = 'fadeout 0.5s';
             setTimeout(() => {
                 modal.style.display = 'none';
+                currentReminderIndex++;
+                showReminderAlert();
             }, 500);
         }
 
@@ -1230,11 +1241,11 @@
         }
 
         function markAsPaid() {
-            const reminder = paymentReminders.find(r => r.id === reminderAlertId);
+            const reminder = paymentReminders[currentReminderIndex];
             if (reminder) {
                 reminder.paid = true;
                 const currentDate = new Date();
-                const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, reminder.day);
+                const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, new Date(reminder.date).getDate());
                 reminder.nextDueDate = nextMonthDate.toISOString().split('T')[0];
 
                 // Adiciona a transação da despesa automaticamente
