@@ -171,6 +171,7 @@
         auth.onAuthStateChanged(user => {
             if (user) {
                 const userId = user.uid;
+                console.log("User ID:", userId); // Log para depuração
                 loadPaymentReminders(userId);
                 loadTheme(); // Carregar o tema salvo
             } else {
@@ -189,6 +190,7 @@
             paymentReminders.push(reminder);
 
             const userId = auth.currentUser.uid;
+            console.log("Saving reminders for user:", userId, paymentReminders); // Log para depuração
             savePaymentReminders(userId);
             updateRemindersTable();
 
@@ -223,19 +225,29 @@
             if (confirm('Tem certeza que deseja remover este lembrete?')) {
                 paymentReminders = paymentReminders.filter(reminder => reminder.id !== reminderId);
                 const userId = auth.currentUser.uid;
+                console.log("Removing reminder for user:", userId, reminderId); // Log para depuração
                 savePaymentReminders(userId);
                 updateRemindersTable();
             }
         }
 
         function savePaymentReminders(userId) {
-            database.ref('paymentReminders/' + userId).set(paymentReminders);
+            database.ref('paymentReminders/' + userId).set(paymentReminders, (error) => {
+                if (error) {
+                    console.error("Error saving reminders:", error); // Log de erro
+                } else {
+                    console.log("Reminders saved successfully!"); // Log de sucesso
+                }
+            });
         }
 
         function loadPaymentReminders(userId) {
             database.ref('paymentReminders/' + userId).once('value').then((snapshot) => {
                 paymentReminders = snapshot.val() || [];
+                console.log("Loaded reminders:", paymentReminders); // Log para depuração
                 updateRemindersTable();
+            }).catch(error => {
+                console.error("Error loading reminders:", error); // Log de erro
             });
         }
 
