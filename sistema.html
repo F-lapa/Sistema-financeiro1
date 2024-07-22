@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -583,13 +582,13 @@
     <script>
         var firebaseConfig = {
             apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-  projectId: "sistema-de-receitas-e-despesas",
-  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-  messagingSenderId: "252102478972",
-  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-  measurementId: "G-K2HCS7WNZV"
+            authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+            databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+            projectId: "sistema-de-receitas-e-despesas",
+            storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+            messagingSenderId: "252102478972",
+            appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
+            measurementId: "G-K2HCS7WNZV"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -666,13 +665,7 @@
             return parseFloat(value.replace(/\./g, '').replace(',', '.').replace('R$', '')) || 0;
         }
 
-        function addTransaction() {
-            const date = document.getElementById('date').value;
-            const description = document.getElementById('description').value;
-            const amountInput = document.getElementById('amount');
-            const amount = parseCurrency(amountInput.value);
-            const type = document.getElementById('type').value;
-
+        function addTransaction(date, description, amount, type) {
             const transaction = { id: generateTransactionId(), date, description, amount, type };
             transactions.push(transaction);
             lastTransactionId = transaction.id;
@@ -686,7 +679,7 @@
 
             document.getElementById('date').value = getCurrentDate();
             document.getElementById('description').value = '';
-            amountInput.value = '0,00';
+            document.getElementById('amount').value = '0,00';
             document.getElementById('type').value = 'receita';
         }
 
@@ -1186,7 +1179,6 @@
             const reminders = paymentReminders.filter(reminder => {
                 const reminderDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), reminder.day);
                 const differenceInDays = Math.floor((reminderDate - currentDate) / (1000 * 60 * 60 * 24));
-                console.log(`Reminder for ${reminder.description} is due in ${differenceInDays} days.`);
                 return (differenceInDays === 2 || (differenceInDays < 0 && differenceInDays >= -7)) && !reminder.paid;
             });
 
@@ -1194,7 +1186,7 @@
                 reminderAlertDay = reminders[0].day;
                 const modal = document.getElementById('reminderAlertModal');
                 document.getElementById('reminderAlertMessage').innerHTML = `
-                    Você tem um pagamento de <strong>${reminders[0].description}</strong> com vencimento no dia <strong>${reminders[0].day}</strong>.
+                    Você tem um pagamento de <strong>${reminders[0].description}</strong> com vencimento no dia <strong>${reminders[0].day}</strong> no valor de <strong>R$ ${parseFloat(reminders[0].value).toFixed(2)}</strong>.
                 `;
                 modal.style.display = 'block';
                 modal.style.animation = 'fadein 0.5s';
@@ -1225,10 +1217,18 @@
 
         function markAsPaid() {
             const reminder = paymentReminders.find(r => r.day === reminderAlertDay);
-            reminder.paid = true;
-            reminder.lastPaidDate = getCurrentDate();
-            savePaymentReminders();
-            closeReminderAlertModal();
+            if (reminder) {
+                reminder.paid = true;
+                const currentDate = new Date();
+                const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, reminder.day);
+                reminder.nextDueDate = nextMonthDate.toISOString().split('T')[0];
+
+                // Adiciona a transação da despesa automaticamente
+                addTransaction(getCurrentDate(), reminder.description, parseFloat(reminder.value), 'despesa');
+                
+                savePaymentReminders();
+                closeReminderAlertModal();
+            }
         }
 
         function snoozeReminder() {
@@ -1266,8 +1266,8 @@
         function generateColorArray() {
             const colors = [];
             for (let r = 0; r <= 255; r += 51) {
-                for (let g = 0; g <= 255; g += 51) {
-                    for (let b = 0; b <= 255; b += 51) {
+                for (let g = 0; r <= 255; g += 51) {
+                    for (let b = 0; r <= 255; b += 51) {
                         colors.push(`rgb(${r},${g},${b})`);
                     }
                 }
