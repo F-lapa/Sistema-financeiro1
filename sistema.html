@@ -1229,7 +1229,7 @@
                 reminder.paid = true;
                 reminder.lastPaidDate = getCurrentDate();
                 addTransactionFromReminder(reminder);
-                paymentReminders.splice(reminderIndex, 1); // Remove the reminder
+                reminder.paid = false; // Set paid to false so it can remind next month
                 savePaymentReminders();
                 closeReminderAlertModal();
             }
