@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -130,6 +129,10 @@
             <label for="reminderDescription">Descrição:</label>
             <input type="text" id="reminderDescription" class="highlight">
         </div>
+        <div class="form-group">
+            <label for="reminderAmount">Valor (R$):</label>
+            <input type="number" id="reminderAmount" class="highlight" step="0.01" min="0">
+        </div>
         <button onclick="addReminder()">Adicionar Lembrete</button>
 
         <table id="remindersTable">
@@ -137,6 +140,7 @@
                 <tr>
                     <th>Dia</th>
                     <th>Descrição</th>
+                    <th>Valor</th>
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -179,8 +183,9 @@
         function addReminder() {
             const day = document.getElementById('reminderDay').value;
             const description = document.getElementById('reminderDescription').value;
+            const amount = parseFloat(document.getElementById('reminderAmount').value);
 
-            const reminder = { id: generateReminderId(), day, description, paid: false };
+            const reminder = { id: generateReminderId(), day, description, amount, paid: false };
             paymentReminders.push(reminder);
 
             savePaymentReminders();
@@ -188,6 +193,7 @@
 
             document.getElementById('reminderDay').value = '';
             document.getElementById('reminderDescription').value = '';
+            document.getElementById('reminderAmount').value = '';
         }
 
         function generateReminderId() {
@@ -202,10 +208,12 @@
                 const row = tbody.insertRow();
                 const cellDay = row.insertCell(0);
                 const cellDescription = row.insertCell(1);
-                const cellAction = row.insertCell(2);
+                const cellAmount = row.insertCell(2);
+                const cellAction = row.insertCell(3);
 
                 cellDay.innerText = reminder.day;
                 cellDescription.innerText = reminder.description;
+                cellAmount.innerText = reminder.amount.toFixed(2);
                 cellAction.innerHTML = `<i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')" style="cursor:pointer; color:red;"></i>`;
             });
         }
