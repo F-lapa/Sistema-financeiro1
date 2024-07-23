@@ -256,30 +256,6 @@
         .container .filter-results {
             margin-top: 10px;
         }
-        .container .admin-section {
-            display: none;
-            margin-top: 10px;
-        }
-        .container .admin-section h2 {
-            text-align: center;
-            color: var(--text-color);
-        }
-        .container .admin-section .form-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .container .admin-section input, .container .admin-section select {
-            width: 100%;
-            margin-bottom: 8px;
-        }
-        .container .admin-section .buttons {
-            flex-direction: column;
-        }
-        .container .admin-section button {
-            width: 100%;
-            margin-bottom: 8px;
-        }
         .container .password-field {
             position: relative;
         }
@@ -450,8 +426,8 @@
             <button onclick="goToLimitPage()"><i class="fas fa-money-check-alt"></i> Definir Limite de Gastos</button>
             <button onclick="openSpecificTransactionsModal()"><i class="fas fa-search-dollar"></i> Transações Específicas</button>
             <button onclick="openFinancialPerformanceModal()"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
-            <button id="adminButton" onclick="toggleAdminSection()"><i class="fas fa-user-shield"></i> Área do Administrador</button>
-            <button onclick="openPaymentRemindersPage()"><i class="fas fa-bell"></i> Lembrete de Pagamentos</button>
+            <button id="adminButton" style="display: none;" onclick="openAdminModal()"><i class="fas fa-user-shield"></i> Área do Administrador</button>
+            <button id="reminderButton" style="display: none;" onclick="openPaymentRemindersPage()"><i class="fas fa-bell"></i> Lembrete de Pagamentos</button>
         </div>
         <div class="theme-selector">
             <label for="theme">Selecionar Tema:</label>
@@ -604,23 +580,26 @@
             </div>
         </div>
 
-        <div class="admin-section" id="adminSection">
-            <h2>Gerenciamento de Usuários</h2>
-            <div class="form-group">
-                <label for="newUserName">Nome do Novo Usuário:</label>
-                <input type="text" id="newUserName" class="highlight">
-            </div>
-            <div class="form-group">
-                <label for="newUserEmail">Email do Novo Usuário:</label>
-                <input type="text" id="newUserEmail" class="highlight">
-            </div>
-            <div class="form-group password-field">
-                <label for="newUserPassword">Senha do Novo Usuário:</label>
-                <input type="password" id="newUserPassword" class="highlight" value="">
-                <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility('newUserPassword')"></i>
-            </div>
-            <div class="buttons">
-                <button onclick="registerNewUser()">Registrar Novo Usuário</button>
+        <div id="adminModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeAdminModal()">&times;</span>
+                <h2>Gerenciamento de Usuários</h2>
+                <div class="form-group">
+                    <label for="newUserName">Nome do Novo Usuário:</label>
+                    <input type="text" id="newUserName" class="highlight">
+                </div>
+                <div class="form-group">
+                    <label for="newUserEmail">Email do Novo Usuário:</label>
+                    <input type="text" id="newUserEmail" class="highlight">
+                </div>
+                <div class="form-group password-field">
+                    <label for="newUserPassword">Senha do Novo Usuário:</label>
+                    <input type="password" id="newUserPassword" class="highlight" value="">
+                    <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility('newUserPassword')"></i>
+                </div>
+                <div class="buttons">
+                    <button onclick="registerNewUser()">Registrar Novo Usuário</button>
+                </div>
             </div>
         </div>
 
@@ -712,11 +691,14 @@
 
         function checkAdmin(email) {
             const adminButton = document.getElementById('adminButton');
+            const reminderButton = document.getElementById('reminderButton');
             if (email === 'fernandolapa1987@gmail.com') {
                 adminButton.style.display = 'block';
+                reminderButton.style.display = 'block';
                 loadAllUsers();
             } else {
                 adminButton.style.display = 'none';
+                reminderButton.style.display = 'block';
             }
         }
 
@@ -960,9 +942,18 @@
             });
         }
 
-        function toggleAdminSection() {
-            const adminSection = document.getElementById('adminSection');
-            adminSection.style.display = adminSection.style.display === 'block' ? 'none' : 'block';
+        function openAdminModal() {
+            const modal = document.getElementById('adminModal');
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+        }
+
+        function closeAdminModal() {
+            const modal = document.getElementById('adminModal');
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
         }
 
         function registerNewUser() {
