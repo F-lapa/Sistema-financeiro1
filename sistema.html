@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -382,10 +384,6 @@
             <label for="theme">Selecionar Tema:</label>
             <button id="themeButton" onclick="openThemeSelectorModal()">Clique para escolher</button>
         </div>
-        <div class="theme-selector">
-            <label for="theme">Selecionar Cor:</label>
-            <button id="colorButton" onclick="openColorSelectorModal()">Clique para escolher</button>
-        </div>
     </div>
     <div class="container">
         <div class="greeting" id="userGreeting"></div>
@@ -566,16 +564,6 @@
             </div>
         </div>
 
-        <div id="colorSelectorModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeColorSelectorModal()">&times;</span>
-                <h2>Selecionar Cor</h2>
-                <div class="color-grid">
-                    <!-- As cores serão inseridas aqui -->
-                </div>
-            </div>
-        </div>
-
         <div id="reminderAlertModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeReminderAlertModal()">&times;</span>
@@ -596,20 +584,19 @@
     <script>
         var firebaseConfig = {
             apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-            authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-            databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-            projectId: "sistema-de-receitas-e-despesas",
-            storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-            messagingSenderId: "252102478972",
-            appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-            measurementId: "G-K2HCS7WNZV"
+  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+  projectId: "sistema-de-receitas-e-despesas",
+  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+  messagingSenderId: "252102478972",
+  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
+  measurementId: "G-K2HCS7WNZV"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const auth = firebase.auth();
 
-        let reminderAlertId;
-        let currentReminderIndex = 0;
+        let reminderAlertDay;
 
         auth.onAuthStateChanged(user => {
             if (user) {
@@ -680,7 +667,13 @@
             return parseFloat(value.replace(/\./g, '').replace(',', '.').replace('R$', '')) || 0;
         }
 
-        function addTransaction(date, description, amount, type) {
+        function addTransaction() {
+            const date = document.getElementById('date').value;
+            const description = document.getElementById('description').value;
+            const amountInput = document.getElementById('amount');
+            const amount = parseCurrency(amountInput.value);
+            const type = document.getElementById('type').value;
+
             const transaction = { id: generateTransactionId(), date, description, amount, type };
             transactions.push(transaction);
             lastTransactionId = transaction.id;
@@ -694,7 +687,7 @@
 
             document.getElementById('date').value = getCurrentDate();
             document.getElementById('description').value = '';
-            document.getElementById('amount').value = '0,00';
+            amountInput.value = '0,00';
             document.getElementById('type').value = 'receita';
         }
 
@@ -1192,24 +1185,17 @@
         function checkReminders() {
             const currentDate = new Date();
             const reminders = paymentReminders.filter(reminder => {
-                const reminderDate = new Date(reminder.date);
+                const reminderDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), reminder.day);
                 const differenceInDays = Math.floor((reminderDate - currentDate) / (1000 * 60 * 60 * 24));
+                console.log(`Reminder for ${reminder.description} is due in ${differenceInDays} days.`);
                 return (differenceInDays === 2 || (differenceInDays < 0 && differenceInDays >= -7)) && !reminder.paid;
             });
 
             if (reminders.length > 0) {
-                reminderAlertId = reminders[0].id;
-                currentReminderIndex = 0;
-                showReminderAlert();
-            }
-        }
-
-        function showReminderAlert() {
-            if (currentReminderIndex < paymentReminders.length) {
-                const reminder = paymentReminders[currentReminderIndex];
+                reminderAlertDay = reminders[0].day;
                 const modal = document.getElementById('reminderAlertModal');
                 document.getElementById('reminderAlertMessage').innerHTML = `
-                    Você tem um pagamento de <strong>${reminder.description}</strong> com vencimento no dia <strong>${reminder.date}</strong> no valor de <strong>R$ ${parseFloat(reminder.value).toFixed(2)}</strong>.
+                    Você tem um pagamento de <strong>${reminders[0].description}</strong> com vencimento no dia <strong>${reminders[0].day}</strong>.
                 `;
                 modal.style.display = 'block';
                 modal.style.animation = 'fadein 0.5s';
@@ -1222,8 +1208,6 @@
             modal.style.animation = 'fadeout 0.5s';
             setTimeout(() => {
                 modal.style.display = 'none';
-                currentReminderIndex++;
-                showReminderAlert();
             }, 500);
         }
 
@@ -1241,19 +1225,11 @@
         }
 
         function markAsPaid() {
-            const reminder = paymentReminders[currentReminderIndex];
-            if (reminder) {
-                reminder.paid = true;
-                const currentDate = new Date();
-                const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, new Date(reminder.date).getDate());
-                reminder.nextDueDate = nextMonthDate.toISOString().split('T')[0];
-
-                // Adiciona a transação da despesa automaticamente
-                addTransaction(getCurrentDate(), reminder.description, parseFloat(reminder.value), 'despesa');
-                
-                savePaymentReminders();
-                closeReminderAlertModal();
-            }
+            const reminder = paymentReminders.find(r => r.day === reminderAlertDay);
+            reminder.paid = true;
+            reminder.lastPaidDate = getCurrentDate();
+            savePaymentReminders();
+            closeReminderAlertModal();
         }
 
         function snoozeReminder() {
@@ -1268,7 +1244,7 @@
             const modal = document.getElementById('themeSelectorModal');
             modal.style.display = 'block';
             modal.style.animation = 'fadein 0.5s';
-            const colorGrid = document.querySelector('#themeSelectorModal .color-grid');
+            const colorGrid = document.querySelector('.color-grid');
             colorGrid.innerHTML = ''; // Limpar cores anteriores
             const colors = generateColorArray();
             colors.forEach(color => {
@@ -1288,35 +1264,11 @@
             }, 500);
         }
 
-        function openColorSelectorModal() {
-            const modal = document.getElementById('colorSelectorModal');
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-            const colorGrid = document.querySelector('#colorSelectorModal .color-grid');
-            colorGrid.innerHTML = ''; // Limpar cores anteriores
-            const colors = generateColorArray();
-            colors.forEach(color => {
-                const colorBox = document.createElement('div');
-                colorBox.classList.add('color-box');
-                colorBox.style.backgroundColor = color;
-                colorBox.onclick = () => selectBackgroundColor(color);
-                colorGrid.appendChild(colorBox);
-            });
-        }
-
-        function closeColorSelectorModal() {
-            const modal = document.getElementById('colorSelectorModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
-
         function generateColorArray() {
             const colors = [];
             for (let r = 0; r <= 255; r += 51) {
-                for (let g = 0; r <= 255; g += 51) {
-                    for (let b = 0; r <= 255; b += 51) {
+                for (let g = 0; g <= 255; g += 51) {
+                    for (let b = 0; b <= 255; b += 51) {
                         colors.push(`rgb(${r},${g},${b})`);
                     }
                 }
@@ -1331,38 +1283,11 @@
             closeThemeSelectorModal();
         }
 
-        function selectBackgroundColor(color) {
-            document.documentElement.style.setProperty('--background-color', color);
-            adjustTextColor(color);
-            localStorage.setItem('background-color', color);
-            closeColorSelectorModal();
-        }
-
-        function adjustTextColor(backgroundColor) {
-            const luminance = getLuminance(backgroundColor);
-            const textColor = luminance > 0.5 ? 'black' : '#ecf0f1';
-            document.documentElement.style.setProperty('--text-color', textColor);
-        }
-
-        function getLuminance(color) {
-            const rgb = color.match(/\d+/g).map(Number);
-            rgb.forEach((value, index) => {
-                rgb[index] = value / 255;
-                rgb[index] = rgb[index] <= 0.03928 ? rgb[index] / 12.92 : Math.pow((rgb[index] + 0.055) / 1.055, 2.4);
-            });
-            return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
-        }
-
         function loadTheme() {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme) {
                 document.documentElement.style.setProperty('--button-color', savedTheme);
                 document.documentElement.style.setProperty('--input-border-color', savedTheme);
-            }
-            const savedBackgroundColor = localStorage.getItem('background-color');
-            if (savedBackgroundColor) {
-                document.documentElement.style.setProperty('--background-color', savedBackgroundColor);
-                adjustTextColor(savedBackgroundColor);
             }
         }
     </script>
