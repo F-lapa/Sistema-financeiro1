@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1229,11 +1227,30 @@
             reminder.paid = true;
             reminder.lastPaidDate = getCurrentDate();
             savePaymentReminders();
+
+            addTransactionFromReminder(reminder);
+
             closeReminderAlertModal();
         }
 
         function snoozeReminder() {
             closeReminderAlertModal();
+        }
+
+        function addTransactionFromReminder(reminder) {
+            const transaction = {
+                id: generateTransactionId(),
+                date: getCurrentDate(),
+                description: reminder.description,
+                amount: reminder.amount,
+                type: 'despesa'
+            };
+            transactions.push(transaction);
+            saveTransactions();
+            updateDescriptionList();
+            updateFilteredView();
+            calculateBalances();
+            checkMonthlyLimit();
         }
 
         function openPaymentRemindersPage() {
