@@ -104,9 +104,13 @@
         tbody tr:hover {
             background-color: #3b4b5e;
         }
-        .fa-trash-alt {
+        .fa-trash-alt, .fa-edit {
             cursor: pointer;
             color: red;
+        }
+        .fa-edit {
+            color: #3498db;
+            margin-right: 10px;
         }
         @keyframes shine {
             0% { background-position: -200px; }
@@ -214,7 +218,9 @@
                 cellDay.innerText = reminder.day;
                 cellDescription.innerText = reminder.description;
                 cellAmount.innerText = reminder.amount.toFixed(2);
-                cellAction.innerHTML = `<i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')" style="cursor:pointer; color:red;"></i>`;
+                cellAction.innerHTML = `
+                    <i class="fas fa-edit" onclick="editReminder('${reminder.id}')"></i>
+                    <i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')"></i>`;
             });
         }
 
@@ -224,6 +230,15 @@
                 savePaymentReminders();
                 updateRemindersTable();
             }
+        }
+
+        function editReminder(reminderId) {
+            const reminder = paymentReminders.find(r => r.id === reminderId);
+            document.getElementById('reminderDay').value = reminder.day;
+            document.getElementById('reminderDescription').value = reminder.description;
+            document.getElementById('reminderAmount').value = reminder.amount;
+
+            removeReminder(reminderId);
         }
 
         function savePaymentReminders() {
