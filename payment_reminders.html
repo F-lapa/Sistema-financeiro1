@@ -106,19 +106,55 @@
         }
         .fa-trash-alt, .fa-edit {
             cursor: pointer;
-            color: red;
         }
         .fa-edit {
             color: #3498db;
             margin-right: 10px;
         }
-        @keyframes shine {
-            0% { background-position: -200px; }
-            100% { background-position: 200px; }
+        .fa-trash-alt {
+            color: red;
         }
-        input[type="text"]:hover, input[type="number"]:hover, select:hover {
-            border-color: var(--input-border-color);
-            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+        .modal-content {
+            background-color: #34495e;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            animation: slideIn 0.3s;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        @keyframes slideIn {
+            from {transform: translateY(-50px);}
+            to {transform: translateY(0);}
         }
     </style>
 </head>
@@ -154,6 +190,26 @@
         </table>
     </div>
 
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Editar Lembrete</h2>
+            <div class="form-group">
+                <label for="editReminderDay">Dia do Mês:</label>
+                <input type="number" id="editReminderDay" min="1" max="31">
+            </div>
+            <div class="form-group">
+                <label for="editReminderDescription">Descrição:</label>
+                <input type="text" id="editReminderDescription">
+            </div>
+            <div class="form-group">
+                <label for="editReminderAmount">Valor (R$):</label>
+                <input type="number" id="editReminderAmount" step="0.01" min="0">
+            </div>
+            <button onclick="saveReminder()">Salvar Alterações</button>
+        </div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
@@ -183,6 +239,7 @@
         });
 
         let paymentReminders = [];
+        let currentEditId = null;
 
         function addReminder() {
             const day = document.getElementById('reminderDay').value;
@@ -234,11 +291,36 @@
 
         function editReminder(reminderId) {
             const reminder = paymentReminders.find(r => r.id === reminderId);
-            document.getElementById('reminderDay').value = reminder.day;
-            document.getElementById('reminderDescription').value = reminder.description;
-            document.getElementById('reminderAmount').value = reminder.amount;
+            document.getElementById('editReminderDay').value = reminder.day;
+            document.getElementById('editReminderDescription').value = reminder.description;
+            document.getElementById('editReminderAmount').value = reminder.amount;
+            currentEditId = reminderId;
+            openModal();
+        }
 
-            removeReminder(reminderId);
+        function openModal() {
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        function saveReminder() {
+            const day = document.getElementById('editReminderDay').value;
+            const description = document.getElementById('editReminderDescription').value;
+            const amount = parseFloat(document.getElementById('editReminderAmount').value);
+
+            paymentReminders = paymentReminders.map(reminder => {
+                if (reminder.id === currentEditId) {
+                    return { ...reminder, day, description, amount };
+                }
+                return reminder;
+            });
+
+            savePaymentReminders();
+            updateRemindersTable();
+            closeModal();
         }
 
         function savePaymentReminders() {
@@ -259,6 +341,13 @@
             if (savedTheme) {
                 document.documentElement.style.setProperty('--button-color', savedTheme);
                 document.documentElement.style.setProperty('--input-border-color', savedTheme);
+            }
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeModal();
             }
         }
     </script>
