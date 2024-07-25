@@ -623,7 +623,7 @@
 
         <div id="reminderAlertModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeReminderAlertModal()">&times;</span>
+                <span class="close" onclick="snoozeReminder()">&times;</span>
                 <div id="reminderAlertMessage"></div>
                 <button onclick="markAsPaid()">Já foi Pago</button>
                 <button onclick="snoozeReminder()">Não foi Pago</button>
@@ -1271,6 +1271,8 @@
                 modal.style.animation = 'fadein 0.5s';
                 document.getElementById('alertSound').play();
             }
+
+            setTimeout(checkReminders, 86400000); // Recheck reminders every 24 hours (86400000 milliseconds)
         }
 
         function closeReminderAlertModal() {
