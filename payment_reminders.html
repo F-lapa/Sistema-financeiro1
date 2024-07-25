@@ -403,7 +403,14 @@
                 type: 'despesa'
             };
             const userId = auth.currentUser.uid;
-            database.ref('transactions/' + userId).push(transaction);
+            // Save the transaction directly to the transactions database
+            database.ref('transactions/' + userId).push(transaction)
+                .then(() => {
+                    alert('Transação adicionada com sucesso');
+                })
+                .catch(error => {
+                    console.error('Erro ao adicionar transação:', error);
+                });
         }
 
         function resetPaymentConfirmations() {
