@@ -403,14 +403,12 @@
                 type: 'despesa'
             };
             const userId = auth.currentUser.uid;
-            // Save the transaction directly to the transactions database
-            database.ref('transactions/' + userId).push(transaction)
-                .then(() => {
-                    alert('Transação adicionada com sucesso');
-                })
-                .catch(error => {
-                    console.error('Erro ao adicionar transação:', error);
-                });
+            database.ref('transactions/' + userId).push(transaction).then(() => {
+                alert('Pagamento confirmado e despesa adicionada!');
+            }).catch(error => {
+                console.error('Erro ao adicionar transação:', error);
+                alert('Erro ao adicionar despesa. Por favor, tente novamente.');
+            });
         }
 
         function resetPaymentConfirmations() {
