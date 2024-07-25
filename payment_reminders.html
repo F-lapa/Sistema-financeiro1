@@ -118,6 +118,11 @@
         .fa-check-circle {
             color: green;
         }
+        .paid-message {
+            color: green;
+            font-weight: bold;
+            margin-left: 10px;
+        }
         .modal {
             display: none;
             position: fixed;
@@ -292,7 +297,9 @@
                 cellAction.innerHTML = `
                     <i class="fas fa-edit" onclick="editReminder('${reminder.id}')"></i>
                     <i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')"></i>
-                    <i class="fas fa-check-circle" onclick="openConfirmModal('${reminder.id}')"></i>`;
+                    <i class="fas fa-check-circle" onclick="openConfirmModal('${reminder.id}')"></i>
+                    ${reminder.paid ? '<span class="paid-message">Já foi pago</span>' : ''}
+                `;
             });
         }
 
