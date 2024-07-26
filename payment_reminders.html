@@ -261,7 +261,7 @@
             const description = document.getElementById('reminderDescription').value;
             const amount = parseFloat(document.getElementById('reminderAmount').value);
 
-            const reminder = { id: generateReminderId(), day, description, amount, paid: false };
+            const reminder = { id: generateReminderId(), day, description, amount, paid: false, lastPaidDate: null };
             paymentReminders.push(reminder);
 
             savePaymentReminders();
@@ -354,6 +354,7 @@
         function confirmPayment() {
             const reminder = paymentReminders.find(r => r.id === currentConfirmId);
             reminder.paid = true;
+            reminder.lastPaidDate = getCurrentDate();
             savePaymentReminders();
             addTransactionFromReminder(reminder);
             updateRemindersTable();
