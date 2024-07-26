@@ -657,6 +657,7 @@
         let currentReminderId;
         let transactions = [];
         let paymentReminders = [];
+        let incomeReminders = [];
         let lastTransactionId = localStorage.getItem('lastTransactionId');
         let allUsers = [];
         let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
@@ -673,6 +674,7 @@
                     checkAdmin(user.email);
                     loadTheme(); // Carrega o tema salvo
                     loadPaymentReminders(); // Carrega lembretes de pagamento
+                    loadIncomeReminders(); // Carrega lembretes de receita
                 });
             } else {
                 window.location.href = 'index.html';  
@@ -1258,20 +1260,17 @@
         }
 
         function checkReminders() {
-            const currentDate = new Date();
-            const currentMonth = currentDate.getMonth();
-            const reminders = paymentReminders.filter(reminder => {
-                const reminderDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), reminder.day);
-                const differenceInDays = Math.floor((reminderDate - currentDate) / (1000 * 60 * 60 * 24));
-                return (differenceInDays === 2 || (differenceInDays < 0 && differenceInDays >= -7)) &&
-                        !reminder.paid && new Date(reminder.lastPaidDate).getMonth() !== currentMonth;
+            const currentDate = getCurrentDate();
+            const reminders = incomeReminders.filter(reminder => {
+                const reminderDate = reminder.date;
+                return reminderDate === currentDate && !reminder.paid;
             });
 
             if (reminders.length > 0) {
                 currentReminderId = reminders[0].id;
                 const modal = document.getElementById('reminderAlertModal');
                 document.getElementById('reminderAlertMessage').innerHTML = `
-                    Você tem um pagamento de <strong>${reminders[0].description}</strong> com vencimento no dia <strong>${reminders[0].day}</strong>.
+                    Você tem uma receita de <strong>${reminders[0].description}</strong> cadastrada para hoje.
                 `;
                 modal.style.display = 'block';
                 modal.style.animation = 'fadein 0.5s';
@@ -1291,6 +1290,13 @@
             const userId = auth.currentUser.uid;
             database.ref('paymentReminders/' + userId).once('value').then((snapshot) => {
                 paymentReminders = snapshot.val() || [];
+            });
+        }
+
+        function loadIncomeReminders() {
+            const userId = auth.currentUser.uid;
+            database.ref('incomeReminders/' + userId).once('value').then((snapshot) => {
+                incomeReminders = snapshot.val() || [];
                 checkReminders();
             });
         }
@@ -1300,36 +1306,23 @@
             database.ref('paymentReminders/' + userId).set(paymentReminders);
         }
 
+        function saveIncomeReminders() {
+            const userId = auth.currentUser.uid;
+            database.ref('incomeReminders/' + userId).set(incomeReminders);
+        }
+
         function markAsPaid() {
-            const reminderIndex = paymentReminders.findIndex(r => r.id === currentReminderId);
+            const reminderIndex = incomeReminders.findIndex(r => r.id === currentReminderId);
             if (reminderIndex > -1) {
-                const reminder = paymentReminders[reminderIndex];
+                const reminder = incomeReminders[reminderIndex];
                 reminder.paid = true;
-                reminder.lastPaidDate = getCurrentDate();
-                addTransactionFromReminder(reminder);
-                savePaymentReminders();
+                saveIncomeReminders();
                 closeReminderAlertModal();
             }
         }
 
         function snoozeReminder() {
             closeReminderAlertModal();
-        }
-
-        function addTransactionFromReminder(reminder) {
-            const transaction = {
-                id: generateTransactionId(),
-                date: getCurrentDate(),
-                description: reminder.description,
-                amount: reminder.amount,
-                type: 'despesa'
-            };
-            transactions.push(transaction);
-            saveTransactions();
-            updateDescriptionList();
-            updateFilteredView();
-            calculateBalances();
-            checkMonthlyLimit();
         }
 
         function openPaymentRemindersPage() {
