@@ -185,6 +185,26 @@
         </div>
     </div>
 
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h2>Editar Receita</h2>
+            <div class="form-group">
+                <label for="editDay">Dia do Mês:</label>
+                <input type="number" id="editDay" min="1" max="31">
+            </div>
+            <div class="form-group">
+                <label for="editDescription">Descrição:</label>
+                <input type="text" id="editDescription">
+            </div>
+            <div class="form-group">
+                <label for="editAmount">Valor (R$):</label>
+                <input type="text" id="editAmount" placeholder="0,00">
+            </div>
+            <button onclick="saveEditIncomeReminder()">Salvar</button>
+        </div>
+    </div>
+
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeDeleteModal()">&times;</span>
@@ -214,6 +234,7 @@
 
         let incomeReminders = [];
         let currentReminderId;
+        let editReminderId;
 
         auth.onAuthStateChanged(user => {
             if (user) {
@@ -273,7 +294,7 @@
                 cellStatus.innerHTML = `<span class="status ${reminder.status === 'Em Aberto' ? 'open' : 'received'}">${reminder.status}</span>`;
                 cellAction.innerHTML = `
                     <i class="fas fa-check" onclick="confirmIncomeReminder('${reminder.id}')" style="color:green; ${reminder.status === 'Já Recebi' ? 'display:none;' : ''}"></i>
-                    <i class="fas fa-edit" onclick="editIncomeReminder('${reminder.id}')" style="color:yellow;"></i>
+                    <i class="fas fa-edit" onclick="openEditIncomeReminderModal('${reminder.id}')" style="color:yellow;"></i>
                     <i class="fas fa-trash-alt" onclick="confirmDeleteIncomeReminder('${reminder.id}')" style="color:red;"></i>
                 `;
             });
@@ -310,13 +331,26 @@
             database.ref('transactions/' + userId).push(transaction);
         }
 
-        function editIncomeReminder(id) {
+        function openEditIncomeReminderModal(id) {
             const reminder = incomeReminders.find(r => r.id === id);
             if (reminder) {
-                document.getElementById('day').value = reminder.day;
-                document.getElementById('description').value = reminder.description;
-                document.getElementById('amount').value = reminder.amount;
-                deleteIncomeReminder(id);
+                editReminderId = id;
+                document.getElementById('editDay').value = reminder.day;
+                document.getElementById('editDescription').value = reminder.description;
+                document.getElementById('editAmount').value = reminder.amount.toFixed(2).replace('.', ',');
+                openEditModal();
+            }
+        }
+
+        function saveEditIncomeReminder() {
+            const reminderIndex = incomeReminders.findIndex(r => r.id === editReminderId);
+            if (reminderIndex > -1) {
+                incomeReminders[reminderIndex].day = document.getElementById('editDay').value;
+                incomeReminders[reminderIndex].description = document.getElementById('editDescription').value;
+                incomeReminders[reminderIndex].amount = parseCurrency(document.getElementById('editAmount').value);
+                saveIncomeReminders();
+                renderIncomeReminders();
+                closeEditModal();
             }
         }
 
@@ -372,6 +406,20 @@
 
         function closeConfirmModal() {
             const modal = document.getElementById('confirmModal');
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
+        function openEditModal() {
+            const modal = document.getElementById('editModal');
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById('editModal');
             modal.style.animation = 'fadeout 0.5s';
             setTimeout(() => {
                 modal.style.display = 'none';
