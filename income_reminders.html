@@ -3,71 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lembrete de Receitas</title>
+    <title>Lembretes de Receita</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --background-color: #2c3e50;
+            --text-color: #ecf0f1;
+            --primary-color: #3498db;
+            --button-color: #3498db;
+            --input-border-color: #3498db;
+        }
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #2c3e50;
+            background-color: var(--background-color);
             margin: 0;
             padding: 0;
-            color: #ecf0f1;
+            color: var(--text-color);
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             min-height: 100vh;
         }
         .container {
             width: 90%;
             max-width: 600px;
-            background-color: #34495e;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: #34495e;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
         h1 {
             text-align: center;
+            color: var(--text-color);
             margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: 500;
         }
         .form-group {
             margin-bottom: 15px;
         }
-        .form-group label {
+        label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             font-weight: bold;
             color: #bdc3c7;
         }
-        .form-group input {
+        input[type="text"], input[type="number"], select {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #3498db;
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid var(--input-border-color);
             border-radius: 8px;
             box-sizing: border-box;
             font-size: 14px;
-            background-color: #2c3e50;
-            color: #ecf0f1;
+            background-color: var(--background-color);
+            color: var(--text-color);
             transition: all 0.3s ease;
         }
-        .form-group input:focus {
-            border: 2px solid #3498db;
+        input:focus, select:focus {
+            border: 2px solid var(--button-color);
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
         button {
             width: 100%;
             padding: 10px;
-            background-color: #3498db;
-            color: #ecf0f1;
+            background-color: var(--button-color);
+            color: var(--text-color);
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
         }
         button:hover {
-            background-color: #2980b9;
+            background-color: darken(var(--button-color), 10%);
             transform: scale(1.05);
         }
         table {
@@ -82,20 +93,30 @@
             background-color: #34495e;
         }
         th {
-            background-color: #2c3e50;
+            background-color: var(--background-color);
             color: #bdc3c7;
         }
-        .status {
-            font-weight: bold;
+        tbody tr {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
         }
-        .status.open {
+        tbody tr:hover {
+            background-color: #3b4b5e;
+        }
+        .fa-trash-alt, .fa-edit, .fa-check-circle {
+            cursor: pointer;
+        }
+        .fa-edit {
+            color: #3498db;
+            margin-right: 10px;
+        }
+        .fa-trash-alt {
             color: red;
         }
-        .status.received {
+        .fa-check-circle {
             color: green;
-        }
-        .fa-trash-alt, .fa-check, .fa-edit {
-            cursor: pointer;
+            margin-right: 10px;
         }
         .modal {
             display: none;
@@ -106,61 +127,59 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
         }
         .modal-content {
             background-color: #34495e;
             margin: 15% auto;
             padding: 20px;
-            border: 1px solid #444;
+            border: 1px solid #888;
             width: 80%;
-            max-width: 400px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            color: #ecf0f1;
-            text-align: center;
-            animation: fadein 0.5s;
+            max-width: 500px;
+            border-radius: 10px;
+            animation: slideIn 0.3s;
         }
         .close {
-            color: #ecf0f1;
+            color: #aaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
         .close:hover,
         .close:focus {
-            color: #3498db;
+            color: #000;
             text-decoration: none;
             cursor: pointer;
         }
-        @keyframes fadein {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
         }
-        @keyframes fadeout {
-            from { opacity: 1; }
-            to { opacity: 0; }
+        @keyframes slideIn {
+            from {transform: translateY(-50px);}
+            to {transform: translateY(0);}
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Lembrete de Receitas</h1>
+        <h1>Lembretes de Receita</h1>
         <div class="form-group">
-            <label for="day">Dia do Mês:</label>
-            <input type="number" id="day" min="1" max="31">
+            <label for="reminderDay">Dia do Mês:</label>
+            <input type="number" id="reminderDay" class="highlight" min="1" max="31">
         </div>
         <div class="form-group">
-            <label for="description">Descrição:</label>
-            <input type="text" id="description">
+            <label for="reminderDescription">Descrição:</label>
+            <input type="text" id="reminderDescription" class="highlight">
         </div>
         <div class="form-group">
-            <label for="amount">Valor (R$):</label>
-            <input type="text" id="amount" placeholder="0,00">
+            <label for="reminderAmount">Valor (R$):</label>
+            <input type="number" id="reminderAmount" class="highlight" step="0.01" min="0">
         </div>
-        <button onclick="addIncomeReminder()">Adicionar Lembrete</button>
-        
-        <table id="incomeRemindersTable">
+        <button onclick="addReminder()">Adicionar Lembrete</button>
+
+        <table id="remindersTable">
             <thead>
                 <tr>
                     <th>Dia</th>
@@ -171,46 +190,37 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Income reminders will be added here -->
+                <!-- Reminders will be added here -->
             </tbody>
         </table>
     </div>
 
-    <div id="confirmModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeConfirmModal()">&times;</span>
-            <p id="confirmMessage"></p>
-            <button onclick="confirmIncome()">Confirmar</button>
-            <button onclick="closeConfirmModal()">Cancelar</button>
-        </div>
-    </div>
-
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeEditModal()">&times;</span>
-            <h2>Editar Receita</h2>
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Editar Lembrete</h2>
             <div class="form-group">
-                <label for="editDay">Dia do Mês:</label>
-                <input type="number" id="editDay" min="1" max="31">
+                <label for="editReminderDay">Dia do Mês:</label>
+                <input type="number" id="editReminderDay" min="1" max="31">
             </div>
             <div class="form-group">
-                <label for="editDescription">Descrição:</label>
-                <input type="text" id="editDescription">
+                <label for="editReminderDescription">Descrição:</label>
+                <input type="text" id="editReminderDescription">
             </div>
             <div class="form-group">
-                <label for="editAmount">Valor (R$):</label>
-                <input type="text" id="editAmount" placeholder="0,00">
+                <label for="editReminderAmount">Valor (R$):</label>
+                <input type="number" id="editReminderAmount" step="0.01" min="0">
             </div>
-            <button onclick="saveEditIncomeReminder()">Salvar</button>
+            <button onclick="saveReminder()">Salvar Alterações</button>
         </div>
     </div>
 
-    <div id="deleteModal" class="modal">
+    <div id="confirmationModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeDeleteModal()">&times;</span>
-            <p id="deleteMessage"></p>
-            <button onclick="deleteIncome()">Excluir</button>
-            <button onclick="closeDeleteModal()">Cancelar</button>
+            <span class="close" onclick="closeConfirmationModal()">&times;</span>
+            <h2>Confirmar Receita</h2>
+            <p>Você tem certeza que deseja marcar este lembrete como "Recebido"?</p>
+            <button onclick="confirmIncome()">Confirmar</button>
         </div>
     </div>
 
@@ -220,68 +230,58 @@
     <script>
         var firebaseConfig = {
             apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-  projectId: "sistema-de-receitas-e-despesas",
-  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-  messagingSenderId: "252102478972",
-  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-  measurementId: "G-K2HCS7WNZV"
+            authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+            databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+            projectId: "sistema-de-receitas-e-despesas",
+            storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+            messagingSenderId: "252102478972",
+            appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
+            measurementId: "G-K2HCS7WNZV"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const auth = firebase.auth();
 
-        let incomeReminders = [];
-        let currentReminderId;
-        let editReminderId;
-
         auth.onAuthStateChanged(user => {
             if (user) {
                 const userId = user.uid;
-                loadIncomeReminders(userId);
-                setMonthlyStatus(userId);
+                loadPaymentReminders();
+                loadTheme(); // Carregar o tema salvo
             } else {
-                window.location.href = 'index.html';  
+                window.location.href = 'index.html';
             }
         });
 
-        function saveIncomeReminders() {
-            const userId = auth.currentUser.uid;
-            database.ref('incomeReminders/' + userId).set(incomeReminders);
+        let paymentReminders = [];
+        let currentEditId = null;
+        let currentConfirmationId = null;
+
+        function addReminder() {
+            const day = document.getElementById('reminderDay').value;
+            const description = document.getElementById('reminderDescription').value;
+            const amount = parseFloat(document.getElementById('reminderAmount').value);
+
+            const reminder = { id: generateReminderId(), day, description, amount, paid: false, lastPaidDate: '' };
+            paymentReminders.push(reminder);
+
+            savePaymentReminders();
+            updateRemindersTable();
+
+            document.getElementById('reminderDay').value = '';
+            document.getElementById('reminderDescription').value = '';
+            document.getElementById('reminderAmount').value = '';
         }
 
-        function loadIncomeReminders(userId) {
-            database.ref('incomeReminders/' + userId).once('value').then((snapshot) => {
-                if (snapshot.val()) {
-                    incomeReminders = snapshot.val();
-                    renderIncomeReminders();
-                }
-            });
+        function generateReminderId() {
+            return '_' + Math.random().toString(36).substr(2, 9);
         }
 
-        function addIncomeReminder() {
-            const day = document.getElementById('day').value;
-            const description = document.getElementById('description').value;
-            const amount = parseCurrency(document.getElementById('amount').value);
-
-            const reminder = { id: generateReminderId(), day, description, amount, status: 'Em Aberto' };
-            incomeReminders.push(reminder);
-            saveIncomeReminders();
-            renderIncomeReminders();
-
-            document.getElementById('day').value = '';
-            document.getElementById('description').value = '';
-            document.getElementById('amount').value = '0,00';
-        }
-
-        function renderIncomeReminders() {
-            const tbody = document.getElementById('incomeRemindersTable').getElementsByTagName('tbody')[0];
+        function updateRemindersTable() {
+            const tbody = document.getElementById('remindersTable').getElementsByTagName('tbody')[0];
             tbody.innerHTML = '';
 
-            incomeReminders.forEach(reminder => {
+            paymentReminders.forEach(reminder => {
                 const row = tbody.insertRow();
-                
                 const cellDay = row.insertCell(0);
                 const cellDescription = row.insertCell(1);
                 const cellAmount = row.insertCell(2);
@@ -290,93 +290,110 @@
 
                 cellDay.innerText = reminder.day;
                 cellDescription.innerText = reminder.description;
-                cellAmount.innerText = formatCurrency(reminder.amount);
-                cellStatus.innerHTML = `<span class="status ${reminder.status === 'Em Aberto' ? 'open' : 'received'}">${reminder.status}</span>`;
+                cellAmount.innerText = reminder.amount.toFixed(2);
+                cellStatus.innerText = reminder.paid ? "Recebido" : "Em Aberto";
                 cellAction.innerHTML = `
-                    <i class="fas fa-check" onclick="confirmIncomeReminder('${reminder.id}')" style="color:green; ${reminder.status === 'Já Recebi' ? 'display:none;' : ''}"></i>
-                    <i class="fas fa-edit" onclick="openEditIncomeReminderModal('${reminder.id}')" style="color:yellow;"></i>
-                    <i class="fas fa-trash-alt" onclick="confirmDeleteIncomeReminder('${reminder.id}')" style="color:red;"></i>
-                `;
+                    <i class="fas fa-check-circle" onclick="openConfirmationModal('${reminder.id}')" ${reminder.paid ? 'style="display:none;"' : ''}></i>
+                    <i class="fas fa-edit" onclick="editReminder('${reminder.id}')"></i>
+                    <i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')"></i>`;
             });
         }
 
-        function confirmIncomeReminder(id) {
-            currentReminderId = id;
-            document.getElementById('confirmMessage').innerText = 'Tem certeza que deseja confirmar o recebimento desta receita?';
-            openConfirmModal();
-        }
-
-        function confirmIncome() {
-            const reminderIndex = incomeReminders.findIndex(r => r.id === currentReminderId);
-            if (reminderIndex > -1) {
-                const reminder = incomeReminders[reminderIndex];
-                reminder.status = 'Já Recebi';
-                reminder.lastConfirmed = new Date().toISOString().split('T')[0];
-                addTransactionFromReminder(reminder);
-                saveIncomeReminders();
-                renderIncomeReminders();
-                closeConfirmModal();
+        function removeReminder(reminderId) {
+            if (confirm('Tem certeza que deseja remover este lembrete?')) {
+                paymentReminders = paymentReminders.filter(reminder => reminder.id !== reminderId);
+                savePaymentReminders();
+                updateRemindersTable();
             }
         }
 
-        function addTransactionFromReminder(reminder) {
-            const transaction = {
-                id: generateTransactionId(),
+        function editReminder(reminderId) {
+            const reminder = paymentReminders.find(r => r.id === reminderId);
+            document.getElementById('editReminderDay').value = reminder.day;
+            document.getElementById('editReminderDescription').value = reminder.description;
+            document.getElementById('editReminderAmount').value = reminder.amount;
+            currentEditId = reminderId;
+            openModal();
+        }
+
+        function openModal() {
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        function saveReminder() {
+            const day = document.getElementById('editReminderDay').value;
+            const description = document.getElementById('editReminderDescription').value;
+            const amount = parseFloat(document.getElementById('editReminderAmount').value);
+
+            paymentReminders = paymentReminders.map(reminder => {
+                if (reminder.id === currentEditId) {
+                    return { ...reminder, day, description, amount };
+                }
+                return reminder;
+            });
+
+            savePaymentReminders();
+            updateRemindersTable();
+            closeModal();
+        }
+
+        function openConfirmationModal(reminderId) {
+            currentConfirmationId = reminderId;
+            document.getElementById('confirmationModal').style.display = 'block';
+        }
+
+        function closeConfirmationModal() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        }
+
+        function confirmIncome() {
+            paymentReminders = paymentReminders.map(reminder => {
+                if (reminder.id === currentConfirmationId) {
+                    addIncome(reminder);
+                    return { ...reminder, paid: true, lastPaidDate: getCurrentDate() };
+                }
+                return reminder;
+            });
+
+            savePaymentReminders();
+            updateRemindersTable();
+            closeConfirmationModal();
+        }
+
+        function addIncome(reminder) {
+            const userId = auth.currentUser.uid;
+            const newIncomeRef = database.ref('transactions/' + userId).push();
+            newIncomeRef.set({
                 date: getCurrentDate(),
                 description: reminder.description,
                 amount: reminder.amount,
                 type: 'receita'
-            };
+            });
+        }
+
+        function savePaymentReminders() {
             const userId = auth.currentUser.uid;
-            database.ref('transactions/' + userId).push(transaction);
+            database.ref('paymentReminders/' + userId).set(paymentReminders);
         }
 
-        function openEditIncomeReminderModal(id) {
-            const reminder = incomeReminders.find(r => r.id === id);
-            if (reminder) {
-                editReminderId = id;
-                document.getElementById('editDay').value = reminder.day;
-                document.getElementById('editDescription').value = reminder.description;
-                document.getElementById('editAmount').value = reminder.amount.toFixed(2).replace('.', ',');
-                openEditModal();
+        function loadPaymentReminders() {
+            const userId = auth.currentUser.uid;
+            database.ref('paymentReminders/' + userId).once('value').then((snapshot) => {
+                paymentReminders = snapshot.val() || [];
+                updateRemindersTable();
+            });
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.style.setProperty('--button-color', savedTheme);
+                document.documentElement.style.setProperty('--input-border-color', savedTheme);
             }
-        }
-
-        function saveEditIncomeReminder() {
-            const reminderIndex = incomeReminders.findIndex(r => r.id === editReminderId);
-            if (reminderIndex > -1) {
-                incomeReminders[reminderIndex].day = document.getElementById('editDay').value;
-                incomeReminders[reminderIndex].description = document.getElementById('editDescription').value;
-                incomeReminders[reminderIndex].amount = parseCurrency(document.getElementById('editAmount').value);
-                saveIncomeReminders();
-                renderIncomeReminders();
-                closeEditModal();
-            }
-        }
-
-        function confirmDeleteIncomeReminder(id) {
-            currentReminderId = id;
-            document.getElementById('deleteMessage').innerText = 'Tem certeza que deseja excluir este lembrete de receita?';
-            openDeleteModal();
-        }
-
-        function deleteIncome() {
-            incomeReminders = incomeReminders.filter(reminder => reminder.id !== currentReminderId);
-            saveIncomeReminders();
-            renderIncomeReminders();
-            closeDeleteModal();
-        }
-
-        function generateReminderId() {
-            return '_' + Math.random().toString(36).substr(2, 9);
-        }
-
-        function formatCurrency(value) {
-            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        }
-
-        function parseCurrency(value) {
-            return parseFloat(value.replace(/\./g, '').replace(',', '.').replace('R$', '')) || 0;
         }
 
         function getCurrentDate() {
@@ -386,58 +403,15 @@
             return brasiliaTime.toISOString().split('T')[0];
         }
 
-        function setMonthlyStatus(userId) {
-            const currentMonth = new Date().getMonth();
-            incomeReminders.forEach(reminder => {
-                const reminderMonth = new Date(reminder.lastConfirmed || '').getMonth();
-                if (currentMonth !== reminderMonth) {
-                    reminder.status = 'Em Aberto';
-                }
-            });
-            saveIncomeReminders();
-            renderIncomeReminders();
-        }
-
-        function openConfirmModal() {
-            const modal = document.getElementById('confirmModal');
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-        }
-
-        function closeConfirmModal() {
-            const modal = document.getElementById('confirmModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
-
-        function openEditModal() {
+        window.onclick = function(event) {
             const modal = document.getElementById('editModal');
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-        }
-
-        function closeEditModal() {
-            const modal = document.getElementById('editModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
-
-        function openDeleteModal() {
-            const modal = document.getElementById('deleteModal');
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-        }
-
-        function closeDeleteModal() {
-            const modal = document.getElementById('deleteModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
+            const confirmationModal = document.getElementById('confirmationModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+            if (event.target === confirmationModal) {
+                closeConfirmationModal();
+            }
         }
     </script>
 </body>
