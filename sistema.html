@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -437,6 +436,7 @@
             <button onclick="openFinancialPerformanceModal()"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
             <button id="adminButton" style="display: none;" onclick="openAdminModal()"><i class="fas fa-user-shield"></i> Área do Administrador</button>
             <button id="reminderButton" style="display: none;" onclick="openPaymentRemindersPage()"><i class="fas fa-bell"></i> Lembrete de Pagamentos</button>
+            <button onclick="openIncomeRemindersPage()"><i class="fas fa-bell"></i> Lembrete de Receitas</button>
         </div>
         <div class="theme-selector">
             <label for="theme">Selecionar Tema:</label>
@@ -1334,6 +1334,10 @@
 
         function openPaymentRemindersPage() {
             window.location.href = 'payment_reminders.html';
+        }
+
+        function openIncomeRemindersPage() {
+            window.location.href = 'income_reminders.html';
         }
 
         function openThemeSelectorModal() {
