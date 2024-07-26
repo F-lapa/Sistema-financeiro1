@@ -219,6 +219,7 @@
             if (user) {
                 const userId = user.uid;
                 loadIncomeReminders(userId);
+                setMonthlyStatus(userId);
             } else {
                 window.location.href = 'index.html';  
             }
@@ -271,7 +272,7 @@
                 cellAmount.innerText = formatCurrency(reminder.amount);
                 cellStatus.innerHTML = `<span class="status ${reminder.status === 'Em Aberto' ? 'open' : 'received'}">${reminder.status}</span>`;
                 cellAction.innerHTML = `
-                    <i class="fas fa-check" onclick="confirmIncomeReminder('${reminder.id}')" style="color:green;"></i>
+                    <i class="fas fa-check" onclick="confirmIncomeReminder('${reminder.id}')" style="color:green; ${reminder.status === 'Já Recebi' ? 'display:none;' : ''}"></i>
                     <i class="fas fa-edit" onclick="editIncomeReminder('${reminder.id}')" style="color:yellow;"></i>
                     <i class="fas fa-trash-alt" onclick="confirmDeleteIncomeReminder('${reminder.id}')" style="color:red;"></i>
                 `;
@@ -289,6 +290,7 @@
             if (reminderIndex > -1) {
                 const reminder = incomeReminders[reminderIndex];
                 reminder.status = 'Já Recebi';
+                reminder.lastConfirmed = new Date().toISOString().split('T')[0];
                 addTransactionFromReminder(reminder);
                 saveIncomeReminders();
                 renderIncomeReminders();
@@ -338,6 +340,18 @@
             const offset = -3;
             const brasiliaTime = new Date(now.getTime() + offset * 3600 * 1000);
             return brasiliaTime.toISOString().split('T')[0];
+        }
+
+        function setMonthlyStatus(userId) {
+            const currentMonth = new Date().getMonth();
+            incomeReminders.forEach(reminder => {
+                const reminderMonth = new Date(reminder.lastConfirmed || '').getMonth();
+                if (currentMonth !== reminderMonth) {
+                    reminder.status = 'Em Aberto';
+                }
+            });
+            saveIncomeReminders();
+            renderIncomeReminders();
         }
 
         function openConfirmModal() {
