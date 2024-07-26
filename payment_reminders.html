@@ -104,7 +104,7 @@
         tbody tr:hover {
             background-color: #3b4b5e;
         }
-        .fa-trash-alt, .fa-edit, .fa-check {
+        .fa-trash-alt, .fa-edit, .fa-check-circle {
             cursor: pointer;
         }
         .fa-edit {
@@ -114,9 +114,9 @@
         .fa-trash-alt {
             color: red;
         }
-        .fa-check {
+        .fa-check-circle {
             color: green;
-            margin-left: 10px;
+            margin-right: 10px;
         }
         .modal {
             display: none;
@@ -185,6 +185,7 @@
                     <th>Dia</th>
                     <th>Descrição</th>
                     <th>Valor</th>
+                    <th>Status</th>
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -214,11 +215,11 @@
         </div>
     </div>
 
-    <div id="confirmModal" class="modal">
+    <div id="confirmationModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeConfirmModal()">&times;</span>
+            <span class="close" onclick="closeConfirmationModal()">&times;</span>
             <h2>Confirmar Pagamento</h2>
-            <p id="confirmMessage"></p>
+            <p>Você tem certeza que deseja marcar este lembrete como "Já foi pago"?</p>
             <button onclick="confirmPayment()">Confirmar</button>
         </div>
     </div>
@@ -246,7 +247,6 @@
                 const userId = user.uid;
                 loadPaymentReminders();
                 loadTheme(); // Carregar o tema salvo
-                resetPaidStatusMonthly();
             } else {
                 window.location.href = 'index.html';
             }
@@ -254,14 +254,14 @@
 
         let paymentReminders = [];
         let currentEditId = null;
-        let currentConfirmId = null;
+        let currentConfirmationId = null;
 
         function addReminder() {
             const day = document.getElementById('reminderDay').value;
             const description = document.getElementById('reminderDescription').value;
             const amount = parseFloat(document.getElementById('reminderAmount').value);
 
-            const reminder = { id: generateReminderId(), day, description, amount, paid: false, lastPaidDate: null };
+            const reminder = { id: generateReminderId(), day, description, amount, paid: false, lastPaidDate: '' };
             paymentReminders.push(reminder);
 
             savePaymentReminders();
@@ -285,16 +285,17 @@
                 const cellDay = row.insertCell(0);
                 const cellDescription = row.insertCell(1);
                 const cellAmount = row.insertCell(2);
-                const cellAction = row.insertCell(3);
+                const cellStatus = row.insertCell(3);
+                const cellAction = row.insertCell(4);
 
                 cellDay.innerText = reminder.day;
                 cellDescription.innerText = reminder.description;
                 cellAmount.innerText = reminder.amount.toFixed(2);
+                cellStatus.innerText = reminder.paid ? "Já foi pago" : "Em Aberto";
                 cellAction.innerHTML = `
+                    <i class="fas fa-check-circle" onclick="openConfirmationModal('${reminder.id}')"></i>
                     <i class="fas fa-edit" onclick="editReminder('${reminder.id}')"></i>
-                    <i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')"></i>
-                    <i class="fas fa-check" onclick="openConfirmModal('${reminder.id}')"></i>
-                    ${reminder.paid ? '<span>Já foi pago</span>' : ''}`;
+                    <i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')"></i>`;
             });
         }
 
@@ -340,54 +341,26 @@
             closeModal();
         }
 
-        function openConfirmModal(reminderId) {
-            const reminder = paymentReminders.find(r => r.id === reminderId);
-            document.getElementById('confirmMessage').innerText = `Deseja confirmar o pagamento de R$ ${reminder.amount.toFixed(2)} para ${reminder.description}?`;
-            currentConfirmId = reminderId;
-            document.getElementById('confirmModal').style.display = 'block';
+        function openConfirmationModal(reminderId) {
+            currentConfirmationId = reminderId;
+            document.getElementById('confirmationModal').style.display = 'block';
         }
 
-        function closeConfirmModal() {
-            document.getElementById('confirmModal').style.display = 'none';
+        function closeConfirmationModal() {
+            document.getElementById('confirmationModal').style.display = 'none';
         }
 
         function confirmPayment() {
-            const reminder = paymentReminders.find(r => r.id === currentConfirmId);
-            reminder.paid = true;
-            reminder.lastPaidDate = getCurrentDate();
-            savePaymentReminders();
-            addTransactionFromReminder(reminder);
-            updateRemindersTable();
-            closeConfirmModal();
-        }
-
-        function addTransactionFromReminder(reminder) {
-            const transaction = {
-                id: generateTransactionId(),
-                date: getCurrentDate(),
-                description: reminder.description,
-                amount: reminder.amount,
-                type: 'despesa'
-            };
-
-            const userId = auth.currentUser.uid;
-            database.ref('transactions/' + userId).once('value', function(snapshot) {
-                let transactions = snapshot.val() || [];
-                transactions = Array.isArray(transactions) ? transactions : Object.values(transactions);
-                transactions.push(transaction);
-                database.ref('transactions/' + userId).set(transactions);
+            paymentReminders = paymentReminders.map(reminder => {
+                if (reminder.id === currentConfirmationId) {
+                    return { ...reminder, paid: true, lastPaidDate: getCurrentDate() };
+                }
+                return reminder;
             });
-        }
 
-        function generateTransactionId() {
-            return '_' + Math.random().toString(36).substr(2, 9);
-        }
-
-        function getCurrentDate() {
-            const now = new Date();
-            const offset = -3;
-            const brasiliaTime = new Date(now.getTime() + offset * 3600 * 1000);
-            return brasiliaTime.toISOString().split('T')[0];
+            savePaymentReminders();
+            updateRemindersTable();
+            closeConfirmationModal();
         }
 
         function savePaymentReminders() {
@@ -411,25 +384,21 @@
             }
         }
 
-        function resetPaidStatusMonthly() {
-            const currentMonth = new Date().getMonth();
-            paymentReminders.forEach(reminder => {
-                const lastPaidDate = new Date(reminder.lastPaidDate);
-                if (lastPaidDate.getMonth() !== currentMonth) {
-                    reminder.paid = false;
-                }
-            });
-            savePaymentReminders();
-            updateRemindersTable();
+        function getCurrentDate() {
+            const now = new Date();
+            const offset = -3;
+            const brasiliaTime = new Date(now.getTime() + offset * 3600 * 1000);
+            return brasiliaTime.toISOString().split('T')[0];
         }
 
         window.onclick = function(event) {
             const modal = document.getElementById('editModal');
-            const confirmModal = document.getElementById('confirmModal');
+            const confirmationModal = document.getElementById('confirmationModal');
             if (event.target === modal) {
                 closeModal();
-            } else if (event.target === confirmModal) {
-                closeConfirmModal();
+            }
+            if (event.target === confirmationModal) {
+                closeConfirmationModal();
             }
         }
     </script>
