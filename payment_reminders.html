@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -104,7 +105,7 @@
         tbody tr:hover {
             background-color: #3b4b5e;
         }
-        .fa-trash-alt, .fa-edit, .fa-check-circle {
+        .fa-trash-alt, .fa-edit {
             cursor: pointer;
         }
         .fa-edit {
@@ -113,15 +114,6 @@
         }
         .fa-trash-alt {
             color: red;
-            margin-right: 10px;
-        }
-        .fa-check-circle {
-            color: green;
-        }
-        .paid-message {
-            color: green;
-            font-weight: bold;
-            margin-left: 10px;
         }
         .modal {
             display: none;
@@ -219,21 +211,12 @@
         </div>
     </div>
 
-    <div id="confirmModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeConfirmModal()">&times;</span>
-            <h2>Confirmar Pagamento</h2>
-            <p>Tem certeza de que deseja confirmar este pagamento?</p>
-            <button onclick="confirmPayment()">Confirmar</button>
-        </div>
-    </div>
-
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script>
         var firebaseConfig = {
-            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
+           apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
   authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
   databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
   projectId: "sistema-de-receitas-e-despesas",
@@ -258,7 +241,6 @@
 
         let paymentReminders = [];
         let currentEditId = null;
-        let currentConfirmId = null;
 
         function addReminder() {
             const day = document.getElementById('reminderDay').value;
@@ -296,10 +278,7 @@
                 cellAmount.innerText = reminder.amount.toFixed(2);
                 cellAction.innerHTML = `
                     <i class="fas fa-edit" onclick="editReminder('${reminder.id}')"></i>
-                    <i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')"></i>
-                    <i class="fas fa-check-circle" onclick="openConfirmModal('${reminder.id}')"></i>
-                    ${reminder.paid ? '<span class="paid-message">Já foi pago</span>' : ''}
-                `;
+                    <i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')"></i>`;
             });
         }
 
@@ -372,62 +351,6 @@
                 closeModal();
             }
         }
-
-        function openConfirmModal(reminderId) {
-            currentConfirmId = reminderId;
-            document.getElementById('confirmModal').style.display = 'block';
-        }
-
-        function closeConfirmModal() {
-            document.getElementById('confirmModal').style.display = 'none';
-        }
-
-        function confirmPayment() {
-            const reminder = paymentReminders.find(r => r.id === currentConfirmId);
-            if (reminder) {
-                reminder.paid = true;
-                reminder.lastPaidDate = new Date().toISOString().split('T')[0];
-                savePaymentReminders();
-                updateRemindersTable();
-                addTransactionFromReminder(reminder);
-                closeConfirmModal();
-            }
-        }
-
-        function addTransactionFromReminder(reminder) {
-            const transaction = {
-                id: generateReminderId(),
-                date: new Date().toISOString().split('T')[0],
-                description: reminder.description,
-                amount: reminder.amount,
-                type: 'despesa'
-            };
-            const userId = auth.currentUser.uid;
-            database.ref('transactions/' + userId).push(transaction).then(() => {
-                alert('Pagamento confirmado e despesa adicionada!');
-            }).catch(error => {
-                console.error('Erro ao adicionar transação:', error);
-                alert('Erro ao adicionar despesa. Por favor, tente novamente.');
-            });
-        }
-
-        function resetPaymentConfirmations() {
-            const currentMonth = new Date().getMonth();
-            paymentReminders.forEach(reminder => {
-                if (new Date(reminder.lastPaidDate).getMonth() !== currentMonth) {
-                    reminder.paid = false;
-                }
-            });
-            savePaymentReminders();
-            updateRemindersTable();
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentDate = new Date();
-            if (currentDate.getDate() === 1) {
-                resetPaymentConfirmations();
-            }
-        });
     </script>
 </body>
 </html>
