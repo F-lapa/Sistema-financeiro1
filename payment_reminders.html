@@ -228,7 +228,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script>
-        var firebaseConfig = {
+       var firebaseConfig = {
     apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
     authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
     databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
@@ -253,6 +253,7 @@ auth.onAuthStateChanged(user => {
 
 let paymentReminders = [];
 let currentEditId = null;
+let currentConfirmId = null;
 
 function addReminder() {
     const day = document.getElementById('reminderDay').value;
@@ -293,7 +294,7 @@ function updateRemindersTable() {
 
         if (!reminder.paid) {
             cellAction.innerHTML = `
-                <i class="fas fa-check-circle" onclick="confirmPaymentOnRemindersPage('${reminder.id}')" style="color:green; cursor:pointer;"></i>
+                <i class="fas fa-check-circle" onclick="openConfirmPaymentModal('${reminder.id}')" style="color:green; cursor:pointer;"></i>
                 <i class="fas fa-edit" onclick="editReminder('${reminder.id}')" style="cursor:pointer;"></i>
                 <i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')" style="color:red; cursor:pointer;"></i>`;
         } else {
@@ -359,8 +360,17 @@ function loadPaymentReminders() {
     });
 }
 
-function confirmPaymentOnRemindersPage(reminderId) {
-    const reminderIndex = paymentReminders.findIndex(r => r.id === reminderId);
+function openConfirmPaymentModal(reminderId) {
+    currentConfirmId = reminderId;
+    document.getElementById('confirmPaymentModal').style.display = 'block';
+}
+
+function closeConfirmPaymentModal() {
+    document.getElementById('confirmPaymentModal').style.display = 'none';
+}
+
+function confirmPayment() {
+    const reminderIndex = paymentReminders.findIndex(r => r.id === currentConfirmId);
     if (reminderIndex > -1) {
         const reminder = paymentReminders[reminderIndex];
         reminder.paid = true;
@@ -380,6 +390,8 @@ function confirmPaymentOnRemindersPage(reminderId) {
 
         // Enviar mensagem para a página sistema.html
         window.opener.postMessage({ action: 'markReminderAsPaid', reminderId: reminder.id }, '*');
+        
+        closeConfirmPaymentModal();
     }
 }
 
@@ -404,9 +416,13 @@ function getCurrentDate() {
 }
 
 window.onclick = function(event) {
-    const modal = document.getElementById('editModal');
-    if (event.target === modal) {
+    const editModal = document.getElementById('editModal');
+    const confirmPaymentModal = document.getElementById('confirmPaymentModal');
+    if (event.target === editModal) {
         closeModal();
+    }
+    if (event.target === confirmPaymentModal) {
+        closeConfirmPaymentModal();
     }
 }
 
