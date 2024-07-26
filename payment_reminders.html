@@ -353,6 +353,7 @@
         function confirmPayment() {
             paymentReminders = paymentReminders.map(reminder => {
                 if (reminder.id === currentConfirmationId) {
+                    addExpense(reminder);
                     return { ...reminder, paid: true, lastPaidDate: getCurrentDate() };
                 }
                 return reminder;
@@ -361,6 +362,17 @@
             savePaymentReminders();
             updateRemindersTable();
             closeConfirmationModal();
+        }
+
+        function addExpense(reminder) {
+            const userId = auth.currentUser.uid;
+            const newExpenseRef = database.ref('transactions/' + userId).push();
+            newExpenseRef.set({
+                date: getCurrentDate(),
+                description: reminder.description,
+                amount: reminder.amount,
+                type: 'despesa'
+            });
         }
 
         function savePaymentReminders() {
