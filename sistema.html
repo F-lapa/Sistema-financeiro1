@@ -1262,8 +1262,8 @@
             const reminders = paymentReminders.filter(reminder => {
                 const reminderDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), reminder.day);
                 const differenceInDays = Math.floor((reminderDate - currentDate) / (1000 * 60 * 60 * 24));
-                return (differenceInDays === 2 || (differenceInDays < 0 && differenceInDays >= -7)) &&
-                        !reminder.paid && new Date(reminder.lastPaidDate).getMonth() !== currentMonth;
+                return ((differenceInDays === 2 || (differenceInDays < 0 && differenceInDays >= -7)) &&
+                        !reminder.paid && new Date(reminder.lastPaidDate).getMonth() !== currentMonth) || reminder.snoozed;
             });
 
             if (reminders.length > 0) {
@@ -1304,6 +1304,7 @@
             if (reminderIndex > -1) {
                 const reminder = paymentReminders[reminderIndex];
                 reminder.paid = true;
+                reminder.snoozed = false;
                 reminder.lastPaidDate = getCurrentDate();
                 addTransactionFromReminder(reminder);
                 savePaymentReminders();
@@ -1312,7 +1313,12 @@
         }
 
         function snoozeReminder() {
-            closeReminderAlertModal();
+            const reminderIndex = paymentReminders.findIndex(r => r.id === currentReminderId);
+            if (reminderIndex > -1) {
+                paymentReminders[reminderIndex].snoozed = true;
+                savePaymentReminders();
+                closeReminderAlertModal();
+            }
         }
 
         function addTransactionFromReminder(reminder) {
