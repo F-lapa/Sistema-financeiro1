@@ -310,6 +310,16 @@
             database.ref('transactions/' + userId).push(transaction);
         }
 
+        function editIncomeReminder(id) {
+            const reminder = incomeReminders.find(r => r.id === id);
+            if (reminder) {
+                document.getElementById('day').value = reminder.day;
+                document.getElementById('description').value = reminder.description;
+                document.getElementById('amount').value = reminder.amount;
+                deleteIncomeReminder(id);
+            }
+        }
+
         function confirmDeleteIncomeReminder(id) {
             currentReminderId = id;
             document.getElementById('deleteMessage').innerText = 'Tem certeza que deseja excluir este lembrete de receita?';
