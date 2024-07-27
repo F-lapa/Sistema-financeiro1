@@ -7,10 +7,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
+        /* Estilos Globais */
         :root {
             --background-color: #2c3e50;
             --text-color: #ecf0f1;
             --primary-color: #3498db;
+            --secondary-color: #e74c3c;
             --button-color: #3498db;
             --input-border-color: #3498db;
         }
@@ -24,6 +26,7 @@
             min-height: 100vh;
             flex-direction: column;
         }
+        /* Sidebar */
         .sidebar {
             width: 220px;
             background-color: #34495e;
@@ -109,6 +112,7 @@
             font-size: 14px;
             cursor: pointer;
         }
+        /* Container */
         .container {
             margin-left: 240px;
             padding: 20px;
@@ -126,6 +130,32 @@
             color: var(--text-color);
             margin-bottom: 15px;
             font-size: 1.2em;
+        }
+        .dashboard {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .dashboard-item {
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 30%;
+        }
+        .dashboard-item h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: var(--text-color);
+        }
+        .dashboard-item p {
+            font-size: 1.5em;
+            margin: 10px 0 0;
+            color: var(--primary-color);
+        }
+        .dashboard-item .negative {
+            color: var(--secondary-color);
         }
         .container .form-header {
             text-align: center;
@@ -152,7 +182,7 @@
             top: 10px;
             left: 10px;
             cursor: pointer;
-            color: var (--text-color);
+            color: var(--text-color);
             font-size: 1.2em;
             display: none;
         }
@@ -197,7 +227,7 @@
             display: block;
         }
         .container button:hover {
-            background-color: darken(var (--button-color), 10%);
+            background-color: darken(var(--button-color), 10%);
             transform: scale(1.05);
         }
         .container table {
@@ -212,7 +242,7 @@
             background-color: #34495e;
         }
         .container th {
-            background-color: var (--background-color);
+            background-color: var(--background-color);
             color: #bdc3c7;
         }
         .container tbody tr {
@@ -233,7 +263,7 @@
         }
         .container .totals span, .container .filter span {
             font-weight: bold;
-            color: var (--primary-color);
+            color: var(--primary-color);
         }
         .container .totals p {
             display: inline-block;
@@ -346,7 +376,6 @@
         .color-box:hover {
             transform: scale(1.1);
         }
-
         /* Media Queries for Mobile Devices */
         @media (max-width: 768px) {
             .sidebar {
@@ -444,6 +473,20 @@
     </div>
     <div class="container">
         <div class="greeting" id="userGreeting"></div>
+        <div class="dashboard">
+            <div class="dashboard-item">
+                <h3>Saldo do Dia</h3>
+                <p id="dailyBalance">R$ 0,00</p>
+            </div>
+            <div class="dashboard-item">
+                <h3>Saldo do Mês</h3>
+                <p id="monthlyBalance">R$ 0,00</p>
+            </div>
+            <div class="dashboard-item">
+                <h3>Saldo do Ano</h3>
+                <p id="annualBalance">R$ 0,00</p>
+            </div>
+        </div>
         <div class="form-header">Nova Transação</div>
         
         <input type="text" style="display:none;" autocomplete="username">
@@ -484,12 +527,6 @@
                 <!-- Transactions will be added here -->
             </tbody>
         </table>
-
-        <div class="totals">
-            <p>Saldo do Dia: <span id="dailyBalance">R$ 0,00</span></p>
-            <p>Saldo do Mês: <span id="monthlyBalance">R$ 0,00</span></p>
-            <p>Saldo do Ano: <span id="annualBalance">R$ 0,00</span></p>
-        </div>
 
         <div id="filterPeriodModal" class="modal">
             <div class="modal-content">
