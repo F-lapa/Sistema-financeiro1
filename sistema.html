@@ -11,11 +11,9 @@
             --background-color: #2c3e50;
             --text-color: #ecf0f1;
             --primary-color: #3498db;
-            --secondary-color: #e74c3c;
             --button-color: #3498db;
             --input-border-color: #3498db;
         }
-
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--background-color);
@@ -26,12 +24,6 @@
             min-height: 100vh;
             flex-direction: column;
         }
-
-        body.light {
-            --background-color: #ecf0f1;
-            --text-color: #2c3e50;
-        }
-
         .sidebar {
             width: 220px;
             background-color: #34495e;
@@ -43,17 +35,14 @@
             flex-direction: column;
             justify-content: flex-start;
         }
-
         .logo-container {
             text-align: center;
             margin-bottom: 20px;
         }
-
         .logo-container img {
             width: 100px;
             height: auto;
         }
-
         .sidebar h3 {
             text-align: center;
             color: var(--text-color);
@@ -61,26 +50,22 @@
             font-size: 1.4em;
             font-weight: 500;
         }
-
         .sidebar .menu-icons {
             text-align: center;
             margin-bottom: 20px;
         }
-
         .sidebar .menu-icons i {
             margin: 0 5px;
             cursor: pointer;
             color: var(--text-color);
             font-size: 1.5em;
         }
-
         .sidebar .buttons {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-bottom: 20px;
         }
-
         .sidebar button {
             width: 90%;
             padding: 10px;
@@ -96,29 +81,24 @@
             align-items: center;
             justify-content: center;
         }
-
         .sidebar button i {
             margin-right: 8px;
         }
-
         .sidebar button:hover {
-            background-color: darken(var(--button-color), 10%);
+            background-color: #2980b9;
             transform: scale(1.05);
         }
-
         .sidebar .theme-selector {
             margin-top: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-
         .sidebar .theme-selector label {
             font-size: 14px;
             margin-bottom: 5px;
             color: var(--text-color);
         }
-
         .sidebar .theme-selector button {
             width: 90%;
             padding: 8px;
@@ -129,13 +109,11 @@
             font-size: 14px;
             cursor: pointer;
         }
-
         .container {
             margin-left: 240px;
             padding: 20px;
             flex: 1;
         }
-
         .container h1 {
             text-align: center;
             color: var(--text-color);
@@ -143,45 +121,12 @@
             font-size: 1.8em;
             font-weight: 500;
         }
-
         .container .greeting {
             text-align: center;
             color: var(--text-color);
             margin-bottom: 15px;
             font-size: 1.2em;
         }
-
-        .dashboard {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-
-        .dashboard-item {
-            background-color: #34495e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            width: 30%;
-        }
-
-        .dashboard-item h3 {
-            margin: 0;
-            font-size: 1.2em;
-            color: var(--text-color);
-        }
-
-        .dashboard-item p {
-            font-size: 1.5em;
-            margin: 10px 0 0;
-            color: var(--primary-color);
-        }
-
-        .dashboard-item .negative {
-            color: var(--secondary-color);
-        }
-
         .container .form-header {
             text-align: center;
             color: var(--text-color);
@@ -189,7 +134,6 @@
             font-size: 1.2em;
             font-weight: 500;
         }
-
         .container .logout, .container .change-password {
             position: absolute;
             top: 10px;
@@ -197,15 +141,12 @@
             color: var(--text-color);
             font-size: 1.2em;
         }
-
         .container .logout {
             right: 50px;
         }
-
         .container .change-password {
             right: 10px;
         }
-
         .container .admin-icon {
             position: absolute;
             top: 10px;
@@ -215,20 +156,17 @@
             font-size: 1.2em;
             display: none;
         }
-
         .container .form-group {
             margin-bottom: 10px;
             width: 50%;
             margin: 0 auto;
         }
-
         .container label {
             display: block;
             margin-bottom: 6px;
             font-weight: bold;
             color: #bdc3c7;
         }
-
         .container input[type="text"], .container input[type="number"], .container input[type="date"], .container select, .container input[type="password"] {
             width: 100%;
             padding: 8px;
@@ -241,12 +179,10 @@
             color: var(--text-color);
             transition: all 0.3s ease;
         }
-
         .container input:focus, .container select:focus, .container input:focus-visible, .container select:focus-visible {
             border: 2px solid var(--button-color);
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
-
         .container button {
             width: 50%;
             padding: 10px;
@@ -260,55 +196,45 @@
             margin: 10px auto;
             display: block;
         }
-
         .container button:hover {
-            background-color: darken(var(--button-color), 10%);
+            background-color: #2980b9;
             transform: scale(1.05);
         }
-
         .container table {
             width: 100%;
             margin-top: 10px;
             border-collapse: separate;
             border-spacing: 0 8px;
         }
-
         .container th, .container td {
             padding: 10px;
             text-align: left;
             background-color: #34495e;
         }
-
         .container th {
             background-color: var(--background-color);
             color: #bdc3c7;
         }
-
         .container tbody tr {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 6px;
             overflow: hidden;
         }
-
         .container tbody tr:hover {
             background-color: #3b4b5e;
         }
-
         .container .totals, .container .filter {
             margin-top: 10px;
             text-align: center;
         }
-
         .container .totals p, .container .filter p {
             font-size: 16px;
             color: var(--text-color);
         }
-
         .container .totals span, .container .filter span {
             font-weight: bold;
             color: var(--primary-color);
         }
-
         .container .totals p {
             display: inline-block;
             padding: 10px 20px;
@@ -317,43 +243,34 @@
             margin: 5px 0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
         .container .negative {
             color: red !important;
         }
-
         .container .transaction-description {
             display: flex;
             align-items: center;
         }
-
         .container .transaction-amount {
             text-align: left;
             color: green;
         }
-
         .container .transaction-amount.despesa {
             color: red;
         }
-
         .container .transaction-icon {
             margin-right: 10px;
             font-size: 1.2em;
         }
-
         .container .filter-results {
             margin-top: 10px;
         }
-
         .container .password-field {
             position: relative;
         }
-
         .container .password-field input {
             width: calc(100% - 40px);
             margin-bottom: 0;
         }
-
         .container .password-field i {
             position: absolute;
             right: 10px;
@@ -361,7 +278,6 @@
             cursor: pointer;
             color: var(--button-color);
         }
-
         .container .modal {
             display: none;
             position: fixed;
@@ -373,60 +289,51 @@
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
         }
-
         .container .modal-content {
             background-color: #34495e;
-            margin: 5% auto;
-            padding: 20px;
+            margin: 15% auto;
+            padding: 15px;
             border: 1px solid #444;
-            width: 80%;
-            max-width: 800px;
+            width: 70%;
+            max-width: 400px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             color: var(--text-color);
             text-align: center;
             animation: fadein 0.5s;
         }
-
         .container .close {
             color: var(--text-color);
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
-
         .container .close:hover,
         .container .close:focus {
             color: var(--button-color);
             text-decoration: none;
             cursor: pointer;
         }
-
         .container .fa-trash-alt {
             cursor: pointer;
             color: red;
         }
-
         @keyframes fadein {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
         @keyframes fadeout {
             from { opacity: 1; }
             to { opacity: 0; }
         }
-
         @keyframes shine {
             0% { background-position: -200px; }
             100% { background-position: 200px; }
         }
-
         .container input[type="text"]:hover, .container input[type="number"]:hover, .container input[type="date"]:hover, .container select:hover, .container input[type="password"]:hover {
             border-color: var(--input-border-color);
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
-
         .color-box {
             width: 40px;
             height: 40px;
@@ -436,11 +343,11 @@
             border-radius: 8px;
             transition: transform 0.2s;
         }
-
         .color-box:hover {
             transform: scale(1.1);
         }
 
+        /* Media Queries for Mobile Devices */
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
@@ -452,22 +359,18 @@
                 padding: 10px;
                 margin-bottom: 20px;
             }
-
             .sidebar .menu-icons {
                 order: -1;
                 margin-bottom: 0;
                 text-align: right;
             }
-
             .sidebar .menu-icons i {
                 font-size: 1.2em;
                 margin: 0 3px;
             }
-
             .sidebar h3 {
                 display: none;
             }
-
             .sidebar .buttons {
                 flex-direction: row;
                 flex-wrap: wrap;
@@ -475,47 +378,39 @@
                 width: 100%;
                 margin-bottom: 0;
             }
-
             .sidebar button {
                 width: 48%;
                 padding: 5px 10px;
                 font-size: 12px;
                 margin-bottom: 5px;
             }
-
             .sidebar .theme-selector {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 margin-top: 10px;
             }
-
             .container {
                 margin-left: 0;
                 padding: 10px;
             }
-
             .container .form-group {
                 width: 100%;
                 margin-bottom: 8px;
             }
-
             .container button {
                 width: 100%;
                 padding: 8px;
                 font-size: 12px;
                 margin: 8px auto;
             }
-
             .container table th, .container table td {
                 padding: 5px;
                 font-size: 12px;
             }
-
             .container .totals p {
                 font-size: 14px;
             }
-
             .container .modal-content {
                 width: 90%;
                 margin: 30% auto;
@@ -1183,7 +1078,6 @@
                 transaction.date >= startDate && transaction.date <= endDate && transaction.type === specificType
             );
 
-            // Usar um objeto para agregar valores por descrição
             const descriptionsMap = specificTransactions.reduce((acc, transaction) => {
                 const description = transaction.description.toLowerCase();
                 if (!acc[description]) {
@@ -1193,7 +1087,6 @@
                 return acc;
             }, {});
 
-            // Convertendo o objeto para arrays para uso no gráfico
             const descriptions = Object.keys(descriptionsMap);
             const data = descriptions.map(description => descriptionsMap[description]);
 
@@ -1513,7 +1406,7 @@
         function generateColorArray() {
             const colors = [];
             for (let r = 0; r <= 255; r += 51) {
-                for (let g = 0; g <= 255; g += 51) {
+                for (let g = 0; r <= 255; g += 51) {
                     for (let b = 0; b <= 255; b += 51) {
                         colors.push(`rgb(${r},${g},${b})`);
                     }
