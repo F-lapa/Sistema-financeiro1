@@ -461,7 +461,7 @@
         <div class="buttons">
             <button onclick="openFilterPeriodModal()"><i class="fas fa-filter"></i> Filtrar Período</button>
             <button onclick="goToLimitPage()"><i class="fas fa-money-check-alt"></i> Definir Limite de Gastos</button>
-            <button onclick="openSpecificTransactionsModal()"><i class="fas fa-search-dollar"></i> Transações Específicas</button>
+            <button onclick="openDetailedTransactionsModal()"><i class="fas fa-search-dollar"></i> Relatório Detalhado</button>
             <button onclick="openFinancialPerformanceModal()"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
             <button id="reminderButton" style="display: none;" onclick="openPaymentRemindersPage()"><i class="fas fa-bell"></i> Lembrete de Pagamentos</button>
             <button onclick="openIncomeRemindersPage()"><i class="fas fa-bell"></i> Lembrete de Receitas</button>
@@ -593,10 +593,10 @@
             </div>
         </div>
 
-        <div id="specificTransactionsModal" class="modal">
+        <div id="detailedTransactionsModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeSpecificTransactionsModal()">&times;</span>
-                <h2>Transações Específicas</h2>
+                <span class="close" onclick="closeDetailedTransactionsModal()">&times;</span>
+                <h2>Relatório Detalhado</h2>
                 <div class="form-group">
                     <label for="specificStartDate">Data Inicial:</label>
                     <input type="date" id="specificStartDate" class="highlight">
@@ -621,7 +621,9 @@
             <div class="modal-content">
                 <span class="close" onclick="closeFinancialPerformanceModal()">&times;</span>
                 <h2>Desempenho Financeiro</h2>
-                <canvas id="financialPerformanceChart" style="margin-top: 20px;"></canvas>
+                <div style="position: relative; height: 400px;">
+                    <canvas id="financialPerformanceChart"></canvas>
+                </div>
             </div>
         </div>
 
@@ -677,7 +679,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         var firebaseConfig = {
-           apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
+            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
   authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
   databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
   projectId: "sistema-de-receitas-e-despesas",
@@ -802,11 +804,11 @@
         function updateDescriptionList() {
             const filterDescription = document.getElementById('filterDescription');
             filterDescription.innerHTML = '<option value="">Todos</option>';
-            const uniqueDescriptions = [...new Set(transactions.map(t => t.description))];
+            const uniqueDescriptions = [...new Set(transactions.map(t => t.description.toLowerCase()))];
             uniqueDescriptions.forEach(description => {
                 const option = document.createElement('option');
                 option.value = description;
-                option.text = description;
+                option.text = description.charAt(0).toUpperCase() + description.slice(1);
                 filterDescription.appendChild(option);
             });
         }
@@ -1032,7 +1034,7 @@
                 });
         }
 
-               function openChangePasswordModal() {
+        function openChangePasswordModal() {
             const modal = document.getElementById('changePasswordModal');
             modal.style.display = 'block';
             modal.style.animation = 'fadein 0.5s';
@@ -1076,28 +1078,14 @@
             }
         }
 
-        function openSpecificTransactionsModal() {
-            const modal = document.getElementById('specificTransactionsModal');
+        function openDetailedTransactionsModal() {
+            const modal = document.getElementById('detailedTransactionsModal');
             modal.style.display = 'block';
             modal.style.animation = 'fadein 0.5s';
         }
 
-        function closeSpecificTransactionsModal() {
-            const modal = document.getElementById('specificTransactionsModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
-
-        function openFilterPeriodModal() {
-            const modal = document.getElementById('filterPeriodModal');
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-        }
-
-        function closeFilterPeriodModal() {
-            const modal = document.getElementById('filterPeriodModal');
+        function closeDetailedTransactionsModal() {
+            const modal = document.getElementById('detailedTransactionsModal');
             modal.style.animation = 'fadeout 0.5s';
             setTimeout(() => {
                 modal.style.display = 'none';
@@ -1115,9 +1103,9 @@
                 transaction.date >= startDate && transaction.date <= endDate && transaction.type === specificType
             );
 
-            const descriptions = [...new Set(specificTransactions.map(t => t.description))];
+            const descriptions = [...new Set(specificTransactions.map(t => t.description.toLowerCase()))];
             const data = descriptions.map(description => {
-                return specificTransactions.filter(transaction => transaction.description === description)
+                return specificTransactions.filter(transaction => transaction.description.toLowerCase() === description)
                                            .reduce((total, transaction) => total + transaction.amount, 0);
             });
 
@@ -1129,7 +1117,7 @@
             specificTransactionsChart = new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: descriptions,
+                    labels: descriptions.map(d => d.charAt(0).toUpperCase() + d.slice(1)),
                     datasets: [{
                         label: 'Transações Específicas',
                         data: data,
@@ -1457,5 +1445,3 @@
     </script>
 </body>
 </html>
- 
-           
