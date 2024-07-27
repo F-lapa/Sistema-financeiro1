@@ -1183,11 +1183,19 @@
                 transaction.date >= startDate && transaction.date <= endDate && transaction.type === specificType
             );
 
-            const descriptions = [...new Set(specificTransactions.map(t => t.description.toLowerCase()))];
-            const data = descriptions.map(description => {
-                return specificTransactions.filter(transaction => transaction.description.toLowerCase() === description)
-                                           .reduce((total, transaction) => total + transaction.amount, 0);
-            });
+            // Usar um objeto para agregar valores por descrição
+            const descriptionsMap = specificTransactions.reduce((acc, transaction) => {
+                const description = transaction.description.toLowerCase();
+                if (!acc[description]) {
+                    acc[description] = 0;
+                }
+                acc[description] += transaction.amount;
+                return acc;
+            }, {});
+
+            // Convertendo o objeto para arrays para uso no gráfico
+            const descriptions = Object.keys(descriptionsMap);
+            const data = descriptions.map(description => descriptionsMap[description]);
 
             if (specificTransactionsChart) {
                 specificTransactionsChart.destroy();
