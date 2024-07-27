@@ -677,14 +677,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         var firebaseConfig = {
-            apiKey: "API_KEY_HERE",
-            authDomain: "DOMAIN_HERE",
-            databaseURL: "DATABASE_URL_HERE",
-            projectId: "PROJECT_ID_HERE",
-            storageBucket: "STORAGE_BUCKET_HERE",
-            messagingSenderId: "SENDER_ID_HERE",
-            appId: "APP_ID_HERE",
-            measurementId: "MEASUREMENT_ID_HERE"
+           apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
+  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+  projectId: "sistema-de-receitas-e-despesas",
+  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+  messagingSenderId: "252102478972",
+  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
+  measurementId: "G-K2HCS7WNZV"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -1032,7 +1032,7 @@
                 });
         }
 
-        function openChangePasswordModal() {
+               function openChangePasswordModal() {
             const modal = document.getElementById('changePasswordModal');
             modal.style.display = 'block';
             modal.style.animation = 'fadein 0.5s';
@@ -1251,7 +1251,7 @@
                         {
                             label: 'Receitas',
                             data: receitasData,
-                            backgroundColor: 'rgba(52, 152, 219, 0.5)',
+                            backgroundColor: 'rgba(52, 152, 219, 0.2)',
                             borderColor: 'rgba(52, 152, 219, 1)',
                             fill: true,
                             tension: 0.4,
@@ -1262,7 +1262,7 @@
                         {
                             label: 'Despesas',
                             data: despesasData,
-                            backgroundColor: 'rgba(231, 76, 60, 0.5)',
+                            backgroundColor: 'rgba(231, 76, 60, 0.2)',
                             borderColor: 'rgba(231, 76, 60, 1)',
                             fill: true,
                             tension: 0.4,
@@ -1457,3 +1457,5 @@
     </script>
 </body>
 </html>
+ 
+           
