@@ -462,7 +462,6 @@
             <button onclick="goToLimitPage()"><i class="fas fa-money-check-alt"></i> Definir Limite de Gastos</button>
             <button onclick="openDetailedTransactionsModal()"><i class="fas fa-search-dollar"></i> Relatório Detalhado</button>
             <button onclick="openFinancialPerformanceModal()"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
-            <button id="reminderButton" style="display: none;" onclick="openPaymentRemindersPage()"><i class="fas fa-bell"></i> Lembrete de Pagamentos</button>
             <button onclick="openIncomeRemindersPage()"><i class="fas fa-bell"></i> Lembrete de Receitas</button>
         </div>
         <div class="theme-selector">
@@ -1466,6 +1465,51 @@
         }
 
         document.addEventListener('DOMContentLoaded', loadTheme);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM totalmente carregado e analisado");
+
+            const botaoFiltrarPeriodo = document.querySelector('button[onclick="openFilterPeriodModal()"]');
+            const botaoDefinirLimite = document.querySelector('button[onclick="goToLimitPage()"]');
+            const botaoRelatorioDetalhado = document.querySelector('button[onclick="openDetailedTransactionsModal()"]');
+            const botaoDesempenhoFinanceiro = document.querySelector('button[onclick="openFinancialPerformanceModal()"]');
+            const botaoLembreteReceitas = document.querySelector('button[onclick="openIncomeRemindersPage()"]');
+
+            if (botaoFiltrarPeriodo) {
+                console.log("Botão Filtrar Período encontrado");
+                botaoFiltrarPeriodo.addEventListener('click', openFilterPeriodModal);
+            } else {
+                console.error("Botão Filtrar Período não encontrado");
+            }
+
+            if (botaoDefinirLimite) {
+                console.log("Botão Definir Limite encontrado");
+                botaoDefinirLimite.addEventListener('click', goToLimitPage);
+            } else {
+                console.error("Botão Definir Limite não encontrado");
+            }
+
+            if (botaoRelatorioDetalhado) {
+                console.log("Botão Relatório Detalhado encontrado");
+                botaoRelatorioDetalhado.addEventListener('click', openDetailedTransactionsModal);
+            } else {
+                console.error("Botão Relatório Detalhado não encontrado");
+            }
+
+            if (botaoDesempenhoFinanceiro) {
+                console.log("Botão Desempenho Financeiro encontrado");
+                botaoDesempenhoFinanceiro.addEventListener('click', openFinancialPerformanceModal);
+            } else {
+                console.error("Botão Desempenho Financeiro não encontrado");
+            }
+
+            if (botaoLembreteReceitas) {
+                console.log("Botão Lembrete de Receitas encontrado");
+                botaoLembreteReceitas.addEventListener('click', openIncomeRemindersPage);
+            } else {
+                console.error("Botão Lembrete de Receitas não encontrado");
+            }
+        });
     </script>
 </body>
 </html>
