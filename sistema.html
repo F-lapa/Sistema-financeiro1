@@ -7,12 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        /* Estilos Globais */
         :root {
             --background-color: #2c3e50;
             --text-color: #ecf0f1;
             --primary-color: #3498db;
-            --secondary-color: #e74c3c;
             --button-color: #3498db;
             --input-border-color: #3498db;
         }
@@ -26,7 +24,6 @@
             min-height: 100vh;
             flex-direction: column;
         }
-        /* Sidebar */
         .sidebar {
             width: 220px;
             background-color: #34495e;
@@ -88,7 +85,7 @@
             margin-right: 8px;
         }
         .sidebar button:hover {
-            background-color: darken(var(--button-color), 10%);
+            background-color: #2980b9;
             transform: scale(1.05);
         }
         .sidebar .theme-selector {
@@ -112,7 +109,6 @@
             font-size: 14px;
             cursor: pointer;
         }
-        /* Container */
         .container {
             margin-left: 240px;
             padding: 20px;
@@ -130,32 +126,6 @@
             color: var(--text-color);
             margin-bottom: 15px;
             font-size: 1.2em;
-        }
-        .dashboard {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-        .dashboard-item {
-            background-color: #34495e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            width: 30%;
-        }
-        .dashboard-item h3 {
-            margin: 0;
-            font-size: 1.2em;
-            color: var(--text-color);
-        }
-        .dashboard-item p {
-            font-size: 1.5em;
-            margin: 10px 0 0;
-            color: var(--primary-color);
-        }
-        .dashboard-item .negative {
-            color: var(--secondary-color);
         }
         .container .form-header {
             text-align: center;
@@ -227,7 +197,7 @@
             display: block;
         }
         .container button:hover {
-            background-color: darken(var(--button-color), 10%);
+            background-color: #2980b9;
             transform: scale(1.05);
         }
         .container table {
@@ -321,11 +291,11 @@
         }
         .container .modal-content {
             background-color: #34495e;
-            margin: 5% auto;
-            padding: 20px;
+            margin: 15% auto;
+            padding: 15px;
             border: 1px solid #444;
-            width: 80%;
-            max-width: 800px;
+            width: 70%;
+            max-width: 400px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             color: var(--text-color);
@@ -376,6 +346,7 @@
         .color-box:hover {
             transform: scale(1.1);
         }
+
         /* Media Queries for Mobile Devices */
         @media (max-width: 768px) {
             .sidebar {
@@ -654,6 +625,10 @@
             <div class="modal-content">
                 <span class="close" onclick="closeThemeSelectorModal()">&times;</span>
                 <h2>Selecionar Tema</h2>
+                <div class="theme-options">
+                    <button onclick="setTheme('light')">Claro</button>
+                    <button onclick="setTheme('dark')">Escuro</button>
+                </div>
                 <div class="color-grid">
                     <!-- As cores serão inseridas aqui -->
                 </div>
@@ -679,14 +654,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         var firebaseConfig = {
-            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-  projectId: "sistema-de-receitas-e-despesas",
-  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-  messagingSenderId: "252102478972",
-  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-  measurementId: "G-K2HCS7WNZV"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID",
+            measurementId: "YOUR_MEASUREMENT_ID"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -1103,11 +1078,17 @@
                 transaction.date >= startDate && transaction.date <= endDate && transaction.type === specificType
             );
 
-            const descriptions = [...new Set(specificTransactions.map(t => t.description.toLowerCase()))];
-            const data = descriptions.map(description => {
-                return specificTransactions.filter(transaction => transaction.description.toLowerCase() === description)
-                                           .reduce((total, transaction) => total + transaction.amount, 0);
-            });
+            const descriptionsMap = specificTransactions.reduce((acc, transaction) => {
+                const description = transaction.description.toLowerCase();
+                if (!acc[description]) {
+                    acc[description] = 0;
+                }
+                acc[description] += transaction.amount;
+                return acc;
+            }, {});
+
+            const descriptions = Object.keys(descriptionsMap);
+            const data = descriptions.map(description => descriptionsMap[description]);
 
             if (specificTransactionsChart) {
                 specificTransactionsChart.destroy();
@@ -1131,6 +1112,12 @@
                 options: {
                     responsive: true,
                     plugins: {
+                        animation: {
+                            duration: 2000,
+                            easing: 'easeOutBounce',
+                            animateScale: true,
+                            animateRotate: true
+                        },
                         tooltip: {
                             callbacks: {
                                 label: function(tooltipItem) {
@@ -1431,17 +1418,26 @@
         function selectThemeColor(color) {
             document.documentElement.style.setProperty('--button-color', color);
             document.documentElement.style.setProperty('--input-border-color', color);
-            localStorage.setItem('theme', color);
+            localStorage.setItem('buttonColor', color);
             closeThemeSelectorModal();
         }
 
+        function setTheme(theme) {
+            document.body.className = theme;
+            localStorage.setItem('theme', theme);
+        }
+
         function loadTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                document.documentElement.style.setProperty('--button-color', savedTheme);
-                document.documentElement.style.setProperty('--input-border-color', savedTheme);
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.className = savedTheme;
+            const savedButtonColor = localStorage.getItem('buttonColor');
+            if (savedButtonColor) {
+                document.documentElement.style.setProperty('--button-color', savedButtonColor);
+                document.documentElement.style.setProperty('--input-border-color', savedButtonColor);
             }
         }
+
+        document.addEventListener('DOMContentLoaded', loadTheme);
     </script>
 </body>
 </html>
