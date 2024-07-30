@@ -346,6 +346,29 @@
         .color-box:hover {
             transform: scale(1.1);
         }
+        .dashboard {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .dashboard-item {
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            flex: 1;
+            margin: 0 10px;
+        }
+        .dashboard-item h3 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+        .dashboard-item p {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
         /* Media Queries for Mobile Devices */
         @media (max-width: 768px) {
             .sidebar {
@@ -413,6 +436,12 @@
             .container .modal-content {
                 width: 90%;
                 margin: 30% auto;
+            }
+            .dashboard {
+                flex-direction: column;
+            }
+            .dashboard-item {
+                margin: 10px 0;
             }
         }
     </style>
@@ -1405,8 +1434,8 @@
         function generateColorArray() {
             const colors = [];
             for (let r = 0; r <= 255; r += 51) {
-                for (let g = 0; g <= 255; g += 51) {
-                    for (let b = 0; b <= 255; b += 51) {
+                for (let g = 0; r <= 255; g += 51) {
+                    for (let b = 0; r <= 255; b += 51) {
                         colors.push(`rgb(${r},${g},${b})`);
                     }
                 }
