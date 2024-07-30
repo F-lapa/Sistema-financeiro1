@@ -12,8 +12,10 @@
             --text-color: #ecf0f1;
             --primary-color: #3498db;
             --button-color: #3498db;
+            --button-hover-color: #2980b9;
             --input-border-color: #3498db;
         }
+
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--background-color);
@@ -24,6 +26,7 @@
             min-height: 100vh;
             flex-direction: column;
         }
+
         .sidebar {
             width: 220px;
             background-color: #34495e;
@@ -35,14 +38,17 @@
             flex-direction: column;
             justify-content: flex-start;
         }
+
         .logo-container {
             text-align: center;
             margin-bottom: 20px;
         }
+
         .logo-container img {
             width: 100px;
             height: auto;
         }
+
         .sidebar h3 {
             text-align: center;
             color: var(--text-color);
@@ -50,22 +56,26 @@
             font-size: 1.4em;
             font-weight: 500;
         }
+
         .sidebar .menu-icons {
             text-align: center;
             margin-bottom: 20px;
         }
+
         .sidebar .menu-icons i {
             margin: 0 5px;
             cursor: pointer;
             color: var(--text-color);
             font-size: 1.5em;
         }
+
         .sidebar .buttons {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-bottom: 20px;
         }
+
         .sidebar button {
             width: 90%;
             padding: 10px;
@@ -81,24 +91,29 @@
             align-items: center;
             justify-content: center;
         }
+
         .sidebar button i {
             margin-right: 8px;
         }
+
         .sidebar button:hover {
-            background-color: #2980b9;
+            background-color: var(--button-hover-color);
             transform: scale(1.05);
         }
+
         .sidebar .theme-selector {
             margin-top: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
         .sidebar .theme-selector label {
             font-size: 14px;
             margin-bottom: 5px;
             color: var(--text-color);
         }
+
         .sidebar .theme-selector button {
             width: 90%;
             padding: 8px;
@@ -109,11 +124,13 @@
             font-size: 14px;
             cursor: pointer;
         }
+
         .container {
             margin-left: 240px;
             padding: 20px;
             flex: 1;
         }
+
         .container h1 {
             text-align: center;
             color: var(--text-color);
@@ -121,12 +138,14 @@
             font-size: 1.8em;
             font-weight: 500;
         }
+
         .container .greeting {
             text-align: center;
             color: var(--text-color);
             margin-bottom: 15px;
             font-size: 1.2em;
         }
+
         .container .form-header {
             text-align: center;
             color: var(--text-color);
@@ -134,40 +153,25 @@
             font-size: 1.2em;
             font-weight: 500;
         }
-        .container .logout, .container .change-password {
-            position: absolute;
-            top: 10px;
-            cursor: pointer;
-            color: var(--text-color);
-            font-size: 1.2em;
-        }
-        .container .logout {
-            right: 50px;
-        }
-        .container .change-password {
-            right: 10px;
-        }
-        .container .admin-icon {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            cursor: pointer;
-            color: var(--text-color);
-            font-size: 1.2em;
-            display: none;
-        }
+
         .container .form-group {
             margin-bottom: 10px;
             width: 50%;
             margin: 0 auto;
         }
+
         .container label {
             display: block;
             margin-bottom: 6px;
             font-weight: bold;
             color: #bdc3c7;
         }
-        .container input[type="text"], .container input[type="number"], .container input[type="date"], .container select, .container input[type="password"] {
+
+        .container input[type="text"],
+        .container input[type="number"],
+        .container input[type="date"],
+        .container select,
+        .container input[type="password"] {
             width: 100%;
             padding: 8px;
             margin-bottom: 8px;
@@ -179,10 +183,13 @@
             color: var(--text-color);
             transition: all 0.3s ease;
         }
-        .container input:focus, .container select:focus, .container input:focus-visible, .container select:focus-visible {
+
+        .container input:focus,
+        .container select:focus {
             border: 2px solid var(--button-color);
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
+
         .container button {
             width: 50%;
             padding: 10px;
@@ -196,45 +203,59 @@
             margin: 10px auto;
             display: block;
         }
+
         .container button:hover {
-            background-color: #2980b9;
+            background-color: var(--button-hover-color);
             transform: scale(1.05);
         }
+
         .container table {
             width: 100%;
             margin-top: 10px;
             border-collapse: separate;
             border-spacing: 0 8px;
         }
-        .container th, .container td {
+
+        .container th,
+        .container td {
             padding: 10px;
             text-align: left;
             background-color: #34495e;
         }
+
         .container th {
             background-color: var(--background-color);
             color: #bdc3c7;
         }
+
         .container tbody tr {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 6px;
             overflow: hidden;
         }
+
         .container tbody tr:hover {
             background-color: #3b4b5e;
         }
-        .container .totals, .container .filter {
+
+        .container .totals,
+        .container .filter {
             margin-top: 10px;
             text-align: center;
         }
-        .container .totals p, .container .filter p {
+
+        .container .totals p,
+        .container .filter p {
             font-size: 16px;
             color: var(--text-color);
         }
-        .container .totals span, .container .filter span {
+
+        .container .totals span,
+        .container .filter span {
             font-weight: bold;
             color: var(--primary-color);
         }
+
         .container .totals p {
             display: inline-block;
             padding: 10px 20px;
@@ -243,34 +264,43 @@
             margin: 5px 0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .container .negative {
             color: red !important;
         }
+
         .container .transaction-description {
             display: flex;
             align-items: center;
         }
+
         .container .transaction-amount {
             text-align: left;
             color: green;
         }
+
         .container .transaction-amount.despesa {
             color: red;
         }
+
         .container .transaction-icon {
             margin-right: 10px;
             font-size: 1.2em;
         }
+
         .container .filter-results {
             margin-top: 10px;
         }
+
         .container .password-field {
             position: relative;
         }
+
         .container .password-field input {
             width: calc(100% - 40px);
             margin-bottom: 0;
         }
+
         .container .password-field i {
             position: absolute;
             right: 10px;
@@ -278,6 +308,7 @@
             cursor: pointer;
             color: var(--button-color);
         }
+
         .container .modal {
             display: none;
             position: fixed;
@@ -289,6 +320,7 @@
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
         }
+
         .container .modal-content {
             background-color: #34495e;
             margin: 15% auto;
@@ -302,38 +334,46 @@
             text-align: center;
             animation: fadein 0.5s;
         }
+
         .container .close {
             color: var(--text-color);
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
+
         .container .close:hover,
         .container .close:focus {
             color: var(--button-color);
             text-decoration: none;
             cursor: pointer;
         }
+
         .container .fa-trash-alt {
             cursor: pointer;
             color: red;
         }
+
         @keyframes fadein {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
+
         @keyframes fadeout {
-            from { opacity: 1; }
-            to { opacity: 0; }
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
         }
-        @keyframes shine {
-            0% { background-position: -200px; }
-            100% { background-position: 200px; }
-        }
-        .container input[type="text"]:hover, .container input[type="number"]:hover, .container input[type="date"]:hover, .container select:hover, .container input[type="password"]:hover {
-            border-color: var(--input-border-color);
-            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
-        }
+
         .color-box {
             width: 40px;
             height: 40px;
@@ -343,33 +383,11 @@
             border-radius: 8px;
             transition: transform 0.2s;
         }
+
         .color-box:hover {
             transform: scale(1.1);
         }
-        .dashboard {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-        .dashboard-item {
-            background-color: #34495e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            flex: 1;
-            margin: 0 10px;
-        }
-        .dashboard-item h3 {
-            font-size: 1.4em;
-            margin-bottom: 10px;
-        }
-        .dashboard-item p {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-        /* Media Queries for Mobile Devices */
+
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
@@ -381,18 +399,22 @@
                 padding: 10px;
                 margin-bottom: 20px;
             }
+
             .sidebar .menu-icons {
                 order: -1;
                 margin-bottom: 0;
                 text-align: right;
             }
+
             .sidebar .menu-icons i {
                 font-size: 1.2em;
                 margin: 0 3px;
             }
+
             .sidebar h3 {
                 display: none;
             }
+
             .sidebar .buttons {
                 flex-direction: row;
                 flex-wrap: wrap;
@@ -400,48 +422,51 @@
                 width: 100%;
                 margin-bottom: 0;
             }
+
             .sidebar button {
                 width: 48%;
                 padding: 5px 10px;
                 font-size: 12px;
                 margin-bottom: 5px;
             }
+
             .sidebar .theme-selector {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 margin-top: 10px;
             }
+
             .container {
                 margin-left: 0;
                 padding: 10px;
             }
+
             .container .form-group {
                 width: 100%;
                 margin-bottom: 8px;
             }
+
             .container button {
                 width: 100%;
                 padding: 8px;
                 font-size: 12px;
                 margin: 8px auto;
             }
-            .container table th, .container table td {
+
+            .container table th,
+            .container table td {
                 padding: 5px;
                 font-size: 12px;
             }
+
             .container .totals p {
                 font-size: 14px;
             }
+
             .container .modal-content {
                 width: 90%;
                 margin: 30% auto;
-            }
-            .dashboard {
-                flex-direction: column;
-            }
-            .dashboard-item {
-                margin: 10px 0;
             }
         }
     </style>
@@ -453,38 +478,24 @@
         </div>
         <h3>Menu</h3>
         <div class="menu-icons">
-            <i class="fas fa-key change-password" onclick="openChangePasswordModal()" title="Alterar Senha"></i>
+            <i class="fas fa-key change-password" onclick="openModal('changePasswordModal')" title="Alterar Senha"></i>
             <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
-            <i class="fas fa-user-shield admin-icon" id="adminButton" style="display: none;" onclick="openAdminModal()" title="Área do Administrador"></i>
         </div>
         <div class="buttons">
-            <button onclick="openFilterPeriodModal()"><i class="fas fa-filter"></i> Filtrar Período</button>
+            <button onclick="openModal('filterPeriodModal')"><i class="fas fa-filter"></i> Filtrar Período</button>
             <button onclick="goToLimitPage()"><i class="fas fa-money-check-alt"></i> Definir Limite de Gastos</button>
-            <button onclick="openDetailedTransactionsModal()"><i class="fas fa-search-dollar"></i> Relatório Detalhado</button>
-            <button onclick="openFinancialPerformanceModal()"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
-            <button onclick="openIncomeRemindersPage()"><i class="fas fa-bell"></i> Lembrete de Receitas</button>
+            <button onclick="openModal('specificTransactionsModal')"><i class="fas fa-search-dollar"></i> Transações Específicas</button>
+            <button onclick="openModal('financialPerformanceModal')"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
+            <button id="adminButton" style="display: none;" onclick="openModal('adminModal')"><i class="fas fa-user-shield"></i> Área do Administrador</button>
+            <button id="reminderButton" style="display: none;" onclick="openPaymentRemindersPage()"><i class="fas fa-bell"></i> Lembrete de Pagamentos</button>
         </div>
         <div class="theme-selector">
             <label for="theme">Selecionar Tema:</label>
-            <button id="themeButton" onclick="openThemeSelectorModal()">Clique para escolher</button>
+            <button id="themeButton" onclick="openModal('themeSelectorModal')">Clique para escolher</button>
         </div>
     </div>
     <div class="container">
         <div class="greeting" id="userGreeting"></div>
-        <div class="dashboard">
-            <div class="dashboard-item">
-                <h3>Saldo do Dia</h3>
-                <p id="dailyBalance">R$ 0,00</p>
-            </div>
-            <div class="dashboard-item">
-                <h3>Saldo do Mês</h3>
-                <p id="monthlyBalance">R$ 0,00</p>
-            </div>
-            <div class="dashboard-item">
-                <h3>Saldo do Ano</h3>
-                <p id="annualBalance">R$ 0,00</p>
-            </div>
-        </div>
         <div class="form-header">Nova Transação</div>
         
         <input type="text" style="display:none;" autocomplete="username">
@@ -526,9 +537,16 @@
             </tbody>
         </table>
 
+        <div class="totals">
+            <p>Saldo do Dia: <span id="dailyBalance">R$ 0,00</span></p>
+            <p>Saldo do Mês: <span id="monthlyBalance">R$ 0,00</span></p>
+            <p>Saldo do Ano: <span id="annualBalance">R$ 0,00</span></p>
+        </div>
+
+        <!-- Modais -->
         <div id="filterPeriodModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeFilterPeriodModal()">&times;</span>
+                <span class="close" onclick="closeModal('filterPeriodModal')">&times;</span>
                 <h2>Filtrar por Período</h2>
                 <div class="form-group">
                     <label for="startDate">Data Inicial:</label>
@@ -580,7 +598,7 @@
 
         <div id="changePasswordModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeChangePasswordModal()">&times;</span>
+                <span class="close" onclick="closeModal('changePasswordModal')">&times;</span>
                 <h2>Alterar Senha</h2>
                 <div class="form-group password-field">
                     <label for="newPassword">Nova Senha:</label>
@@ -591,10 +609,10 @@
             </div>
         </div>
 
-        <div id="detailedTransactionsModal" class="modal">
+        <div id="specificTransactionsModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeDetailedTransactionsModal()">&times;</span>
-                <h2>Relatório Detalhado</h2>
+                <span class="close" onclick="closeModal('specificTransactionsModal')">&times;</span>
+                <h2>Transações Específicas</h2>
                 <div class="form-group">
                     <label for="specificStartDate">Data Inicial:</label>
                     <input type="date" id="specificStartDate" class="highlight">
@@ -617,17 +635,15 @@
 
         <div id="financialPerformanceModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeFinancialPerformanceModal()">&times;</span>
+                <span class="close" onclick="closeModal('financialPerformanceModal')">&times;</span>
                 <h2>Desempenho Financeiro</h2>
-                <div style="position: relative; height: 400px;">
-                    <canvas id="financialPerformanceChart"></canvas>
-                </div>
+                <canvas id="financialPerformanceChart" style="margin-top: 20px;"></canvas>
             </div>
         </div>
 
         <div id="adminModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeAdminModal()">&times;</span>
+                <span class="close" onclick="closeModal('adminModal')">&times;</span>
                 <h2>Gerenciamento de Usuários</h2>
                 <div class="form-group">
                     <label for="newUserName">Nome do Novo Usuário:</label>
@@ -650,12 +666,8 @@
 
         <div id="themeSelectorModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeThemeSelectorModal()">&times;</span>
+                <span class="close" onclick="closeModal('themeSelectorModal')">&times;</span>
                 <h2>Selecionar Tema</h2>
-                <div class="theme-options">
-                    <button onclick="setTheme('light')">Claro</button>
-                    <button onclick="setTheme('dark')">Escuro</button>
-                </div>
                 <div class="color-grid">
                     <!-- As cores serão inseridas aqui -->
                 </div>
@@ -664,7 +676,7 @@
 
         <div id="reminderAlertModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeReminderAlertModal()">&times;</span>
+                <span class="close" onclick="closeModal('reminderAlertModal')">&times;</span>
                 <div id="reminderAlertMessage"></div>
                 <button onclick="markAsPaid()">Já foi Pago</button>
                 <button onclick="snoozeReminder()">Não foi Pago</button>
@@ -697,34 +709,58 @@
         let currentReminderId;
         let transactions = [];
         let paymentReminders = [];
-        let incomeReminders = [];
         let lastTransactionId = localStorage.getItem('lastTransactionId');
         let allUsers = [];
         let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
 
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                const userId = user.uid;
-                database.ref('users/' + userId).once('value').then((snapshot) => {
-                    const userData = snapshot.val();
-                    const userName = userData ? userData.name : "Usuário";
-                    localStorage.setItem('username', userName);
-                    document.getElementById('userGreeting').innerHTML = '<span>Olá, <strong>' + userName + '</strong>!</span>';
-                    loadTransactions();
-                    checkAdmin(user.email);
-                    loadTheme(); // Carrega o tema salvo
-                    loadPaymentReminders(); // Carrega lembretes de pagamento
-                    loadIncomeReminders(); // Carrega lembretes de receita
-                });
-            } else {
-                window.location.href = 'login.html';  
-            }
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeApp();
         });
 
-        document.addEventListener('click', function enableSound() {
-            document.getElementById('alertSound').play().catch(() => {});
-            document.removeEventListener('click', enableSound);
-        });
+        function initializeApp() {
+            setupFirebase();
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    loadUserData(user);
+                    initializeUI();
+                } else {
+                    redirectToLogin();
+                }
+            });
+        }
+
+        async function loadUserData(user) {
+            const userData = await fetchUserData(user.uid);
+            updateUserGreeting(userData.name);
+            loadTransactions(user.uid);
+        }
+
+        function updateUserGreeting(name) {
+            document.getElementById('userGreeting').innerHTML = `<span>Olá, <strong>${name}</strong>!</span>`;
+        }
+
+        async function fetchUserData(uid) {
+            const snapshot = await database.ref('users/' + uid).once('value');
+            return snapshot.val();
+        }
+
+        function redirectToLogin() {
+            window.location.href = 'index.html';
+        }
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
 
         function saveTransactions() {
             const userId = auth.currentUser.uid;
@@ -733,7 +769,7 @@
 
         function loadTransactions() {
             const userId = auth.currentUser.uid;
-            database.ref('transactions/' + userId).once('value', function(snapshot) {
+            database.ref('transactions/' + userId).once('value', function (snapshot) {
                 if (snapshot.val()) {
                     const data = snapshot.val();
                     transactions = Array.isArray(data) ? data : Object.values(data);
@@ -806,11 +842,11 @@
         function updateDescriptionList() {
             const filterDescription = document.getElementById('filterDescription');
             filterDescription.innerHTML = '<option value="">Todos</option>';
-            const uniqueDescriptions = [...new Set(transactions.map(t => t.description.toLowerCase()))];
+            const uniqueDescriptions = [...new Set(transactions.map(t => t.description))];
             uniqueDescriptions.forEach(description => {
                 const option = document.createElement('option');
                 option.value = description;
-                option.text = description.charAt(0).toUpperCase() + description.slice(1);
+                option.text = description;
                 filterDescription.appendChild(option);
             });
         }
@@ -823,7 +859,7 @@
             transactions.forEach(transaction => {
                 if (transaction.date === selectedDate) {
                     const row = tbody.insertRow();
-                    
+
                     const cellDate = row.insertCell(0);
                     const cellDescription = row.insertCell(1);
                     const cellAmount = row.insertCell(2);
@@ -904,7 +940,7 @@
             let totalReceitas = 0;
             let totalDespesas = 0;
 
-            const filteredTransactions = transactions.filter(transaction => 
+            const filteredTransactions = transactions.filter(transaction =>
                 transaction.date >= startDate && transaction.date <= endDate &&
                 (filterType === '' || transaction.type === filterType) &&
                 (filterDescription === '' || transaction.description.toLowerCase().includes(filterDescription))
@@ -962,7 +998,7 @@
 
         const inputs = document.querySelectorAll('input, select');
         inputs.forEach(input => {
-            input.addEventListener('focus', function() {
+            input.addEventListener('focus', function () {
                 this.classList.remove('highlight');
             });
         });
@@ -980,85 +1016,14 @@
             return brasiliaTime.toISOString().split('T')[0];
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const dateInput = document.getElementById('date');
-            dateInput.value = getCurrentDate();
-            updateFilteredView();
-            checkReminders();
-        });
-
         function logout() {
             auth.signOut().then(() => {
                 localStorage.removeItem('loggedIn');
                 localStorage.removeItem('username');
                 localStorage.removeItem('lastTransactionId');
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             }).catch(error => {
                 console.error('Erro ao deslogar: ', error);
-            });
-        }
-
-        function openAdminModal() {
-            const modal = document.getElementById('adminModal');
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-        }
-
-        function closeAdminModal() {
-            const modal = document.getElementById('adminModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
-
-        function registerNewUser() {
-            const name = document.getElementById('newUserName').value;
-            const email = document.getElementById('newUserEmail').value;
-            const password = document.getElementById('newUserPassword').value;
-
-            auth.createUserWithEmailAndPassword(email, password)
-                .then(userCredential => {
-                    const user = userCredential.user;
-                    database.ref('users/' + user.uid).set({
-                        name: name,
-                        email: email
-                    }).then(() => {
-                        alert('Novo usuário registrado com sucesso.');
-                        document.getElementById('newUserName').value = '';
-                        document.getElementById('newUserEmail').value = '';
-                        document.getElementById('newUserPassword').value = '';
-                        loadAllUsers();
-                    });
-                })
-                .catch(error => {
-                    alert('Erro ao registrar novo usuário: ' + error.message);
-                });
-        }
-
-        function openChangePasswordModal() {
-            const modal = document.getElementById('changePasswordModal');
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-        }
-
-        function closeChangePasswordModal() {
-            const modal = document.getElementById('changePasswordModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
-
-        function changePassword() {
-            const newPassword = document.getElementById('newPassword').value;
-            const user = auth.currentUser;
-
-            user.updatePassword(newPassword).then(() => {
-                alert('Senha alterada com sucesso.');
-                closeChangePasswordModal();
-            }).catch(error => {
-                alert('Erro ao alterar senha: ' + error.message);
             });
         }
 
@@ -1080,20 +1045,6 @@
             }
         }
 
-        function openDetailedTransactionsModal() {
-            const modal = document.getElementById('detailedTransactionsModal');
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-        }
-
-        function closeDetailedTransactionsModal() {
-            const modal = document.getElementById('detailedTransactionsModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
-
         let specificTransactionsChart;
 
         function generateSpecificTransactionsReport() {
@@ -1101,21 +1052,15 @@
             const endDate = document.getElementById('specificEndDate').value;
             const specificType = document.getElementById('specificType').value;
 
-            const specificTransactions = transactions.filter(transaction => 
+            const specificTransactions = transactions.filter(transaction =>
                 transaction.date >= startDate && transaction.date <= endDate && transaction.type === specificType
             );
 
-            const descriptionsMap = specificTransactions.reduce((acc, transaction) => {
-                const description = transaction.description.toLowerCase();
-                if (!acc[description]) {
-                    acc[description] = 0;
-                }
-                acc[description] += transaction.amount;
-                return acc;
-            }, {});
-
-            const descriptions = Object.keys(descriptionsMap);
-            const data = descriptions.map(description => descriptionsMap[description]);
+            const descriptions = [...new Set(specificTransactions.map(t => t.description))];
+            const data = descriptions.map(description => {
+                return specificTransactions.filter(transaction => transaction.description === description)
+                    .reduce((total, transaction) => total + transaction.amount, 0);
+            });
 
             if (specificTransactionsChart) {
                 specificTransactionsChart.destroy();
@@ -1125,11 +1070,11 @@
             specificTransactionsChart = new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: descriptions.map(d => d.charAt(0).toUpperCase() + d.slice(1)),
+                    labels: descriptions,
                     datasets: [{
                         label: 'Transações Específicas',
                         data: data,
-                        backgroundColor: descriptions.map(() => `#${Math.floor(Math.random()*16777215).toString(16)}`),
+                        backgroundColor: descriptions.map(() => `#${Math.floor(Math.random() * 16777215).toString(16)}`),
                         borderColor: '#fff',
                         borderWidth: 2,
                         hoverBorderWidth: 3,
@@ -1137,17 +1082,10 @@
                     }]
                 },
                 options: {
-                    responsive: true,
                     plugins: {
-                        animation: {
-                            duration: 2000,
-                            easing: 'easeOutBounce',
-                            animateScale: true,
-                            animateRotate: true
-                        },
                         tooltip: {
                             callbacks: {
-                                label: function(tooltipItem) {
+                                label: function (tooltipItem) {
                                     let total = tooltipItem.dataset.data.reduce((sum, value) => sum + value, 0);
                                     let currentValue = tooltipItem.raw;
                                     let percentage = ((currentValue / total) * 100).toFixed(2);
@@ -1165,7 +1103,6 @@
                             borderWidth: 1
                         },
                         legend: {
-                            position: 'top',
                             labels: {
                                 color: '#ecf0f1',
                                 font: {
@@ -1195,14 +1132,6 @@
             document.getElementById('alertMessage').innerText = message;
             modal.style.display = 'block';
             modal.style.animation = 'fadein 0.5s';
-        }
-
-        function closeAlertModal() {
-            const modal = document.getElementById('alertModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
         }
 
         function openFinancialPerformanceModal() {
@@ -1253,76 +1182,43 @@
                         {
                             label: 'Receitas',
                             data: receitasData,
-                            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                            backgroundColor: 'rgba(52, 152, 219, 0.5)',
                             borderColor: 'rgba(52, 152, 219, 1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointBackgroundColor: 'rgba(52, 152, 219, 1)',
-                            pointRadius: 5,
-                            pointHoverRadius: 7
+                            fill: false,
+                            tension: 0.1
                         },
                         {
                             label: 'Despesas',
                             data: despesasData,
-                            backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                            backgroundColor: 'rgba(231, 76, 60, 0.5)',
                             borderColor: 'rgba(231, 76, 60, 1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointBackgroundColor: 'rgba(231, 76, 60, 1)',
-                            pointRadius: 5,
-                            pointHoverRadius: 7
+                            fill: false,
+                            tension: 0.1
                         }
                     ]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
                     plugins: {
                         tooltip: {
-                            mode: 'index',
-                            intersect: false,
                             callbacks: {
-                                label: function(context) {
+                                label: function (context) {
                                     return `${context.dataset.label}: R$ ${context.raw.toFixed(2)}`;
                                 }
                             }
                         },
                         legend: {
-                            position: 'top',
                             labels: {
-                                color: '#ecf0f1',
-                                font: {
-                                    size: 14,
-                                    weight: 'bold'
-                                }
+                                color: '#ecf0f1'
                             }
                         }
                     },
                     scales: {
                         x: {
-                            title: {
-                                display: true,
-                                text: 'Mês',
-                                color: '#ecf0f1',
-                                font: {
-                                    size: 16,
-                                    weight: 'bold'
-                                }
-                            },
                             ticks: {
                                 color: '#ecf0f1'
                             }
                         },
                         y: {
-                            title: {
-                                display: true,
-                                text: 'Valor (R$)',
-                                color: '#ecf0f1',
-                                font: {
-                                    size: 16,
-                                    weight: 'bold'
-                                }
-                            },
                             ticks: {
                                 color: '#ecf0f1'
                             }
@@ -1333,17 +1229,20 @@
         }
 
         function checkReminders() {
-            const currentDate = getCurrentDate();
-            const reminders = incomeReminders.filter(reminder => {
-                const reminderDate = reminder.date;
-                return reminderDate === currentDate && !reminder.paid;
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const reminders = paymentReminders.filter(reminder => {
+                const reminderDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), reminder.day);
+                const differenceInDays = Math.floor((reminderDate - currentDate) / (1000 * 60 * 60 * 24));
+                return (differenceInDays === 2 || (differenceInDays < 0 && differenceInDays >= -7)) &&
+                    !reminder.paid && new Date(reminder.lastPaidDate).getMonth() !== currentMonth;
             });
 
             if (reminders.length > 0) {
                 currentReminderId = reminders[0].id;
                 const modal = document.getElementById('reminderAlertModal');
                 document.getElementById('reminderAlertMessage').innerHTML = `
-                    Você tem uma receita de <strong>${reminders[0].description}</strong> cadastrada para hoje.
+                    Você tem um pagamento de <strong>${reminders[0].description}</strong> com vencimento no dia <strong>${reminders[0].day}</strong>.
                 `;
                 modal.style.display = 'block';
                 modal.style.animation = 'fadein 0.5s';
@@ -1363,13 +1262,6 @@
             const userId = auth.currentUser.uid;
             database.ref('paymentReminders/' + userId).once('value').then((snapshot) => {
                 paymentReminders = snapshot.val() || [];
-            });
-        }
-
-        function loadIncomeReminders() {
-            const userId = auth.currentUser.uid;
-            database.ref('incomeReminders/' + userId).once('value').then((snapshot) => {
-                incomeReminders = snapshot.val() || [];
                 checkReminders();
             });
         }
@@ -1379,17 +1271,14 @@
             database.ref('paymentReminders/' + userId).set(paymentReminders);
         }
 
-        function saveIncomeReminders() {
-            const userId = auth.currentUser.uid;
-            database.ref('incomeReminders/' + userId).set(incomeReminders);
-        }
-
         function markAsPaid() {
-            const reminderIndex = incomeReminders.findIndex(r => r.id === currentReminderId);
+            const reminderIndex = paymentReminders.findIndex(r => r.id === currentReminderId);
             if (reminderIndex > -1) {
-                const reminder = incomeReminders[reminderIndex];
+                const reminder = paymentReminders[reminderIndex];
                 reminder.paid = true;
-                saveIncomeReminders();
+                reminder.lastPaidDate = getCurrentDate();
+                addTransactionFromReminder(reminder);
+                savePaymentReminders();
                 closeReminderAlertModal();
             }
         }
@@ -1398,12 +1287,24 @@
             closeReminderAlertModal();
         }
 
-        function openPaymentRemindersPage() {
-            window.location.href = 'payment_reminders.html';
+        function addTransactionFromReminder(reminder) {
+            const transaction = {
+                id: generateTransactionId(),
+                date: getCurrentDate(),
+                description: reminder.description,
+                amount: reminder.amount,
+                type: 'despesa'
+            };
+            transactions.push(transaction);
+            saveTransactions();
+            updateDescriptionList();
+            updateFilteredView();
+            calculateBalances();
+            checkMonthlyLimit();
         }
 
-        function openIncomeRemindersPage() {
-            window.location.href = 'income_reminders.html';
+        function openPaymentRemindersPage() {
+            window.location.href = 'payment_reminders.html';
         }
 
         function openThemeSelectorModal() {
@@ -1433,8 +1334,8 @@
         function generateColorArray() {
             const colors = [];
             for (let r = 0; r <= 255; r += 51) {
-                for (let g = 0; g <= 255; g += 51) {
-                    for (let b = 0; g <= 255; b += 51) {
+                for (let g = 0; r <= 255; g += 51) {
+                    for (let b = 0; b <= 255; b += 51) {
                         colors.push(`rgb(${r},${g},${b})`);
                     }
                 }
@@ -1445,71 +1346,17 @@
         function selectThemeColor(color) {
             document.documentElement.style.setProperty('--button-color', color);
             document.documentElement.style.setProperty('--input-border-color', color);
-            localStorage.setItem('buttonColor', color);
+            localStorage.setItem('theme', color);
             closeThemeSelectorModal();
         }
 
-        function setTheme(theme) {
-            document.body.className = theme;
-            localStorage.setItem('theme', theme);
-        }
-
         function loadTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            document.body.className = savedTheme;
-            const savedButtonColor = localStorage.getItem('buttonColor');
-            if (savedButtonColor) {
-                document.documentElement.style.setProperty('--button-color', savedButtonColor);
-                document.documentElement.style.setProperty('--input-border-color', savedButtonColor);
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.style.setProperty('--button-color', savedTheme);
+                document.documentElement.style.setProperty('--input-border-color', savedTheme);
             }
         }
-
-        document.addEventListener('DOMContentLoaded', loadTheme);
-
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log("DOM totalmente carregado e analisado");
-
-            const botaoFiltrarPeriodo = document.querySelector('button[onclick="openFilterPeriodModal()"]');
-            const botaoDefinirLimite = document.querySelector('button[onclick="goToLimitPage()"]');
-            const botaoRelatorioDetalhado = document.querySelector('button[onclick="openDetailedTransactionsModal()"]');
-            const botaoDesempenhoFinanceiro = document.querySelector('button[onclick="openFinancialPerformanceModal()"]');
-            const botaoLembreteReceitas = document.querySelector('button[onclick="openIncomeRemindersPage()"]');
-
-            if (botaoFiltrarPeriodo) {
-                console.log("Botão Filtrar Período encontrado");
-                botaoFiltrarPeriodo.addEventListener('click', openFilterPeriodModal);
-            } else {
-                console.error("Botão Filtrar Período não encontrado");
-            }
-
-            if (botaoDefinirLimite) {
-                console.log("Botão Definir Limite encontrado");
-                botaoDefinirLimite.addEventListener('click', goToLimitPage);
-            } else {
-                console.error("Botão Definir Limite não encontrado");
-            }
-
-            if (botaoRelatorioDetalhado) {
-                console.log("Botão Relatório Detalhado encontrado");
-                botaoRelatorioDetalhado.addEventListener('click', openDetailedTransactionsModal);
-            } else {
-                console.error("Botão Relatório Detalhado não encontrado");
-            }
-
-            if (botaoDesempenhoFinanceiro) {
-                console.log("Botão Desempenho Financeiro encontrado");
-                botaoDesempenhoFinanceiro.addEventListener('click', openFinancialPerformanceModal);
-            } else {
-                console.error("Botão Desempenho Financeiro não encontrado");
-            }
-
-            if (botaoLembreteReceitas) {
-                console.log("Botão Lembrete de Receitas encontrado");
-                botaoLembreteReceitas.addEventListener('click', openIncomeRemindersPage);
-            } else {
-                console.error("Botão Lembrete de Receitas não encontrado");
-            }
-        });
     </script>
 </body>
 </html>
