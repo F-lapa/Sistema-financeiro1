@@ -706,7 +706,7 @@
             </div>
         </div>
 
-        <audio id="alertSound" src="alert.mp3" preload="auto"></audio>
+        <audio id="alertSound" src="path/to/alert.mp3" preload="auto"></audio> <!-- Atualize o caminho aqui -->
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
@@ -727,10 +727,12 @@
         };
 
         function setupFirebase() {
-            firebase.initializeApp(firebaseConfig);
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
         }
 
-        firebase.initializeApp(firebaseConfig);
+        setupFirebase();
         const database = firebase.database();
         const auth = firebase.auth();
 
@@ -746,7 +748,6 @@
         });
 
         function initializeApp() {
-            setupFirebase();
             auth.onAuthStateChanged(user => {
                 if (user) {
                     loadUserData(user);
