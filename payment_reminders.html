@@ -162,69 +162,85 @@
             from {transform: translateY(-50px);}
             to {transform: translateY(0);}
         }
+        .page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100vh; /* Ocupa a altura total da janela */
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    padding: 20px;
+    background-color: #34495e;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    flex: 1;
+    overflow-y: auto; /* Permite rolagem se o conteúdo for muito grande */
+}
+
+footer#totals {
+    background-color: #34495e;
+    padding: 10px;
+    text-align: center;
+    color: var(--text-color);
+    border-top: 1px solid var(--input-border-color);
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+footer#totals p {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Lembretes de Pagamento</h1>
-        <div class="form-group">
-            <label for="reminderDay">Dia do Mês:</label>
-            <input type="number" id="reminderDay" class="highlight" min="1" max="31">
-        </div>
-        <div class="form-group">
-            <label for="reminderDescription">Descrição:</label>
-            <input type="text" id="reminderDescription" class="highlight">
-        </div>
-        <div class="form-group">
-            <label for="reminderAmount">Valor (R$):</label>
-            <input type="number" id="reminderAmount" class="highlight" step="0.01" min="0">
-        </div>
-        <button onclick="addReminder()">Adicionar Lembrete</button>
-
-        <table id="remindersTable">
-            <thead>
-                <tr>
-                    <th>Dia</th>
-                    <th>Descrição</th>
-                    <th>Valor</th>
-                    <th>Status</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Reminders will be added here -->
-            </tbody>
-        </table>
-    </div>
-
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Editar Lembrete</h2>
+    <div class="page-container">
+        <div class="container">
+            <h1>Lembretes de Pagamento</h1>
+            <!-- Seu conteúdo existente vai aqui -->
             <div class="form-group">
-                <label for="editReminderDay">Dia do Mês:</label>
-                <input type="number" id="editReminderDay" min="1" max="31">
+                <label for="reminderDay">Dia do Mês:</label>
+                <input type="number" id="reminderDay" class="highlight" min="1" max="31">
             </div>
             <div class="form-group">
-                <label for="editReminderDescription">Descrição:</label>
-                <input type="text" id="editReminderDescription">
+                <label for="reminderDescription">Descrição:</label>
+                <input type="text" id="reminderDescription" class="highlight">
             </div>
             <div class="form-group">
-                <label for="editReminderAmount">Valor (R$):</label>
-                <input type="number" id="editReminderAmount" step="0.01" min="0">
+                <label for="reminderAmount">Valor (R$):</label>
+                <input type="number" id="reminderAmount" class="highlight" step="0.01" min="0">
             </div>
-            <button onclick="saveReminder()">Salvar Alterações</button>
+            <button onclick="addReminder()">Adicionar Lembrete</button>
+
+            <table id="remindersTable">
+                <thead>
+                    <tr>
+                        <th>Dia</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Reminders will be added here -->
+                </tbody>
+            </table>
         </div>
+
+        <!-- Novo footer para exibir os totais -->
+        <footer id="totals">
+            <p>Total em Aberto: <span id="totalEmAberto">R$ 0,00</span></p>
+            <p>Total Pago: <span id="totalPago">R$ 0,00</span></p>
+        </footer>
     </div>
 
-    <div id="confirmationModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeConfirmationModal()">&times;</span>
-            <h2>Confirmar Pagamento</h2>
-            <p>Você tem certeza que deseja marcar este lembrete como "Já foi pago"?</p>
-            <button onclick="confirmPayment()">Confirmar</button>
-        </div>
-    </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
@@ -279,27 +295,41 @@
         }
 
         function updateRemindersTable() {
-            const tbody = document.getElementById('remindersTable').getElementsByTagName('tbody')[0];
-            tbody.innerHTML = '';
+    const tbody = document.getElementById('remindersTable').getElementsByTagName('tbody')[0];
+    tbody.innerHTML = '';
 
-            paymentReminders.forEach(reminder => {
-                const row = tbody.insertRow();
-                const cellDay = row.insertCell(0);
-                const cellDescription = row.insertCell(1);
-                const cellAmount = row.insertCell(2);
-                const cellStatus = row.insertCell(3);
-                const cellAction = row.insertCell(4);
+    let totalEmAberto = 0;
+    let totalPago = 0;
 
-                cellDay.innerText = reminder.day;
-                cellDescription.innerText = reminder.description;
-                cellAmount.innerText = reminder.amount.toFixed(2);
-                cellStatus.innerText = reminder.paid ? "Já foi pago" : "Em Aberto";
-                cellAction.innerHTML = `
-                    <i class="fas fa-check-circle" onclick="openConfirmationModal('${reminder.id}')" ${reminder.paid ? 'style="display:none;"' : ''}></i>
-                    <i class="fas fa-edit" onclick="editReminder('${reminder.id}')"></i>
-                    <i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')"></i>`;
-            });
+    paymentReminders.forEach(reminder => {
+        const row = tbody.insertRow();
+        const cellDay = row.insertCell(0);
+        const cellDescription = row.insertCell(1);
+        const cellAmount = row.insertCell(2);
+        const cellStatus = row.insertCell(3);
+        const cellAction = row.insertCell(4);
+
+        cellDay.innerText = reminder.day;
+        cellDescription.innerText = reminder.description;
+        cellAmount.innerText = `R$ ${reminder.amount.toFixed(2)}`;
+        cellStatus.innerText = reminder.paid ? "Já foi pago" : "Em Aberto";
+
+        if (reminder.paid) {
+            totalPago += reminder.amount;
+        } else {
+            totalEmAberto += reminder.amount;
         }
+
+        cellAction.innerHTML = `
+            <i class="fas fa-check-circle" onclick="openConfirmationModal('${reminder.id}')" ${reminder.paid ? 'style="display:none;"' : ''}></i>
+            <i class="fas fa-edit" onclick="editReminder('${reminder.id}')"></i>
+            <i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')"></i>`;
+    });
+
+    document.getElementById('totalEmAberto').innerText = `R$ ${totalEmAberto.toFixed(2)}`;
+    document.getElementById('totalPago').innerText = `R$ ${totalPago.toFixed(2)}`;
+}
+
 
         function removeReminder(reminderId) {
             if (confirm('Tem certeza que deseja remover este lembrete?')) {
