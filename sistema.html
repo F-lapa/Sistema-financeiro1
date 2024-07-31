@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -12,10 +13,8 @@
             --text-color: #ecf0f1;
             --primary-color: #3498db;
             --button-color: #3498db;
-            --button-hover-color: #2980b9;
             --input-border-color: #3498db;
         }
-
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--background-color);
@@ -26,7 +25,6 @@
             min-height: 100vh;
             flex-direction: column;
         }
-
         .sidebar {
             width: 220px;
             background-color: #34495e;
@@ -38,17 +36,14 @@
             flex-direction: column;
             justify-content: flex-start;
         }
-
         .logo-container {
             text-align: center;
             margin-bottom: 20px;
         }
-
         .logo-container img {
             width: 100px;
             height: auto;
         }
-
         .sidebar h3 {
             text-align: center;
             color: var(--text-color);
@@ -56,26 +51,22 @@
             font-size: 1.4em;
             font-weight: 500;
         }
-
         .sidebar .menu-icons {
             text-align: center;
             margin-bottom: 20px;
         }
-
         .sidebar .menu-icons i {
             margin: 0 5px;
             cursor: pointer;
             color: var(--text-color);
             font-size: 1.5em;
         }
-
         .sidebar .buttons {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-bottom: 20px;
         }
-
         .sidebar button {
             width: 90%;
             padding: 10px;
@@ -91,29 +82,24 @@
             align-items: center;
             justify-content: center;
         }
-
         .sidebar button i {
             margin-right: 8px;
         }
-
         .sidebar button:hover {
-            background-color: var(--button-hover-color);
+            background-color: darken(var(--button-color), 10%);
             transform: scale(1.05);
         }
-
         .sidebar .theme-selector {
             margin-top: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-
         .sidebar .theme-selector label {
             font-size: 14px;
             margin-bottom: 5px;
             color: var(--text-color);
         }
-
         .sidebar .theme-selector button {
             width: 90%;
             padding: 8px;
@@ -124,13 +110,11 @@
             font-size: 14px;
             cursor: pointer;
         }
-
         .container {
             margin-left: 240px;
             padding: 20px;
             flex: 1;
         }
-
         .container h1 {
             text-align: center;
             color: var(--text-color);
@@ -138,14 +122,12 @@
             font-size: 1.8em;
             font-weight: 500;
         }
-
         .container .greeting {
             text-align: center;
             color: var(--text-color);
             margin-bottom: 15px;
             font-size: 1.2em;
         }
-
         .container .form-header {
             text-align: center;
             color: var(--text-color);
@@ -153,25 +135,40 @@
             font-size: 1.2em;
             font-weight: 500;
         }
-
+        .container .logout, .container .change-password {
+            position: absolute;
+            top: 10px;
+            cursor: pointer;
+            color: var(--text-color);
+            font-size: 1.2em;
+        }
+        .container .logout {
+            right: 50px;
+        }
+        .container .change-password {
+            right: 10px;
+        }
+        .container .admin-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+            color: var (--text-color);
+            font-size: 1.2em;
+            display: none;
+        }
         .container .form-group {
             margin-bottom: 10px;
             width: 50%;
             margin: 0 auto;
         }
-
         .container label {
             display: block;
             margin-bottom: 6px;
             font-weight: bold;
             color: #bdc3c7;
         }
-
-        .container input[type="text"],
-        .container input[type="number"],
-        .container input[type="date"],
-        .container select,
-        .container input[type="password"] {
+        .container input[type="text"], .container input[type="number"], .container input[type="date"], .container select, .container input[type="password"] {
             width: 100%;
             padding: 8px;
             margin-bottom: 8px;
@@ -183,13 +180,10 @@
             color: var(--text-color);
             transition: all 0.3s ease;
         }
-
-        .container input:focus,
-        .container select:focus {
+        .container input:focus, .container select:focus, .container input:focus-visible, .container select:focus-visible {
             border: 2px solid var(--button-color);
             box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
-
         .container button {
             width: 50%;
             padding: 10px;
@@ -203,59 +197,45 @@
             margin: 10px auto;
             display: block;
         }
-
         .container button:hover {
-            background-color: var(--button-hover-color);
+            background-color: darken(var (--button-color), 10%);
             transform: scale(1.05);
         }
-
         .container table {
             width: 100%;
             margin-top: 10px;
             border-collapse: separate;
             border-spacing: 0 8px;
         }
-
-        .container th,
-        .container td {
+        .container th, .container td {
             padding: 10px;
             text-align: left;
             background-color: #34495e;
         }
-
         .container th {
-            background-color: var(--background-color);
+            background-color: var (--background-color);
             color: #bdc3c7;
         }
-
         .container tbody tr {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 6px;
             overflow: hidden;
         }
-
         .container tbody tr:hover {
             background-color: #3b4b5e;
         }
-
-        .container .totals,
-        .container .filter {
+        .container .totals, .container .filter {
             margin-top: 10px;
             text-align: center;
         }
-
-        .container .totals p,
-        .container .filter p {
+        .container .totals p, .container .filter p {
             font-size: 16px;
             color: var(--text-color);
         }
-
-        .container .totals span,
-        .container .filter span {
+        .container .totals span, .container .filter span {
             font-weight: bold;
-            color: var(--primary-color);
+            color: var (--primary-color);
         }
-
         .container .totals p {
             display: inline-block;
             padding: 10px 20px;
@@ -264,43 +244,34 @@
             margin: 5px 0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
         .container .negative {
             color: red !important;
         }
-
         .container .transaction-description {
             display: flex;
             align-items: center;
         }
-
         .container .transaction-amount {
             text-align: left;
             color: green;
         }
-
         .container .transaction-amount.despesa {
             color: red;
         }
-
         .container .transaction-icon {
             margin-right: 10px;
             font-size: 1.2em;
         }
-
         .container .filter-results {
             margin-top: 10px;
         }
-
         .container .password-field {
             position: relative;
         }
-
         .container .password-field input {
             width: calc(100% - 40px);
             margin-bottom: 0;
         }
-
         .container .password-field i {
             position: absolute;
             right: 10px;
@@ -308,7 +279,6 @@
             cursor: pointer;
             color: var(--button-color);
         }
-
         .container .modal {
             display: none;
             position: fixed;
@@ -320,7 +290,6 @@
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
         }
-
         .container .modal-content {
             background-color: #34495e;
             margin: 15% auto;
@@ -333,48 +302,39 @@
             color: var(--text-color);
             text-align: center;
             animation: fadein 0.5s;
-            position: relative; /* Adicionado */
         }
-
         .container .close {
             color: var(--text-color);
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
-
         .container .close:hover,
         .container .close:focus {
             color: var(--button-color);
             text-decoration: none;
             cursor: pointer;
         }
-
         .container .fa-trash-alt {
             cursor: pointer;
             color: red;
         }
-
         @keyframes fadein {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-
         @keyframes fadeout {
-            from {
-                opacity: 1;
-            }
-
-            to {
-                opacity: 0;
-            }
+            from { opacity: 1; }
+            to { opacity: 0; }
         }
-
+        @keyframes shine {
+            0% { background-position: -200px; }
+            100% { background-position: 200px; }
+        }
+        .container input[type="text"]:hover, .container input[type="number"]:hover, .container input[type="date"]:hover, .container select:hover, .container input[type="password"]:hover {
+            border-color: var(--input-border-color);
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
         .color-box {
             width: 40px;
             height: 40px;
@@ -384,19 +344,11 @@
             border-radius: 8px;
             transition: transform 0.2s;
         }
-
         .color-box:hover {
             transform: scale(1.1);
         }
 
-        .modal-header {
-            cursor: move;
-            padding: 10px;
-            background-color: #2c3e50;
-            color: white;
-            border-bottom: 1px solid #444;
-        }
-
+        /* Media Queries for Mobile Devices */
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
@@ -408,22 +360,18 @@
                 padding: 10px;
                 margin-bottom: 20px;
             }
-
             .sidebar .menu-icons {
                 order: -1;
                 margin-bottom: 0;
                 text-align: right;
             }
-
             .sidebar .menu-icons i {
                 font-size: 1.2em;
                 margin: 0 3px;
             }
-
             .sidebar h3 {
                 display: none;
             }
-
             .sidebar .buttons {
                 flex-direction: row;
                 flex-wrap: wrap;
@@ -431,53 +379,45 @@
                 width: 100%;
                 margin-bottom: 0;
             }
-
             .sidebar button {
                 width: 48%;
                 padding: 5px 10px;
                 font-size: 12px;
                 margin-bottom: 5px;
             }
-
             .sidebar .theme-selector {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 margin-top: 10px;
             }
-
             .container {
                 margin-left: 0;
                 padding: 10px;
             }
-
             .container .form-group {
                 width: 100%;
                 margin-bottom: 8px;
             }
-
             .container button {
                 width: 100%;
                 padding: 8px;
                 font-size: 12px;
                 margin: 8px auto;
             }
-
-            .container table th,
-            .container table td {
+            .container table th, .container table td {
                 padding: 5px;
                 font-size: 12px;
             }
-
             .container .totals p {
                 font-size: 14px;
             }
-
             .container .modal-content {
                 width: 90%;
                 margin: 30% auto;
             }
         }
+
     </style>
 </head>
 <body>
@@ -487,20 +427,20 @@
         </div>
         <h3>Menu</h3>
         <div class="menu-icons">
-            <i class="fas fa-key change-password" onclick="openModal('changePasswordModal')" title="Alterar Senha"></i>
+            <i class="fas fa-key change-password" onclick="openChangePasswordModal()" title="Alterar Senha"></i>
             <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
         </div>
         <div class="buttons">
-            <button onclick="openModal('filterPeriodModal')"><i class="fas fa-filter"></i> Filtrar Período</button>
+            <button onclick="openFilterPeriodModal()"><i class="fas fa-filter"></i> Filtrar Período</button>
             <button onclick="goToLimitPage()"><i class="fas fa-money-check-alt"></i> Definir Limite de Gastos</button>
-            <button onclick="openModal('specificTransactionsModal')"><i class="fas fa-search-dollar"></i> Transações Específicas</button>
-            <button onclick="openModal('financialPerformanceModal')"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
-            <button id="adminButton" style="display: none;" onclick="openModal('adminModal')"><i class="fas fa-user-shield"></i> Área do Administrador</button>
+            <button onclick="openSpecificTransactionsModal()"><i class="fas fa-search-dollar"></i> Transações Específicas</button>
+            <button onclick="openFinancialPerformanceModal()"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
+            <button id="adminButton" style="display: none;" onclick="openAdminModal()"><i class="fas fa-user-shield"></i> Área do Administrador</button>
             <button id="reminderButton" style="display: none;" onclick="openPaymentRemindersPage()"><i class="fas fa-bell"></i> Lembrete de Pagamentos</button>
         </div>
         <div class="theme-selector">
             <label for="theme">Selecionar Tema:</label>
-            <button id="themeButton" onclick="openModal('themeSelectorModal')">Clique para escolher</button>
+            <button id="themeButton" onclick="openThemeSelectorModal()">Clique para escolher</button>
         </div>
     </div>
     <div class="container">
@@ -552,13 +492,10 @@
             <p>Saldo do Ano: <span id="annualBalance">R$ 0,00</span></p>
         </div>
 
-        <!-- Modais -->
         <div id="filterPeriodModal" class="modal">
-            <div class="modal-content draggable">
-                <div class="modal-header">
-                    <span class="close" onclick="closeModal('filterPeriodModal')">&times;</span>
-                    <h2>Filtrar por Período</h2>
-                </div>
+            <div class="modal-content">
+                <span class="close" onclick="closeFilterPeriodModal()">&times;</span>
+                <h2>Filtrar por Período</h2>
                 <div class="form-group">
                     <label for="startDate">Data Inicial:</label>
                     <input type="date" id="startDate" class="highlight">
@@ -608,11 +545,9 @@
         </div>
 
         <div id="changePasswordModal" class="modal">
-            <div class="modal-content draggable">
-                <div class="modal-header">
-                    <span class="close" onclick="closeModal('changePasswordModal')">&times;</span>
-                    <h2>Alterar Senha</h2>
-                </div>
+            <div class="modal-content">
+                <span class="close" onclick="closeChangePasswordModal()">&times;</span>
+                <h2>Alterar Senha</h2>
                 <div class="form-group password-field">
                     <label for="newPassword">Nova Senha:</label>
                     <input type="password" id="newPassword" class="highlight">
@@ -623,11 +558,9 @@
         </div>
 
         <div id="specificTransactionsModal" class="modal">
-            <div class="modal-content draggable">
-                <div class="modal-header">
-                    <span class="close" onclick="closeModal('specificTransactionsModal')">&times;</span>
-                    <h2>Transações Específicas</h2>
-                </div>
+            <div class="modal-content">
+                <span class="close" onclick="closeSpecificTransactionsModal()">&times;</span>
+                <h2>Transações Específicas</h2>
                 <div class="form-group">
                     <label for="specificStartDate">Data Inicial:</label>
                     <input type="date" id="specificStartDate" class="highlight">
@@ -649,21 +582,17 @@
         </div>
 
         <div id="financialPerformanceModal" class="modal">
-            <div class="modal-content draggable">
-                <div class="modal-header">
-                    <span class="close" onclick="closeModal('financialPerformanceModal')">&times;</span>
-                    <h2>Desempenho Financeiro</h2>
-                </div>
+            <div class="modal-content">
+                <span class="close" onclick="closeFinancialPerformanceModal()">&times;</span>
+                <h2>Desempenho Financeiro</h2>
                 <canvas id="financialPerformanceChart" style="margin-top: 20px;"></canvas>
             </div>
         </div>
 
         <div id="adminModal" class="modal">
-            <div class="modal-content draggable">
-                <div class="modal-header">
-                    <span class="close" onclick="closeModal('adminModal')">&times;</span>
-                    <h2>Gerenciamento de Usuários</h2>
-                </div>
+            <div class="modal-content">
+                <span class="close" onclick="closeAdminModal()">&times;</span>
+                <h2>Gerenciamento de Usuários</h2>
                 <div class="form-group">
                     <label for="newUserName">Nome do Novo Usuário:</label>
                     <input type="text" id="newUserName" class="highlight">
@@ -684,11 +613,9 @@
         </div>
 
         <div id="themeSelectorModal" class="modal">
-            <div class="modal-content draggable">
-                <div class="modal-header">
-                    <span class="close" onclick="closeModal('themeSelectorModal')">&times;</span>
-                    <h2>Selecionar Tema</h2>
-                </div>
+            <div class="modal-content">
+                <span class="close" onclick="closeThemeSelectorModal()">&times;</span>
+                <h2>Selecionar Tema</h2>
                 <div class="color-grid">
                     <!-- As cores serão inseridas aqui -->
                 </div>
@@ -696,17 +623,15 @@
         </div>
 
         <div id="reminderAlertModal" class="modal">
-            <div class="modal-content draggable">
-                <div class="modal-header">
-                    <span class="close" onclick="closeModal('reminderAlertModal')">&times;</span>
-                    <div id="reminderAlertMessage"></div>
-                </div>
+            <div class="modal-content">
+                <span class="close" onclick="closeReminderAlertModal()">&times;</span>
+                <div id="reminderAlertMessage"></div>
                 <button onclick="markAsPaid()">Já foi Pago</button>
                 <button onclick="snoozeReminder()">Não foi Pago</button>
             </div>
         </div>
 
-        <audio id="alertSound" src="path/to/alert.mp3" preload="auto"></audio> <!-- Atualize o caminho aqui -->
+        <audio id="alertSound" src="alert.mp3" preload="auto"></audio>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
@@ -725,14 +650,7 @@
             appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
             measurementId: "G-K2HCS7WNZV"
         };
-
-        function setupFirebase() {
-            if (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
-            }
-        }
-
-        setupFirebase();
+        firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const auth = firebase.auth();
 
@@ -743,53 +661,28 @@
         let allUsers = [];
         let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
 
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeApp();
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                const userId = user.uid;
+                database.ref('users/' + userId).once('value').then((snapshot) => {
+                    const userData = snapshot.val();
+                    const userName = userData ? userData.name : "Usuário";
+                    localStorage.setItem('username', userName);
+                    document.getElementById('userGreeting').innerHTML = '<span>Olá, <strong>' + userName + '</strong>!</span>';
+                    loadTransactions();
+                    checkAdmin(user.email);
+                    loadTheme(); // Carrega o tema salvo
+                    loadPaymentReminders(); // Carrega lembretes de pagamento
+                });
+            } else {
+                window.location.href = 'index.html';  
+            }
         });
 
-        function initializeApp() {
-            auth.onAuthStateChanged(user => {
-                if (user) {
-                    loadUserData(user);
-                    initializeUI();
-                } else {
-                    redirectToLogin();
-                }
-            });
-        }
-
-        async function loadUserData(user) {
-            const userData = await fetchUserData(user.uid);
-            updateUserGreeting(userData.name);
-            loadTransactions(user.uid);
-        }
-
-        function updateUserGreeting(name) {
-            document.getElementById('userGreeting').innerHTML = `<span>Olá, <strong>${name}</strong>!</span>`;
-        }
-
-        async function fetchUserData(uid) {
-            const snapshot = await database.ref('users/' + uid).once('value');
-            return snapshot.val();
-        }
-
-        function redirectToLogin() {
-            window.location.href = 'index.html';
-        }
-
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-        }
-
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
+        document.addEventListener('click', function enableSound() {
+            document.getElementById('alertSound').play().catch(() => {});
+            document.removeEventListener('click', enableSound);
+        });
 
         function saveTransactions() {
             const userId = auth.currentUser.uid;
@@ -798,7 +691,7 @@
 
         function loadTransactions() {
             const userId = auth.currentUser.uid;
-            database.ref('transactions/' + userId).once('value', function (snapshot) {
+            database.ref('transactions/' + userId).once('value', function(snapshot) {
                 if (snapshot.val()) {
                     const data = snapshot.val();
                     transactions = Array.isArray(data) ? data : Object.values(data);
@@ -888,7 +781,7 @@
             transactions.forEach(transaction => {
                 if (transaction.date === selectedDate) {
                     const row = tbody.insertRow();
-
+                    
                     const cellDate = row.insertCell(0);
                     const cellDescription = row.insertCell(1);
                     const cellAmount = row.insertCell(2);
@@ -969,7 +862,7 @@
             let totalReceitas = 0;
             let totalDespesas = 0;
 
-            const filteredTransactions = transactions.filter(transaction =>
+            const filteredTransactions = transactions.filter(transaction => 
                 transaction.date >= startDate && transaction.date <= endDate &&
                 (filterType === '' || transaction.type === filterType) &&
                 (filterDescription === '' || transaction.description.toLowerCase().includes(filterDescription))
@@ -1027,7 +920,7 @@
 
         const inputs = document.querySelectorAll('input, select');
         inputs.forEach(input => {
-            input.addEventListener('focus', function () {
+            input.addEventListener('focus', function() {
                 this.classList.remove('highlight');
             });
         });
@@ -1045,6 +938,13 @@
             return brasiliaTime.toISOString().split('T')[0];
         }
 
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('date');
+            dateInput.value = getCurrentDate();
+            updateFilteredView();
+            checkReminders();
+        });
+
         function logout() {
             auth.signOut().then(() => {
                 localStorage.removeItem('loggedIn');
@@ -1053,6 +953,70 @@
                 window.location.href = 'index.html';
             }).catch(error => {
                 console.error('Erro ao deslogar: ', error);
+            });
+        }
+
+        function openAdminModal() {
+            const modal = document.getElementById('adminModal');
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+        }
+
+        function closeAdminModal() {
+            const modal = document.getElementById('adminModal');
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
+        function registerNewUser() {
+            const name = document.getElementById('newUserName').value;
+            const email = document.getElementById('newUserEmail').value;
+            const password = document.getElementById('newUserPassword').value;
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    const user = userCredential.user;
+                    database.ref('users/' + user.uid).set({
+                        name: name,
+                        email: email
+                    }).then(() => {
+                        alert('Novo usuário registrado com sucesso.');
+                        document.getElementById('newUserName').value = '';
+                        document.getElementById('newUserEmail').value = '';
+                        document.getElementById('newUserPassword').value = '';
+                        loadAllUsers();
+                    });
+                })
+                .catch(error => {
+                    alert('Erro ao registrar novo usuário: ' + error.message);
+                });
+        }
+
+        function openChangePasswordModal() {
+            const modal = document.getElementById('changePasswordModal');
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+        }
+
+        function closeChangePasswordModal() {
+            const modal = document.getElementById('changePasswordModal');
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
+        function changePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const user = auth.currentUser;
+
+            user.updatePassword(newPassword).then(() => {
+                alert('Senha alterada com sucesso.');
+                closeChangePasswordModal();
+            }).catch(error => {
+                alert('Erro ao alterar senha: ' + error.message);
             });
         }
 
@@ -1074,6 +1038,34 @@
             }
         }
 
+        function openSpecificTransactionsModal() {
+            const modal = document.getElementById('specificTransactionsModal');
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+        }
+
+        function closeSpecificTransactionsModal() {
+            const modal = document.getElementById('specificTransactionsModal');
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
+        function openFilterPeriodModal() {
+            const modal = document.getElementById('filterPeriodModal');
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+        }
+
+        function closeFilterPeriodModal() {
+            const modal = document.getElementById('filterPeriodModal');
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
         let specificTransactionsChart;
 
         function generateSpecificTransactionsReport() {
@@ -1081,14 +1073,14 @@
             const endDate = document.getElementById('specificEndDate').value;
             const specificType = document.getElementById('specificType').value;
 
-            const specificTransactions = transactions.filter(transaction =>
+            const specificTransactions = transactions.filter(transaction => 
                 transaction.date >= startDate && transaction.date <= endDate && transaction.type === specificType
             );
 
             const descriptions = [...new Set(specificTransactions.map(t => t.description))];
             const data = descriptions.map(description => {
                 return specificTransactions.filter(transaction => transaction.description === description)
-                    .reduce((total, transaction) => total + transaction.amount, 0);
+                                           .reduce((total, transaction) => total + transaction.amount, 0);
             });
 
             if (specificTransactionsChart) {
@@ -1103,7 +1095,7 @@
                     datasets: [{
                         label: 'Transações Específicas',
                         data: data,
-                        backgroundColor: descriptions.map(() => `#${Math.floor(Math.random() * 16777215).toString(16)}`),
+                        backgroundColor: descriptions.map(() => `#${Math.floor(Math.random()*16777215).toString(16)}`),
                         borderColor: '#fff',
                         borderWidth: 2,
                         hoverBorderWidth: 3,
@@ -1114,7 +1106,7 @@
                     plugins: {
                         tooltip: {
                             callbacks: {
-                                label: function (tooltipItem) {
+                                label: function(tooltipItem) {
                                     let total = tooltipItem.dataset.data.reduce((sum, value) => sum + value, 0);
                                     let currentValue = tooltipItem.raw;
                                     let percentage = ((currentValue / total) * 100).toFixed(2);
@@ -1161,6 +1153,14 @@
             document.getElementById('alertMessage').innerText = message;
             modal.style.display = 'block';
             modal.style.animation = 'fadein 0.5s';
+        }
+
+        function closeAlertModal() {
+            const modal = document.getElementById('alertModal');
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
         }
 
         function openFinancialPerformanceModal() {
@@ -1230,7 +1230,7 @@
                     plugins: {
                         tooltip: {
                             callbacks: {
-                                label: function (context) {
+                                label: function(context) {
                                     return `${context.dataset.label}: R$ ${context.raw.toFixed(2)}`;
                                 }
                             }
@@ -1264,7 +1264,7 @@
                 const reminderDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), reminder.day);
                 const differenceInDays = Math.floor((reminderDate - currentDate) / (1000 * 60 * 60 * 24));
                 return (differenceInDays === 2 || (differenceInDays < 0 && differenceInDays >= -7)) &&
-                    !reminder.paid && new Date(reminder.lastPaidDate).getMonth() !== currentMonth;
+                        !reminder.paid && new Date(reminder.lastPaidDate).getMonth() !== currentMonth;
             });
 
             if (reminders.length > 0) {
@@ -1386,36 +1386,6 @@
                 document.documentElement.style.setProperty('--input-border-color', savedTheme);
             }
         }
-
-        // Função para tornar modais arrastáveis
-        document.querySelectorAll('.draggable').forEach(modal => {
-            const header = modal.querySelector('.modal-header');
-            let isDragging = false;
-            let offsetX = 0;
-            let offsetY = 0;
-
-            header.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                offsetX = e.clientX - modal.offsetLeft;
-                offsetY = e.clientY - modal.offsetTop;
-                header.style.cursor = 'grabbing';
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                if (isDragging) {
-                    modal.style.left = `${e.clientX - offsetX}px`;
-                    modal.style.top = `${e.clientY - offsetY}px`;
-                    modal.style.position = 'absolute';
-                }
-            });
-
-            document.addEventListener('mouseup', () => {
-                if (isDragging) {
-                    isDragging = false;
-                    header.style.cursor = 'move';
-                }
-            });
-        });
     </script>
 </body>
 </html>
