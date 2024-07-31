@@ -227,14 +227,21 @@
     display: inline-block;
     padding: 15px 25px;
     border-radius: 10px;
-    background-color: #1abc9c; /* Cor de fundo destacada */
+    background-color: var(--button-color); /* Cor de fundo usando a cor do tema */
     margin: 10px 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-size: 18px; /* Aumenta o tamanho da fonte */
-    border: 2px solid #16a085; /* Borda para destaque */
-    color: #ffffff; /* Cor do texto */
-    font-weight: bold; /* Texto em negrito */
+    font-size: 18px;
+    border: 2px solid var(--button-color); /* Borda usando a cor do tema */
+    color: var(--text-color); /* Cor do texto do tema */
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transições para o efeito moderno */
 }
+
+.container .totals p:hover {
+    transform: scale(1.05); /* Efeito de aumentar um pouco */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra mais intensa ao passar o mouse */
+}
+
 
         .container .negative {
             color: red !important;
