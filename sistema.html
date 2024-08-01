@@ -8,11 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --background-color: #2c3e50; /* Fixo */
+            --background-color: #2c3e50;
             --text-color: #ecf0f1;
-            --primary-color: #3498db; /* Default */
-            --button-color: #3498db; /* Default */
-            --input-border-color: #3498db; /* Default */
+            --primary-color: #3498db;
+            --button-color: #3498db;
+            --input-border-color: #3498db;
             --negative-color: #e74c3c;
             --positive-color: #2ecc71;
         }
@@ -476,6 +476,23 @@
             gap: 5px;
             margin-top: 10px;
         }
+
+        .delete-all-transactions {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--negative-color);
+            color: var(--text-color);
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .delete-all-transactions:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
@@ -687,6 +704,9 @@
         </div>
 
         <audio id="alertSound" src="alert.mp3" preload="auto"></audio>
+        <div class="delete-all-transactions" onclick="confirmDeleteAllTransactions()" title="Excluir todas as transações">
+            <i class="fas fa-trash"></i>
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
@@ -697,13 +717,13 @@
     <script>
         var firebaseConfig = {
             apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-  projectId: "sistema-de-receitas-e-despesas",
-  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-  messagingSenderId: "252102478972",
-  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-  measurementId: "G-K2HCS7WNZV"
+            authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+            databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+            projectId: "sistema-de-receitas-e-despesas",
+            storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+            messagingSenderId: "252102478972",
+            appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
+            measurementId: "G-K2HCS7WNZV"
         };
        
 firebase.initializeApp(firebaseConfig);
@@ -1333,6 +1353,16 @@ function loadPaymentReminders() {
             checkReminders();
         }
     });
+}
+
+function confirmDeleteAllTransactions() {
+    if (confirm('Tem certeza que deseja excluir todas as transações?')) {
+        transactions = [];
+        saveTransactions();
+        updateFilteredView();
+        calculateBalances();
+        checkMonthlyLimit();
+    }
 }
 
     </script>
