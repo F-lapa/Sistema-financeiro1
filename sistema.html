@@ -264,20 +264,20 @@ body {
 
 .totals {
     margin-top: 20px;
-    text-align: center;
-    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espaço entre os saldos */
 }
 
 .totals p {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 600;
-    margin: 10px auto;
-    padding: 15px;
+    margin: 0;
+    padding: 10px 20px;
     background-color: #34495e;
-    border-radius: 12px;
+    border-radius: 8px;
     color: var(--text-color);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    width: fit-content;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -369,8 +369,12 @@ body {
         padding: 5px;
         font-size: 12px;
     }
-    .container .totals p {
-        font-size: 16px;
+    .totals {
+        flex-direction: column;
+        align-items: center;
+    }
+    .totals p {
+        font-size: 14px;
     }
     .container .modal-content {
         width: 90%;
@@ -454,6 +458,7 @@ body {
     cursor: pointer;
     color: var(--button-color);
 }
+
 
     </style>
 </head>
