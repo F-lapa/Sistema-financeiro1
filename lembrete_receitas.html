@@ -220,9 +220,9 @@
 
     <div class="totals-container">
         <div class="total-box total-pending">
-            Total Pendente: <span id="totalPending">R$ 0,00</span>
+            Total em Aberto: <span id="totalPending">R$ 0,00</span>
         </div>
-        <div class="total-box total-received">
+        <div class="total-box total-paid">
             Total Recebido: <span id="totalReceived">R$ 0,00</span>
         </div>
     </div>
@@ -261,7 +261,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script>
         var firebaseConfig = {
-           apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
+            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
   authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
   databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
   projectId: "sistema-de-receitas-e-despesas",
@@ -405,6 +405,7 @@
             receitasReminders = receitasReminders.map(reminder => {
                 if (reminder.id === currentConfirmationId) {
                     addReceita(reminder);
+                    addReceitaToSistema(reminder); // Adiciona a receita à página sistema.html
                     return { ...reminder, received: true, lastReceivedDate: getCurrentDate() };
                 }
                 return reminder;
@@ -416,6 +417,17 @@
         }
 
         function addReceita(reminder) {
+            const userId = auth.currentUser.uid;
+            const newReceitaRef = database.ref('transactions/' + userId).push();
+            newReceitaRef.set({
+                date: getCurrentDate(),
+                description: reminder.description,
+                amount: reminder.amount,
+                type: 'receita'
+            });
+        }
+
+        function addReceitaToSistema(reminder) {
             const userId = auth.currentUser.uid;
             const newReceitaRef = database.ref('transactions/' + userId).push();
             newReceitaRef.set({
