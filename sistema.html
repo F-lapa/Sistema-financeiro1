@@ -468,6 +468,14 @@
             cursor: pointer;
             color: var(--button-color);
         }
+
+        .color-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -663,7 +671,7 @@
             <div class="modal-content">
                 <span class="close" onclick="closeThemeSelectorModal()">&times;</span>
                 <h2>Selecionar Tema</h2>
-                <div class="color-grid">
+                <div class="color-grid" id="colorGrid">
                     <!-- As cores serão inseridas aqui -->
                 </div>
             </div>
@@ -688,7 +696,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         var firebaseConfig = {
-           apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
+            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
   authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
   databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
   projectId: "sistema-de-receitas-e-despesas",
@@ -1208,6 +1216,7 @@
             const modal = document.getElementById('themeSelectorModal');
             modal.style.display = 'block';
             modal.style.animation = 'fadein 0.5s';
+            populateColorGrid();
         }
 
         function closeThemeSelectorModal() {
@@ -1219,15 +1228,44 @@
         }
 
         function loadTheme() {
-            const savedTheme = localStorage.getItem('selectedTheme');
+            const savedTheme = localStorage.getItem('theme');
             if (savedTheme) {
-                applyTheme(savedTheme);
+                document.documentElement.style.setProperty('--background-color', savedTheme);
+                document.documentElement.style.setProperty('--button-color', savedTheme);
+                document.documentElement.style.setProperty('--input-border-color', savedTheme);
             }
         }
 
         function applyTheme(color) {
             document.documentElement.style.setProperty('--background-color', color);
-            localStorage.setItem('selectedTheme', color);
+            document.documentElement.style.setProperty('--button-color', color);
+            document.documentElement.style.setProperty('--input-border-color', color);
+            localStorage.setItem('theme', color);
+        }
+
+        function populateColorGrid() {
+            const colors = generateColorArray();
+            const colorGrid = document.getElementById('colorGrid');
+            colorGrid.innerHTML = '';
+            colors.forEach(color => {
+                const colorBox = document.createElement('div');
+                colorBox.className = 'color-box';
+                colorBox.style.backgroundColor = color;
+                colorBox.onclick = () => applyTheme(color);
+                colorGrid.appendChild(colorBox);
+            });
+        }
+
+        function generateColorArray() {
+            const colors = [];
+            for (let r = 0; r <= 255; r += 51) {
+                for (let g = 0; g <= 255; g += 51) {
+                    for (let b = 0; b <= 255; b += 51) {
+                        colors.push(`rgb(${r},${g},${b})`);
+                    }
+                }
+            }
+            return colors;
         }
 
         function checkReminders() {
