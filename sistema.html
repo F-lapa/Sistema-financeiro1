@@ -715,7 +715,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
-        var firebaseConfig = {
+       var firebaseConfig = {
     apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
     authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
     databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
@@ -775,6 +775,8 @@ function loadTransactions() {
             updateFilteredView();
             calculateBalances();
             checkMonthlyLimit();
+        } else {
+            console.log('Nenhuma transação encontrada.');
         }
     });
 }
@@ -1220,7 +1222,9 @@ function generateFinancialPerformanceChart() {
     const startDate = document.getElementById('performanceStartDate').value;
     const endDate = document.getElementById('performanceEndDate').value;
 
-    // Verifica se as datas estão definidas
+    console.log('Start Date:', startDate);
+    console.log('End Date:', endDate);
+
     if (!startDate || !endDate) {
         alert('Por favor, selecione as datas de início e fim.');
         return;
@@ -1230,7 +1234,8 @@ function generateFinancialPerformanceChart() {
         transaction.date >= startDate && transaction.date <= endDate
     );
 
-    // Ordena as transações por data
+    console.log('Filtered Transactions:', filteredTransactions);
+
     filteredTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
 
     const dates = [];
@@ -1247,7 +1252,9 @@ function generateFinancialPerformanceChart() {
         }
     });
 
-    // Destrói o gráfico anterior, se existir
+    console.log('Dates:', dates);
+    console.log('Balances:', balances);
+
     if (financialPerformanceChart) {
         financialPerformanceChart.destroy();
     }
@@ -1400,7 +1407,7 @@ function populateColorGrid() {
 function generateColorArray() {
     const colors = [];
     for (let r = 0; r <= 255; r += 51) {
-        for (let g = 0; g <= 255; g += 51) {
+        for (let g = 0; r <= 255; g += 51) {
             for (let b = 0; g <= 255; b += 51) {
                 colors.push(`rgb(${r},${g},${b})`);
             }
@@ -1458,6 +1465,7 @@ function loadPaymentReminders() {
         }
     });
 }
+
   </script>
 </body>
 </html>
