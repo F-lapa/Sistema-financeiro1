@@ -13,6 +13,8 @@
             --primary-color: #3498db;
             --button-color: #3498db;
             --input-border-color: #3498db;
+            --paid-color: #2ecc71;
+            --pending-color: #e74c3c;
         }
         body {
             font-family: 'Roboto', sans-serif;
@@ -24,6 +26,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            flex-direction: column;
         }
         .container {
             width: 90%;
@@ -32,6 +35,7 @@
             background-color: #34495e;
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
         }
         h1 {
             text-align: center;
@@ -152,6 +156,25 @@
             text-decoration: none;
             cursor: pointer;
         }
+        .totals-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .total-box {
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            font-size: 16px;
+            text-align: center;
+        }
+        .total-pending {
+            background-color: var(--pending-color);
+        }
+        .total-received {
+            background-color: var(--paid-color);
+        }
         @keyframes fadeIn {
             from {opacity: 0;}
             to {opacity: 1;}
@@ -195,6 +218,15 @@
         </table>
     </div>
 
+    <div class="totals-container">
+        <div class="total-box total-pending">
+            Total Pendente: <span id="totalPending">R$ 0,00</span>
+        </div>
+        <div class="total-box total-received">
+            Total Recebido: <span id="totalReceived">R$ 0,00</span>
+        </div>
+    </div>
+
     <div id="editModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -229,7 +261,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script>
         var firebaseConfig = {
-            apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
+           apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
   authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
   databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
   projectId: "sistema-de-receitas-e-despesas",
@@ -266,6 +298,7 @@
 
             saveReceitasReminders();
             updateReceitasRemindersTable();
+            calculateTotals();
 
             document.getElementById('reminderDay').value = '';
             document.getElementById('reminderDescription').value = '';
@@ -297,6 +330,24 @@
                     <i class="fas fa-edit" onclick="editReminder('${reminder.id}')"></i>
                     <i class="fas fa-trash-alt" onclick="removeReminder('${reminder.id}')"></i>`;
             });
+
+            calculateTotals();
+        }
+
+        function calculateTotals() {
+            let totalPending = 0;
+            let totalReceived = 0;
+
+            receitasReminders.forEach(reminder => {
+                if (reminder.received) {
+                    totalReceived += reminder.amount;
+                } else {
+                    totalPending += reminder.amount;
+                }
+            });
+
+            document.getElementById('totalPending').innerText = totalPending.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            document.getElementById('totalReceived').innerText = totalReceived.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
         function removeReminder(reminderId) {
