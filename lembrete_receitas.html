@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lembretes de Receita</title>
+    <title>Lembretes de Receitas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
@@ -164,7 +164,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Lembretes de Receita</h1>
+        <h1>Lembretes de Receitas</h1>
         <div class="form-group">
             <label for="reminderDay">Dia do Mês:</label>
             <input type="number" id="reminderDay" class="highlight" min="1" max="31">
@@ -218,9 +218,9 @@
     <div id="confirmationModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeConfirmationModal()">&times;</span>
-            <h2>Confirmar Receita</h2>
+            <h2>Confirmar Recebimento</h2>
             <p>Você tem certeza que deseja marcar este lembrete como "Recebido"?</p>
-            <button onclick="confirmIncome()">Confirmar</button>
+            <button onclick="confirmRecebimento()">Confirmar</button>
         </div>
     </div>
 
@@ -230,31 +230,31 @@
     <script>
         var firebaseConfig = {
             apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
-            authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
-            databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
-            projectId: "sistema-de-receitas-e-despesas",
-            storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
-            messagingSenderId: "252102478972",
-            appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
-            measurementId: "G-K2HCS7WNZV"
+  authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
+  databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
+  projectId: "sistema-de-receitas-e-despesas",
+  storageBucket: "sistema-de-receitas-e-despesas.appspot.com",
+  messagingSenderId: "252102478972",
+  appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
+  measurementId: "G-K2HCS7WNZV"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const auth = firebase.auth();
 
-        let incomeReminders = [];
-        let currentEditId = null;
-        let currentConfirmationId = null;
-
         auth.onAuthStateChanged(user => {
             if (user) {
                 const userId = user.uid;
-                loadIncomeReminders();
-                loadTheme(); // Carregar o tema salvo
+                loadReceitasReminders();
+                loadTheme();
             } else {
                 window.location.href = 'index.html';
             }
         });
+
+        let receitasReminders = [];
+        let currentEditId = null;
+        let currentConfirmationId = null;
 
         function addReminder() {
             const day = document.getElementById('reminderDay').value;
@@ -262,10 +262,10 @@
             const amount = parseFloat(document.getElementById('reminderAmount').value);
 
             const reminder = { id: generateReminderId(), day, description, amount, received: false, lastReceivedDate: '' };
-            incomeReminders.push(reminder);
+            receitasReminders.push(reminder);
 
-            saveIncomeReminders();
-            updateRemindersTable();
+            saveReceitasReminders();
+            updateReceitasRemindersTable();
 
             document.getElementById('reminderDay').value = '';
             document.getElementById('reminderDescription').value = '';
@@ -276,11 +276,11 @@
             return '_' + Math.random().toString(36).substr(2, 9);
         }
 
-        function updateRemindersTable() {
+        function updateReceitasRemindersTable() {
             const tbody = document.getElementById('remindersTable').getElementsByTagName('tbody')[0];
             tbody.innerHTML = '';
 
-            incomeReminders.forEach(reminder => {
+            receitasReminders.forEach(reminder => {
                 const row = tbody.insertRow();
                 const cellDay = row.insertCell(0);
                 const cellDescription = row.insertCell(1);
@@ -291,7 +291,7 @@
                 cellDay.innerText = reminder.day;
                 cellDescription.innerText = reminder.description;
                 cellAmount.innerText = reminder.amount.toFixed(2);
-                cellStatus.innerText = reminder.received ? "Recebido" : "Em Aberto";
+                cellStatus.innerText = reminder.received ? "Recebido" : "Pendente";
                 cellAction.innerHTML = `
                     <i class="fas fa-check-circle" onclick="openConfirmationModal('${reminder.id}')" ${reminder.received ? 'style="display:none;"' : ''}></i>
                     <i class="fas fa-edit" onclick="editReminder('${reminder.id}')"></i>
@@ -301,14 +301,14 @@
 
         function removeReminder(reminderId) {
             if (confirm('Tem certeza que deseja remover este lembrete?')) {
-                incomeReminders = incomeReminders.filter(reminder => reminder.id !== reminderId);
-                saveIncomeReminders();
-                updateRemindersTable();
+                receitasReminders = receitasReminders.filter(reminder => reminder.id !== reminderId);
+                saveReceitasReminders();
+                updateReceitasRemindersTable();
             }
         }
 
         function editReminder(reminderId) {
-            const reminder = incomeReminders.find(r => r.id === reminderId);
+            const reminder = receitasReminders.find(r => r.id === reminderId);
             document.getElementById('editReminderDay').value = reminder.day;
             document.getElementById('editReminderDescription').value = reminder.description;
             document.getElementById('editReminderAmount').value = reminder.amount;
@@ -329,15 +329,15 @@
             const description = document.getElementById('editReminderDescription').value;
             const amount = parseFloat(document.getElementById('editReminderAmount').value);
 
-            incomeReminders = incomeReminders.map(reminder => {
+            receitasReminders = receitasReminders.map(reminder => {
                 if (reminder.id === currentEditId) {
                     return { ...reminder, day, description, amount };
                 }
                 return reminder;
             });
 
-            saveIncomeReminders();
-            updateRemindersTable();
+            saveReceitasReminders();
+            updateReceitasRemindersTable();
             closeModal();
         }
 
@@ -350,24 +350,24 @@
             document.getElementById('confirmationModal').style.display = 'none';
         }
 
-        function confirmIncome() {
-            incomeReminders = incomeReminders.map(reminder => {
+        function confirmRecebimento() {
+            receitasReminders = receitasReminders.map(reminder => {
                 if (reminder.id === currentConfirmationId) {
-                    addIncome(reminder);
+                    addReceita(reminder);
                     return { ...reminder, received: true, lastReceivedDate: getCurrentDate() };
                 }
                 return reminder;
             });
 
-            saveIncomeReminders();
-            updateRemindersTable();
+            saveReceitasReminders();
+            updateReceitasRemindersTable();
             closeConfirmationModal();
         }
 
-        function addIncome(reminder) {
+        function addReceita(reminder) {
             const userId = auth.currentUser.uid;
-            const newIncomeRef = database.ref('transactions/' + userId).push();
-            newIncomeRef.set({
+            const newReceitaRef = database.ref('transactions/' + userId).push();
+            newReceitaRef.set({
                 date: getCurrentDate(),
                 description: reminder.description,
                 amount: reminder.amount,
@@ -375,16 +375,16 @@
             });
         }
 
-        function saveIncomeReminders() {
+        function saveReceitasReminders() {
             const userId = auth.currentUser.uid;
-            database.ref('incomeReminders/' + userId).set(incomeReminders);
+            database.ref('receitasReminders/' + userId).set(receitasReminders);
         }
 
-        function loadIncomeReminders() {
+        function loadReceitasReminders() {
             const userId = auth.currentUser.uid;
-            database.ref('incomeReminders/' + userId).once('value').then((snapshot) => {
-                incomeReminders = snapshot.val() || [];
-                updateRemindersTable();
+            database.ref('receitasReminders/' + userId).once('value').then((snapshot) => {
+                receitasReminders = snapshot.val() || [];
+                updateReceitasRemindersTable();
             });
         }
 
