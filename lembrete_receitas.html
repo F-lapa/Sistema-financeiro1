@@ -7,254 +7,266 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --background-color: #2c3e50;
-            --text-color: #ecf0f1;
-            --primary-color: #3498db;
-            --button-color: #3498db;
-            --input-border-color: #3498db;
-        }
+      :root {
+    --background-color: #2c3e50;
+    --text-color: #ecf0f1;
+    --primary-color: #3498db;
+    --button-color: #3498db;
+    --input-border-color: #3498db;
+}
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--background-color);
-            margin: 0;
-            padding: 0;
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            flex-direction: column;
-        }
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
 
-        .container {
-            width: 90%;
-            max-width: 600px;
-            padding: 20px;
-            background-color: #34495e;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            margin-bottom: 20px;
-        }
+.page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
 
-        h1 {
-            text-align: center;
-            color: var(--text-color);
-            margin-bottom: 20px;
-            font-size: 1.8em;
-            font-weight: 500;
-        }
+.container {
+    padding: 20px;
+    background-color: #34495e;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    flex-grow: 1;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+footer#totals {
+    background-color: #2c3e50; /* Mesma cor de fundo da página */
+    padding: 20px;
+    text-align: center;
+    color: var(--text-color);
+    border-top: 2px solid var(--input-border-color);
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0 0 10px 10px; /* Borda arredondada nos cantos inferiores */
+}
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: bold;
-            color: #bdc3c7;
-        }
+footer#totals p {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #34495e; /* Cor de fundo semelhante ao container */
+    color: var(--text-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
-        input[type="text"], input[type="number"], select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 8px;
-            border: 1px solid var(--input-border-color);
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 14px;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            transition: all 0.3s ease;
-        }
+footer#totals p:hover {
+    background-color: #1a252f; /* Um pouco mais escuro ao passar o mouse */
+    transform: scale(1.05);
+}
 
-        input:focus, select:focus {
-            border: 2px solid var(--button-color);
-            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
-        }
+h1 {
+    text-align: center;
+    color: var(--text-color);
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    font-weight: 500;
+}
 
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: var(--button-color);
-            color: var(--text-color);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            margin-top: 10px;
-        }
+.form-group {
+    margin-bottom: 15px;
+}
 
-        button:hover {
-            background-color: #2980b9;
-            transform: scale(1.05);
-        }
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #bdc3c7;
+}
 
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: separate;
-            border-spacing: 0 8px;
-        }
+input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 8px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 14px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
 
-        th, td {
-            padding: 10px;
-            text-align: left;
-            background-color: #34495e;
-        }
+input:focus, select:focus {
+    border: 2px solid var(--button-color);
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
 
-        th {
-            background-color: var(--background-color);
-            color: #bdc3c7;
-        }
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--button-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
 
-        tbody tr {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 6px;
-            overflow: hidden;
-        }
+button:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
 
-        tbody tr:hover {
-            background-color: #3b4b5e;
-        }
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
 
-        .fa-trash-alt, .fa-edit, .fa-check-circle {
-            cursor: pointer;
-        }
+th, td {
+    padding: 10px;
+    text-align: left;
+    background-color: #34495e;
+}
 
-        .fa-edit {
-            color: #3498db;
-            margin-right: 10px;
-        }
+th {
+    background-color: var(--background-color);
+    color: #bdc3c7;
+}
 
-        .fa-trash-alt {
-            color: red;
-        }
+tbody tr {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+}
 
-        .fa-check-circle {
-            color: green;
-            margin-right: 10px;
-        }
+tbody tr:hover {
+    background-color: #3b4b5e;
+}
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.3s;
-        }
+.fa-trash-alt, .fa-edit, .fa-check-circle {
+    cursor: pointer;
+}
 
-        .modal-content {
-            background-color: #34495e;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 10px;
-            animation: slideIn 0.3s;
-        }
+.fa-edit {
+    color: #3498db;
+    margin-right: 10px;
+}
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
+.fa-trash-alt {
+    color: red;
+}
 
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
+.fa-check-circle {
+    color: green;
+    margin-right: 10px;
+}
 
-        @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
-        }
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s;
+}
 
-        @keyframes slideIn {
-            from {transform: translateY(-50px);}
-            to {transform: translateY(0);}
-        }
+.modal-content {
+    background-color: #34495e;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    animation: slideIn 0.3s;
+}
 
-        footer#totals {
-            background-color: #2c3e50; /* Mesma cor de fundo da página */
-            padding: 20px;
-            text-align: center;
-            color: var(--text-color);
-            border-top: 2px solid var(--input-border-color);
-            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
-            width: 100%;
-            box-sizing: border-box;
-            border-radius: 0 0 10px 10px; /* Borda arredondada nos cantos inferiores */
-        }
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
 
-        footer#totals p {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 8px;
-            background-color: #34495e; /* Cor de fundo semelhante ao container */
-            color: var(--text-color);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
 
-        footer#totals p:hover {
-            background-color: #1a252f; /* Um pouco mais escuro ao passar o mouse */
-            transform: scale(1.05);
-        }
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes slideIn {
+    from {transform: translateY(-50px);}
+    to {transform: translateY(0);}
+}
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Lembretes de Receitas</h1>
-        <div class="form-group">
-            <label for="reminderDay">Dia do Mês:</label>
-            <input type="number" id="reminderDay" class="highlight" min="1" max="31">
-        </div>
-        <div class="form-group">
-            <label for="reminderDescription">Descrição:</label>
-            <input type="text" id="reminderDescription" class="highlight">
-        </div>
-        <div class="form-group">
-            <label for="reminderAmount">Valor (R$):</label>
-            <input type="number" id="reminderAmount" class="highlight" step="0.01" min="0">
-        </div>
-        <button onclick="addReminder()">Adicionar Lembrete</button>
+    <div class="page-container">
+        <div class="container">
+            <h1>Lembretes de Receitas</h1>
+            <div class="form-group">
+                <label for="reminderDay">Dia do Mês:</label>
+                <input type="number" id="reminderDay" class="highlight" min="1" max="31">
+            </div>
+            <div class="form-group">
+                <label for="reminderDescription">Descrição:</label>
+                <input type="text" id="reminderDescription" class="highlight">
+            </div>
+            <div class="form-group">
+                <label for="reminderAmount">Valor (R$):</label>
+                <input type="number" id="reminderAmount" class="highlight" step="0.01" min="0">
+            </div>
+            <button onclick="addReminder()">Adicionar Lembrete</button>
 
-        <table id="remindersTable">
-            <thead>
-                <tr>
-                    <th>Dia</th>
-                    <th>Descrição</th>
-                    <th>Valor</th>
-                    <th>Status</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Reminders will be added here -->
-            </tbody>
-        </table>
+            <table id="remindersTable">
+                <thead>
+                    <tr>
+                        <th>Dia</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Reminders will be added here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Novo footer para exibir os totais -->
+        <footer id="totals">
+            <p>Total em Aberto: <span id="totalPending">R$ 0,00</span></p>
+            <p>Total Recebido: <span id="totalReceived">R$ 0,00</span></p>
+        </footer>
     </div>
-
-    <!-- Novo footer para exibir os totais -->
-    <footer id="totals">
-        <p>Total em Aberto: <span id="totalPending">R$ 0,00</span></p>
-        <p>Total Recebido: <span id="totalReceived">R$ 0,00</span></p>
-    </footer>
 
     <div id="editModal" class="modal">
         <div class="modal-content">
