@@ -421,6 +421,7 @@
             <button onclick="openFilterPeriodModal()"><i class="fas fa-filter"></i> Filtrar Período</button>
             <button onclick="goToLimitPage()"><i class="fas fa-money-check-alt"></i> Definir Limite de Gastos</button>
             <button onclick="openSpecificTransactionsModal()"><i class="fas fa-search-dollar"></i> Transações Específicas</button>
+            <button onclick="openPaymentRemindersPage()"><i class="fas fa-bell"></i> Lembrete de Pagamentos</button>
             <button onclick="openReminderReceitasPage()"><i class="fas fa-bell"></i> Lembrete de Receitas</button>
         </div>
         <div class="theme-selector">
@@ -682,14 +683,11 @@
 
         function checkAdmin(email) {
             const adminButton = document.getElementById('adminButton');
-            const reminderButton = document.getElementById('reminderButton');
             if (email === 'fernandolapa1987@gmail.com') {
                 adminButton.style.display = 'block';
-                reminderButton.style.display = 'block';
                 loadAllUsers();
             } else {
                 adminButton.style.display = 'none';
-                reminderButton.style.display = 'block';
             }
         }
 
@@ -828,6 +826,10 @@
             dailyBalanceSpan.classList.toggle('negative', dailyBalance < 0);
             monthlyBalanceSpan.classList.toggle('negative', monthlyBalance < 0);
             annualBalanceSpan.classList.toggle('negative', annualBalance < 0);
+
+            dailyBalanceSpan.classList.toggle('positive', dailyBalance >= 0);
+            monthlyBalanceSpan.classList.toggle('positive', monthlyBalance >= 0);
+            annualBalanceSpan.classList.toggle('positive', annualBalance >= 0);
         }
 
         function filterByPeriod() {
@@ -1237,7 +1239,7 @@
             const colors = [];
             for (let r = 0; r <= 255; r += 51) {
                 for (let g = 0; g <= 255; g += 51) {
-                    for (let b = 0; b <= 255; b += 51) {
+                    for (let b = 0; r <= 255; r += 51) {
                         colors.push(`rgb(${r},${g},${b})`);
                     }
                 }
