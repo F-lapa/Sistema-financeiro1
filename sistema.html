@@ -385,32 +385,44 @@ body {
     }
 }
 
-@media (max-width: 480px) {
+/* Estilos para desktop */
+@media (min-width: 769px) {
+    body {
+        display: flex;
+        flex-direction: row;
+    }
+
     .sidebar {
-        padding: 5px;
-    }
-
-    .logo-container img {
-        width: 40px; /* Ajuste o tamanho da logo para telas pequenas */
-    }
-
-    .sidebar button {
-        padding: 8px;
-        font-size: 12px;
+        width: 220px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        padding: 20px;
+        box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
     }
 
     .container {
-        padding: 5px;
+        margin-left: 240px; /* Dá espaço para a sidebar */
+        padding: 20px;
+        width: calc(100% - 240px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container .form-group {
+        width: 60%; /* Ajusta a largura do formulário no centro */
     }
 
     .container button {
-        padding: 8px;
-        font-size: 12px;
+        width: 60%;
+        margin: 20px 0;
     }
 
-    .totals p {
-        padding: 8px;
-        font-size: 12px;
+    .totals {
+        justify-content: flex-start;
+        width: 60%;
     }
 }
 
