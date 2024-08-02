@@ -24,66 +24,33 @@ body {
     padding: 0;
     color: var(--text-color);
     display: flex;
-    min-height: 100vh;
     flex-direction: column;
+    min-height: 100vh;
+    height: 100%;
 }
 
 .sidebar {
-    width: 220px;
+    width: 100%;
     background-color: #34495e;
-    padding: 20px;
-    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
+    padding: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    overflow-y: auto; /* Permite rolagem vertical */
-    overflow-x: hidden; /* Evita rolagem horizontal */
-}
-
-.sidebar::-webkit-scrollbar {
-    width: 8px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-    background: #2c3e50;
-    border-radius: 10px;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-    background-color: #3498db;
-    border-radius: 10px;
-    border: 2px solid #2c3e50;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-    background-color: #2980b9;
-}
-
-.logo-container {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.logo-container img {
-    width: 100px;
-    height: auto;
 }
 
 .sidebar h3 {
     text-align: center;
     color: var(--text-color);
-    margin-bottom: 20px;
-    font-size: 1.4em;
+    margin-bottom: 10px;
+    font-size: 1.2em;
     font-weight: 500;
 }
 
 .sidebar .menu-icons {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .sidebar .menu-icons i {
@@ -96,12 +63,12 @@ body {
 .sidebar .buttons {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
+    align-items: stretch;
+    margin-bottom: 10px;
 }
 
 .sidebar button {
-    width: 90%;
+    width: 100%;
     padding: 10px;
     background-color: var(--button-color);
     color: var(--text-color);
@@ -110,7 +77,7 @@ body {
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -126,20 +93,14 @@ body {
 }
 
 .sidebar .theme-selector {
-    margin-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.sidebar .theme-selector label {
-    font-size: 14px;
-    margin-bottom: 5px;
-    color: var(--text-color);
+    margin-top: 10px;
 }
 
 .sidebar .theme-selector button {
-    width: 90%;
+    width: 100%;
     padding: 8px;
     border-radius: 8px;
     border: none;
@@ -150,68 +111,40 @@ body {
 }
 
 .container {
-    margin-left: 220px;
-    padding: 20px;
     flex: 1;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: calc(100% - 220px); /* Ajusta a largura da container */
+    width: 100%;
 }
 
 .container h1 {
     text-align: center;
     color: var(--text-color);
-    margin-bottom: 15px;
-    font-size: 1.8em;
+    margin-bottom: 10px;
+    font-size: 1.6em;
     font-weight: 500;
 }
 
 .container .greeting {
     text-align: center;
     color: var(--text-color);
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     font-size: 1.2em;
 }
 
 .container .form-header {
     text-align: center;
     color: var(--text-color);
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     font-size: 1.2em;
     font-weight: 500;
 }
 
-.container .logout, .container .change-password {
-    position: absolute;
-    top: 10px;
-    cursor: pointer;
-    color: var(--text-color);
-    font-size: 1.2em;
-}
-
-.container .logout {
-    right: 50px;
-}
-
-.container .change-password {
-    right: 10px;
-}
-
-.container .admin-icon {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    cursor: pointer;
-    color: var(--text-color);
-    font-size: 1.2em;
-    display: none;
-}
-
 .container .form-group {
     margin-bottom: 10px;
-    width: 50%;
-    margin: 0 auto;
+    width: 100%;
 }
 
 .container label {
@@ -234,13 +167,13 @@ body {
     transition: all 0.3s ease;
 }
 
-.container input:focus, .container select:focus, .container input:focus-visible, .container select:focus-visible {
+.container input:focus, .container select:focus {
     border: 2px solid var(--button-color);
     box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
 }
 
 .container button {
-    width: 50%;
+    width: 100%;
     padding: 10px;
     background-color: var(--button-color);
     color: var(--text-color);
@@ -249,8 +182,7 @@ body {
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    margin: 10px auto;
-    display: block;
+    margin: 10px 0;
 }
 
 .container button:hover {
@@ -292,6 +224,7 @@ body {
     justify-content: center;
     gap: 20px;
     flex-wrap: wrap;
+    width: 100%;
 }
 
 .totals p {
@@ -303,9 +236,8 @@ body {
     border-radius: 8px;
     color: var(--text-color);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
-    width: 200px;
+    width: 100%;
 }
 
 .totals p.negative {
@@ -314,11 +246,6 @@ body {
 
 .totals p.positive {
     color: var(--positive-color);
-}
-
-.totals p:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .color-box {
@@ -335,52 +262,25 @@ body {
     transform: scale(1.1);
 }
 
-/* Ajustes gerais */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-}
-
-.content-wrapper {
-    margin-left: 220px; /* Mantém o conteúdo principal ao lado da sidebar */
-    padding: 10px; /* Ajuste conforme necessário */
-    box-sizing: border-box;
-    height: 100%;
-    overflow: auto;
-}
-
-.highlight-amount {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #2ecc71;
-    background-color: #34495e;
-    padding: 5px 10px;
-    border-radius: 5px;
-    display: inline-block;
-}
-
 .modal {
     display: none;
     position: fixed;
     z-index: 1;
     left: 0;
-    top: 50%;
+    top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
-    transform: translateY(-50%);
+    padding-top: 60px;
 }
 
 .modal-content {
     background-color: #34495e;
-    margin: auto;
+    margin: 5% auto;
     padding: 20px;
     border: 1px solid #444;
-    width: 70%;
-    max-width: 400px;
+    width: 90%;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     color: var(--text-color);
@@ -412,74 +312,14 @@ html, body {
     to { opacity: 0; }
 }
 
-@keyframes shine {
-    0% { background-position: -200px; }
-    100% { background-position: 200px; }
-}
-
-.container input[type="text"]:hover, .container input[type="number"]:hover, .container input[type="date"]:hover, .container select:hover, .container input[type="password"]:hover {
-    border-color: var(--input-border-color);
-    box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
-}
-
-.password-field {
-    position: relative;
-}
-
-.password-field input {
-    width: calc(100% - 40px);
-    margin-bottom: 0;
-}
-
-.password-field i {
-    position: absolute;
-    right: 10px;
-    top: 12px;
-    cursor: pointer;
-    color: var(--button-color);
-}
-
-.color-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 5px;
-    margin-top: 10px;
-}
-
-.remove-icon {
-    color: var(--negative-color);
-    cursor: pointer;
-}
-
-.remove-icon:hover {
-    transform: scale(1.1);
-}
-
-#compoundInterestModal .modal-content {
+.highlight-amount {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #2ecc71;
     background-color: #34495e;
-    padding: 20px;
-    border-radius: 10px;
-    color: var(--text-color);
-}
-
-#compoundInterestModal .form-group {
-    margin-bottom: 15px;
-}
-
-#compoundInterestModal .form-group label {
-    font-size: 14px;
-}
-
-#compoundInterestModal .form-group input,
-#compoundInterestModal .form-group select {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
+    padding: 5px 10px;
     border-radius: 5px;
-    border: 1px solid var(--input-border-color);
-    background-color: var(--background-color);
-    color: var(--text-color);
+    display: inline-block;
 }
 
 body {
@@ -492,70 +332,21 @@ body {
     color: var(--text-color);
 }
 
-footer {
-    margin-top: 50px;
-}
-
-.menu-icons {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.menu-icons i {
-    margin: 0 5px;
-    cursor: pointer;
-    color: var(--text-color);
-    font-size: 1.5em;
-    transition: color 0.3s;
-}
-
-.menu-icons i:hover {
-    color: var(--button-color);
-}
-
-.admin-icon {
-    display: inline-block;
-}
-
 /* Estilos para dispositivos móveis */
 @media (max-width: 768px) {
     .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
         padding: 10px;
-        box-shadow: none;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .sidebar h3 {
-        display: none;
     }
 
     .sidebar .buttons {
         flex-direction: column;
-        width: 100%;
         align-items: stretch;
     }
 
-    .sidebar button {
-        width: 100%;
-        padding: 10px;
-        font-size: 14px;
-        margin-bottom: 5px;
-    }
-
-    .sidebar .theme-selector {
-        margin-top: 10px;
-        align-items: center;
-    }
-
     .container {
-        margin-left: 0;
         padding: 10px;
         width: 100%;
+        margin-left: 0;
     }
 
     .container .form-group {
@@ -563,22 +354,10 @@ footer {
         margin-bottom: 10px;
     }
 
-    .container table {
-        font-size: 12px;
-    }
-
     .container button {
         width: 100%;
         padding: 10px;
         font-size: 14px;
-        margin: 10px 0;
-    }
-
-    .totals {
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-        align-items: stretch;
     }
 
     .totals p {
@@ -587,34 +366,10 @@ footer {
         font-size: 14px;
     }
 
-    .modal {
-        width: 90%;
-        margin: auto;
-        top: 10%;
-    }
-
     .modal-content {
-        width: 100%;
+        width: 90%;
         padding: 15px;
         border-radius: 10px;
-    }
-
-    .container table {
-        width: 100%;
-    }
-
-    .container table th, .container table td {
-        padding: 5px;
-        font-size: 12px;
-    }
-
-    .sidebar {
-        overflow-y: auto;
-        max-height: 60vh;
-    }
-
-    .sidebar::-webkit-scrollbar {
-        width: 6px;
     }
 }
 
@@ -642,6 +397,7 @@ footer {
         font-size: 12px;
     }
 }
+
 
     </style>
 </head>
