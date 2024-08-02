@@ -7,437 +7,433 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-      :root {
-    --background-color: #2c3e50;
-    --text-color: #ecf0f1;
-    --primary-color: #3498db;
-    --button-color: #3498db;
-    --input-border-color: #3498db;
-    --negative-color: #e74c3c;
-    --positive-color: #2ecc71;
-}
+        :root {
+            --background-color: #2c3e50;
+            --text-color: #ecf0f1;
+            --primary-color: #3498db;
+            --button-color: #3498db;
+            --input-border-color: #3498db;
+            --negative-color: #e74c3c;
+            --positive-color: #2ecc71;
+        }
 
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: var(--background-color);
-    margin: 0;
-    padding: 0;
-    color: var(--text-color);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    height: 100%;
-}
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            height: 100%;
+        }
 
-.sidebar {
-    width: 100%;
-    background-color: #34495e;
-    padding: 10px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        .sidebar {
+            width: 100%;
+            background-color: #34495e;
+            padding: 10px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-.logo-container {
-    text-align: center;
-    margin-bottom: 10px;
-}
+        .logo-container {
+            text-align: center;
+            margin-bottom: 10px;
+        }
 
-.logo-container img {
-    width: 60px; /* Ajuste o tamanho da logo */
-    height: auto;
-}
+        .logo-container img {
+            width: 60px; /* Ajuste o tamanho da logo */
+            height: auto;
+        }
 
-.sidebar h3 {
-    text-align: center;
-    color: var(--text-color);
-    margin-bottom: 10px;
-    font-size: 1.2em;
-    font-weight: 500;
-}
+        .sidebar h3 {
+            text-align: center;
+            color: var(--text-color);
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
 
-.sidebar .menu-icons {
-    text-align: center;
-    margin-bottom: 10px;
-}
+        .sidebar .menu-icons {
+            text-align: center;
+            margin-bottom: 10px;
+        }
 
-.sidebar .menu-icons i {
-    margin: 0 5px;
-    cursor: pointer;
-    color: var(--text-color);
-    font-size: 1.5em;
-}
+        .sidebar .menu-icons i {
+            margin: 0 5px;
+            cursor: pointer;
+            color: var(--text-color);
+            font-size: 1.5em;
+        }
 
-.sidebar .buttons {
-    display: flex;
-    flex-wrap: wrap; /* Distribui os botões em várias linhas se necessário */
-    justify-content: space-between;
-    gap: 10px; /* Espaçamento entre os botões */
-    width: 100%;
-}
+        .sidebar .buttons {
+            display: flex;
+            flex-wrap: wrap; /* Distribui os botões em várias linhas se necessário */
+            justify-content: space-between;
+            gap: 10px; /* Espaçamento entre os botões */
+            width: 100%;
+        }
 
-.sidebar button {
-    flex: 1 1 calc(50% - 10px); /* Cada botão ocupa 50% da largura, com espaçamento */
-    padding: 10px;
-    background-color: var(--button-color);
-    color: var(--text-color);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        .sidebar button {
+            flex: 1 1 calc(50% - 10px); /* Cada botão ocupa 50% da largura, com espaçamento */
+            padding: 10px;
+            background-color: var(--button-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.sidebar button i {
-    margin-right: 8px;
-}
+        .sidebar button i {
+            margin-right: 8px;
+        }
 
-.sidebar button:hover {
-    background-color: #2980b9;
-    transform: scale(1.05);
-}
+        .sidebar button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
 
-.sidebar .theme-selector {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10px;
-    width: 100%;
-}
+        .sidebar .theme-selector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+            width: 100%;
+        }
 
-.sidebar .theme-selector button {
-    width: 100%;
-    padding: 8px;
-    border-radius: 8px;
-    border: none;
-    background-color: var(--button-color);
-    color: var(--text-color);
-    font-size: 14px;
-    cursor: pointer;
-}
+        .sidebar .theme-selector button {
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            border: none;
+            background-color: var(--button-color);
+            color: var (--text-color);
+            font-size: 14px;
+            cursor: pointer;
+        }
 
-.container {
-    flex: 1;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
+        .container {
+            flex: 1;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
 
-.container h1 {
-    text-align: center;
-    color: var(--text-color);
-    margin-bottom: 10px;
-    font-size: 1.6em;
-    font-weight: 500;
-}
+        .container h1 {
+            text-align: center;
+            color: var(--text-color);
+            margin-bottom: 10px;
+            font-size: 1.6em;
+            font-weight: 500;
+        }
 
-.container .greeting {
-    text-align: center;
-    color: var(--text-color);
-    margin-bottom: 10px;
-    font-size: 1.2em;
-}
+        .container .greeting {
+            text-align: center;
+            color: var(--text-color);
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
 
-.container .form-header {
-    text-align: center;
-    color: var(--text-color);
-    margin-bottom: 10px;
-    font-size: 1.2em;
-    font-weight: 500;
-}
+        .container .form-header {
+            text-align: center;
+            color: var(--text-color);
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
 
-.container .form-group {
-    margin-bottom: 10px;
-    width: 100%;
-}
+        .container .form-group {
+            margin-bottom: 10px;
+            width: 100%;
+        }
 
-.container label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: bold;
-    color: #bdc3c7;
-}
+        .container label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #bdc3c7;
+        }
 
-.container input[type="text"], .container input[type="number"], .container input[type="date"], .container select, .container input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 8px;
-    border: 1px solid var(--input-border-color);
-    border-radius: 8px;
-    box-sizing: border-box;
-    font-size: 14px;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    transition: all 0.3s ease;
-}
+        .container input[type="text"], .container input[type="number"], .container input[type="date"], .container select, .container input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            border: 1px solid var(--input-border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
 
-.container input:focus, .container select:focus {
-    border: 2px solid var(--button-color);
-    box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
-}
+        .container input:focus, .container select:focus {
+            border: 2px solid var(--button-color);
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
 
-.container button {
-    width: 100%;
-    padding: 10px;
-    background-color: var(--button-color);
-    color: var(--text-color);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin: 10px 0;
-}
+        .container button {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--button-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 10px 0;
+        }
 
-.container button:hover {
-    background-color: #2980b9;
-    transform: scale(1.05);
-}
+        .container button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
 
-.container table {
-    width: 100%;
-    margin-top: 10px;
-    border-collapse: separate;
-    border-spacing: 0 8px;
-}
+        .container table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
 
-.container th, .container td {
-    padding: 10px;
-    text-align: left;
-    background-color: #34495e;
-}
+        .container th, .container td {
+            padding: 10px;
+            text-align: left;
+            background-color: #34495e;
+        }
 
-.container th {
-    background-color: var(--background-color);
-    color: #bdc3c7;
-}
+        .container th {
+            background-color: var(--background-color);
+            color: #bdc3c7;
+        }
 
-.container tbody tr {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
-    overflow: hidden;
-}
+        .container tbody tr {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+        }
 
-.container tbody tr:hover {
-    background-color: #3b4b5e;
-}
+        .container tbody tr:hover {
+            background-color: #3b4b5e;
+        }
 
-.totals {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    width: 100%;
-}
+        .totals {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
 
-.totals p {
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0;
-    padding: 10px 15px;
-    background-color: #34495e;
-    border-radius: 8px;
-    color: var(--text-color);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    width: 100%;
-}
+        .totals p {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0;
+            padding: 10px 15px;
+            background-color: #34495e;
+            border-radius: 8px;
+            color: var(--text-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 100%;
+        }
 
-.totals p.negative {
-    color: var(--negative-color);
-}
+        .totals p.negative {
+            color: var(--negative-color);
+        }
 
-.totals p.positive {
-    color: var(--positive-color);
-}
+        .totals p.positive {
+            color: var(--positive-color);
+        }
 
-.color-box {
-    width: 40px;
-    height: 40px;
-    display: inline-block;
-    margin: 5px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: transform 0.2s;
-}
+        .color-box {
+            width: 40px;
+            height: 40px;
+            display: inline-block;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
 
-.color-box:hover {
-    transform: scale(1.1);
-}
+        .color-box:hover {
+            transform: scale(1.1);
+        }
 
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-    padding-top: 60px;
-}
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
 
-.modal-content {
-    background-color: #34495e;
-    margin: 5% auto;
-    padding: 20px;
-    border: 1px solid #444;
-    width: 90%;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    color: var(--text-color);
-    text-align: center;
-    animation: fadein 0.5s;
-}
+        .modal-content {
+            background-color: #34495e;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #444;
+            width: 90%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            color: var(--text-color);
+            text-align: center;
+            animation: fadein 0.5s;
+        }
 
-.close {
-    color: var(--text-color);
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
+        .close {
+            color: var(--text-color);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
 
-.close:hover,
-.close:focus {
-    color: var(--button-color);
-    text-decoration: none;
-    cursor: pointer;
-}
+        .close:hover,
+        .close:focus {
+            color: var(--button-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
 
-@keyframes fadein {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
+        @keyframes fadein {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-@keyframes fadeout {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
+        @keyframes fadeout {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
 
-.highlight-amount {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #2ecc71;
-    background-color: #34495e;
-    padding: 5px 10px;
-    border-radius: 5px;
-    display: inline-block;
-}
+        .highlight-amount {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2ecc71;
+            background-color: #34495e;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
 
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    overflow-y: auto;
-    font-family: 'Roboto', sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
-}
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-y: auto;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
 
-/* Estilos para dispositivos móveis */
-@media (max-width: 768px) {
-    .sidebar {
-        padding: 10px;
-    }
+        /* Estilos para dispositivos móveis */
+        @media (max-width: 768px) {
+            .sidebar {
+                padding: 10px;
+            }
 
-    .sidebar .buttons {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px; /* Espaçamento vertical entre os botões */
-    }
+            .sidebar .buttons {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px; /* Espaçamento vertical entre os botões */
+            }
 
-    .container {
-        padding: 10px;
-        width: 100%;
-        margin-left: 0;
-    }
+            .container {
+                padding: 10px;
+                width: 100%;
+                margin-left: 0;
+            }
 
-    .container .form-group {
-        width: 100%;
-        margin-bottom: 10px;
-    }
+            .container .form-group {
+                width: 100%;
+                margin-bottom: 10px;
+            }
 
-    .container button {
-        width: 100%;
-        padding: 10px;
-        font-size: 14px;
-    }
+            .container button {
+                width: 100%;
+                padding: 10px;
+                font-size: 14px;
+            }
 
-    .totals p {
-        width: 100%;
-        padding: 10px;
-        font-size: 14px;
-    }
+            .totals p {
+                width: 100%;
+                padding: 10px;
+                font-size: 14px;
+            }
 
-    .modal-content {
-        width: 90%;
-        padding: 15px;
-        border-radius: 10px;
-    }
-}
+            .modal-content {
+                width: 90%;
+                padding: 15px;
+                border-radius: 10px;
+            }
+        }
 
-/* Estilos para desktop */
-@media (min-width: 769px) {
-    body {
-        display: flex;
-        flex-direction: row;
-    }
+        /* Estilos para desktop */
+        @media (min-width: 769px) {
+            body {
+                display: flex;
+                flex-direction: row;
+            }
 
-    .sidebar {
-        width: 220px;
-        height: 100vh;
-        position: fixed;
-        left: 0;
-        top: 0;
-        padding: 20px;
-        box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
-    }
+            .sidebar {
+                width: 220px;
+                height: 100vh;
+                position: fixed;
+                left: 0;
+                top: 0;
+                padding: 20px;
+                box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
+            }
 
-    .container {
-        margin-left: 240px; /* Dá espaço para a sidebar */
-        padding: 20px;
-        width: calc(100% - 240px);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+            .container {
+                margin-left: 240px; /* Dá espaço para a sidebar */
+                padding: 20px;
+                width: calc(100% - 240px);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
-    .container .form-group {
-        width: 60%; /* Ajusta a largura do formulário no centro */
-    }
+            .container .form-group {
+                width: 60%; /* Ajusta a largura do formulário no centro */
+            }
 
-    .container button {
-        width: 60%;
-        margin: 20px 0;
-    }
+            .container button {
+                width: 60%;
+                margin: 20px 0;
+            }
 
-    .totals {
-        justify-content: flex-start;
-        width: 60%;
-    }
-}
-
-
+            .totals {
+                justify-content: flex-start;
+                width: 60%;
+            }
+        }
     </style>
 </head>
 <body>
-        <div class="content-wrapper">
-       <div class="sidebar">
-       <div class="logo-container">
-        <img src="logo.png" alt="Logo">
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo">
         </div>
         <h3>Menu</h3>
-            
-              <div class="menu-icons">
+        <div class="menu-icons">
             <i class="fas fa-user-shield admin-icon" onclick="openAdminModal()" title="Área do Administrador"></i>
             <i class="fas fa-key change-password" onclick="openChangePasswordModal()" title="Alterar Senha"></i>
             <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
@@ -459,10 +455,10 @@ body {
     <div class="container">
         <div class="greeting" id="userGreeting"></div>
         <div class="form-header">Nova Transação</div>
-        
+
         <input type="text" style="display:none;" autocomplete="username">
         <input type="password" style="display:none;" autocomplete="new-password">
-        
+
         <div class="form-group">
             <label for="date">Data:</label>
             <input type="date" id="date" class="highlight" onchange="updateFilteredView()">
@@ -616,84 +612,83 @@ body {
         </div>
 
     <!-- Modal para Calculadora de Juros Compostos -->
-  <div id="compoundInterestModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeCompoundInterestModal()">&times;</span>
-        <h2>Calculadora de Juros Compostos</h2>
-        <div class="form-group">
-            <label for="initialAmount">Valor Inicial (R$):</label>
-            <input type="number" id="initialAmount" class="highlight" placeholder="Ex: 1000">
+    <div id="compoundInterestModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCompoundInterestModal()">&times;</span>
+            <h2>Calculadora de Juros Compostos</h2>
+            <div class="form-group">
+                <label for="initialAmount">Valor Inicial (R$):</label>
+                <input type="number" id="initialAmount" class="highlight" placeholder="Ex: 1000">
+            </div>
+            <div class="form-group">
+                <label for="monthlyContribution">Aporte Mensal (R$):</label>
+                <input type="number" id="monthlyContribution" class="highlight" placeholder="Ex: 200">
+            </div>
+            <div class="form-group">
+                <label for="interestRate">Taxa de Juros (% ao ano):</label>
+                <input type="number" id="interestRate" class="highlight" placeholder="Ex: 5">
+            </div>
+            <div class="form-group">
+                <label for="years">Período (Anos):</label>
+                <input type="number" id="years" class="highlight" placeholder="Ex: 10">
+            </div>
+            <div class="form-group">
+                <label for="compoundingFrequency">Frequência de Capitalização:</label>
+                <select id="compoundingFrequency" class="highlight">
+                    <option value="1">Anual</option>
+                    <option value="2">Semestral</option>
+                    <option value="4">Trimestral</option>
+                    <option value="12">Mensal</option>
+                    <option value="365">Diária</option>
+                </select>
+            </div>
+            <button onclick="calculateCompoundInterest()">Calcular</button>
+            <div id="compoundInterestResult" style="margin-top: 20px; font-weight: bold;"></div>
         </div>
-        <div class="form-group">
-            <label for="monthlyContribution">Aporte Mensal (R$):</label>
-            <input type="number" id="monthlyContribution" class="highlight" placeholder="Ex: 200">
-        </div>
-        <div class="form-group">
-            <label for="interestRate">Taxa de Juros (% ao ano):</label>
-            <input type="number" id="interestRate" class="highlight" placeholder="Ex: 5">
-        </div>
-        <div class="form-group">
-            <label for="years">Período (Anos):</label>
-            <input type="number" id="years" class="highlight" placeholder="Ex: 10">
-        </div>
-        <div class="form-group">
-            <label for="compoundingFrequency">Frequência de Capitalização:</label>
-            <select id="compoundingFrequency" class="highlight">
-                <option value="1">Anual</option>
-                <option value="2">Semestral</option>
-                <option value="4">Trimestral</option>
-                <option value="12">Mensal</option>
-                <option value="365">Diária</option>
-            </select>
-        </div>
-        <button onclick="calculateCompoundInterest()">Calcular</button>
-        <div id="compoundInterestResult" style="margin-top: 20px; font-weight: bold;"></div>
     </div>
+
+    <!-- Modal de Seleção de Tema -->
+    <div id="themeSelectorModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeThemeSelectorModal()">&times;</span>
+            <h2>Selecionar Tema</h2>
+            <label for="colorPicker">Escolha uma cor:</label>
+            <input type="color" id="colorPicker" onchange="applyTheme(this.value)" style="margin-top: 20px; cursor: pointer;">
+        </div>
+    </div>
+
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAdminModal()">&times;</span>
+            <h2>Gerenciamento de Usuários</h2>
+            <div class="form-group">
+                <label for="newUserName">Nome do Novo Usuário:</label>
+                <input type="text" id="newUserName" class="highlight">
+            </div>
+            <div class="form-group">
+                <label for="newUserEmail">Email do Novo Usuário:</label>
+                <input type="text" id="newUserEmail" class="highlight">
+            </div>
+            <div class="form-group password-field">
+                <label for="newUserPassword">Senha do Novo Usuário:</label>
+                <input type="password" id="newUserPassword" class="highlight">
+                <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility('newUserPassword')"></i>
+            </div>
+            <div class="buttons">
+                <button onclick="registerNewUser()">Registrar Novo Usuário</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="reminderAlertModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeReminderAlertModal()">&times;</span>
+            <div id="reminderAlertMessage"></div>
+            <button onclick="markAsPaid()">Já foi Pago</button>
+            <button onclick="snoozeReminder()">Não foi Pago</button>
+        </div>
+    </div> 
 </div>
-
-
-        <div id="adminModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeAdminModal()">&times;</span>
-                <h2>Gerenciamento de Usuários</h2>
-                <div class="form-group">
-                    <label for="newUserName">Nome do Novo Usuário:</label>
-                    <input type="text" id="newUserName" class="highlight">
-                </div>
-                <div class="form-group">
-                    <label for="newUserEmail">Email do Novo Usuário:</label>
-                    <input type="text" id="newUserEmail" class="highlight">
-                </div>
-                <div class="form-group password-field">
-                    <label for="newUserPassword">Senha do Novo Usuário:</label>
-                    <input type="password" id="newUserPassword" class="highlight">
-                    <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility('newUserPassword')"></i>
-                </div>
-                <div class="buttons">
-                    <button onclick="registerNewUser()">Registrar Novo Usuário</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="themeSelectorModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeThemeSelectorModal()">&times;</span>
-                <h2>Selecionar Tema</h2>
-                <div class="color-grid" id="colorGrid">
-                    <!-- As cores serão inseridas aqui -->
-                </div>
-            </div>
-        </div>
-
-        <div id="reminderAlertModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeReminderAlertModal()">&times;</span>
-                <div id="reminderAlertMessage"></div>
-                <button onclick="markAsPaid()">Já foi Pago</button>
-                <button onclick="snoozeReminder()">Não foi Pago</button>
-            </div>
-        </div> 
-    </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
@@ -1183,7 +1178,6 @@ body {
             });
         }
 
-
         function checkMonthlyLimit() {
             const currentMonth = getCurrentDate().slice(0, 7);
             let monthlyExpenses = transactions
@@ -1235,16 +1229,17 @@ body {
         function openThemeSelectorModal() {
             const modal = document.getElementById('themeSelectorModal');
             modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-            populateColorGrid();
         }
 
         function closeThemeSelectorModal() {
             const modal = document.getElementById('themeSelectorModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
+            modal.style.display = 'none';
+        }
+
+        function applyTheme(color) {
+            document.documentElement.style.setProperty('--button-color', color);
+            document.documentElement.style.setProperty('--input-border-color', color);
+            closeThemeSelectorModal();
         }
 
         function loadTheme(userId) {
@@ -1253,88 +1248,6 @@ body {
                 if (themeColor) {
                     document.documentElement.style.setProperty('--button-color', themeColor);
                     document.documentElement.style.setProperty('--input-border-color', themeColor);
-                }
-            });
-        }
-
-        function applyTheme(color) {
-            document.documentElement.style.setProperty('--button-color', color);
-            document.documentElement.style.setProperty('--input-border-color', color);
-            const userId = auth.currentUser.uid;
-            database.ref('users/' + userId + '/theme').set(color);
-        }
-
-        function populateColorGrid() {
-            const colors = generateColorArray();
-            const colorGrid = document.getElementById('colorGrid');
-            colorGrid.innerHTML = '';
-            colors.forEach(color => {
-                const colorBox = document.createElement('div');
-                colorBox.className = 'color-box';
-                colorBox.style.backgroundColor = color;
-                colorBox.onclick = () => applyTheme(color);
-                colorGrid.appendChild(colorBox);
-            });
-        }
-
-        function generateColorArray() {
-            const colors = [];
-            for (let r = 0; r <= 255; r += 51) {
-                for (let g = 0; r <= 255; g += 51) {
-                    for (let b = 0; g <= 255; b += 51) {
-                        colors.push(`rgb(${r},${g},${b})`);
-                    }
-                }
-            }
-            return colors;
-        }
-
-        function checkReminders() {
-            const now = new Date();
-            paymentReminders.forEach(reminder => {
-                const reminderDate = new Date(reminder.date);
-                if (reminderDate <= now && !reminder.paid) {
-                    showReminderAlert(reminder);
-                }
-            });
-        }
-
-        function showReminderAlert(reminder) {
-            currentReminderId = reminder.id;
-            document.getElementById('reminderAlertMessage').innerText = `Você tem um pagamento pendente: ${reminder.description} - Valor: ${formatCurrency(reminder.amount)}`;
-            const modal = document.getElementById('reminderAlertModal');
-            modal.style.display = 'block';
-        }
-
-        function markAsPaid() {
-            const reminder = paymentReminders.find(r => r.id === currentReminderId);
-            if (reminder) {
-                reminder.paid = true;
-                savePaymentReminders();
-                closeReminderAlertModal();
-            }
-        }
-
-        function snoozeReminder() {
-            closeReminderAlertModal();
-        }
-
-        function closeReminderAlertModal() {
-            const modal = document.getElementById('reminderAlertModal');
-            modal.style.display = 'none';
-        }
-
-        function savePaymentReminders() {
-            const userId = auth.currentUser.uid;
-            database.ref('paymentReminders/' + userId).set(paymentReminders);
-        }
-
-        function loadPaymentReminders() {
-            const userId = auth.currentUser.uid;
-            database.ref('paymentReminders/' + userId).once('value', function(snapshot) {
-                if (snapshot.val()) {
-                    paymentReminders = snapshot.val();
-                    checkReminders();
                 }
             });
         }
@@ -1356,125 +1269,126 @@ body {
         let performanceFromSelectedDateChart;
 
         function generatePerformanceFromSelectedDateChart() {
-    const startDate = document.getElementById('performanceFromStartDate').value;
-    const endDate = getCurrentDate();
+            const startDate = document.getElementById('performanceFromStartDate').value;
+            const endDate = getCurrentDate();
 
-    if (!startDate) {
-        alert('Por favor, selecione a data inicial.');
-        return;
-    }
-
-    const filteredTransactions = transactions.filter(transaction =>
-        transaction.date >= startDate && transaction.date <= endDate
-    );
-
-    filteredTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    const dates = [];
-    const balances = [];
-    let cumulativeBalance = 0;
-
-    filteredTransactions.forEach(transaction => {
-        if (!dates.includes(transaction.date)) {
-            dates.push(transaction.date);
-            const dailyTransactions = filteredTransactions.filter(t => t.date === transaction.date);
-            const dailyBalance = dailyTransactions.reduce((total, t) => total + (t.type === 'receita' ? t.amount : -t.amount), 0);
-            cumulativeBalance += dailyBalance;
-            balances.push(cumulativeBalance);
-        }
-    });
-
-    if (performanceFromSelectedDateChart) {
-        performanceFromSelectedDateChart.destroy();
-    }
-
-    const ctx = document.getElementById('performanceFromSelectedDateChart').getContext('2d');
-    performanceFromSelectedDateChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: dates,
-            datasets: [{
-                label: 'Desempenho Financeiro',
-                data: balances,
-                borderColor: '#3498db', // Cor da linha
-                backgroundColor: 'rgba(52, 152, 219, 0.2)', // Preenchimento da área abaixo da linha
-                fill: true, // Preencher a área abaixo da linha
-                borderWidth: 3, // Espessura da linha
-                tension: 0.1 // Suavização da linha
-            }]
-        },
-        options: {
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day',
-                        tooltipFormat: 'dd MMM yyyy'
-                    },
-                    title: {
-                        display: true,
-                        text: 'Data',
-                        font: {
-                            size: 14,
-                            weight: 'bold'
-                        },
-                        color: '#ffffff'
-                    },
-                    ticks: {
-                        color: '#ffffff',
-                        font: {
-                            size: 12
-                        }
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Saldo (R$)',
-                        font: {
-                            size: 14,
-                            weight: 'bold'
-                        },
-                        color: '#ffffff'
-                    },
-                    ticks: {
-                        callback: function(value) {
-                            return formatCurrency(value);
-                        },
-                        color: '#ffffff',
-                        font: {
-                            size: 12
-                        }
-                    }
-                }
-            },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(tooltipItem) {
-                            return `Saldo: ${formatCurrency(tooltipItem.raw)}`;
-                        }
-                    },
-                    backgroundColor: 'rgba(0,0,0,0.7)',
-                    titleFont: { size: 14, weight: 'bold' },
-                    bodyFont: { size: 14 },
-                    displayColors: false,
-                    borderColor: '#3498db',
-                    borderWidth: 1
-                },
-                legend: {
-                    labels: {
-                        color: '#ffffff',
-                        font: {
-                            size: 14,
-                            weight: 'bold'
-                        }
-                    }
-                }
+            if (!startDate) {
+                alert('Por favor, selecione a data inicial.');
+                return;
             }
+
+            const filteredTransactions = transactions.filter(transaction =>
+                transaction.date >= startDate && transaction.date <= endDate
+            );
+
+            filteredTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            const dates = [];
+            const balances = [];
+            let cumulativeBalance = 0;
+
+            filteredTransactions.forEach(transaction => {
+                if (!dates.includes(transaction.date)) {
+                    dates.push(transaction.date);
+                    const dailyTransactions = filteredTransactions.filter(t => t.date === transaction.date);
+                    const dailyBalance = dailyTransactions.reduce((total, t) => total + (t.type === 'receita' ? t.amount : -t.amount), 0);
+                    cumulativeBalance += dailyBalance;
+                    balances.push(cumulativeBalance);
+                }
+            });
+
+            if (performanceFromSelectedDateChart) {
+                performanceFromSelectedDateChart.destroy();
+            }
+
+            const ctx = document.getElementById('performanceFromSelectedDateChart').getContext('2d');
+            performanceFromSelectedDateChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Desempenho Financeiro',
+                        data: balances,
+                        borderColor: '#3498db', // Cor da linha
+                        backgroundColor: 'rgba(52, 152, 219, 0.2)', // Preenchimento da área abaixo da linha
+                        fill: true, // Preencher a área abaixo da linha
+                        borderWidth: 3, // Espessura da linha
+                        tension: 0.1 // Suavização da linha
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                tooltipFormat: 'dd MMM yyyy'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Data',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#ffffff'
+                            },
+                            ticks: {
+                                color: '#ffffff',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Saldo (R$)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#ffffff'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                },
+                                color: '#ffffff',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return `Saldo: ${formatCurrency(tooltipItem.raw)}`;
+                                }
+                            },
+                            backgroundColor: 'rgba(0,0,0,0.7)',
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyFont: { size: 14 },
+                            displayColors: false,
+                            borderColor: '#3498db',
+                            borderWidth: 1
+                        },
+                        legend: {
+                            labels: {
+                                color: '#ffffff',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }
-    });
-}
+
         function openCompoundInterestModal() {
             const modal = document.getElementById('compoundInterestModal');
             modal.style.display = 'block';
@@ -1492,34 +1406,33 @@ body {
 
         // Função para calcular os juros compostos
        function calculateCompoundInterest() {
-    const principal = parseFloat(document.getElementById('initialAmount').value);
-    const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value) || 0;
-    const rate = parseFloat(document.getElementById('interestRate').value) / 100;
-    const years = parseInt(document.getElementById('years').value);
-    const frequency = parseInt(document.getElementById('compoundingFrequency').value);
+            const principal = parseFloat(document.getElementById('initialAmount').value);
+            const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value) || 0;
+            const rate = parseFloat(document.getElementById('interestRate').value) / 100;
+            const years = parseInt(document.getElementById('years').value);
+            const frequency = parseInt(document.getElementById('compoundingFrequency').value);
 
-    if (isNaN(principal) || isNaN(rate) || isNaN(years) || isNaN(frequency)) {
-        alert('Por favor, preencha todos os campos corretamente.');
-        return;
-    }
+            if (isNaN(principal) || isNaN(rate) || isNaN(years) || isNaN(frequency)) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
 
-    let amount = principal;
-    const monthlyRate = rate / frequency;
+            let amount = principal;
+            const monthlyRate = rate / frequency;
 
-    // Loop para calcular o valor acumulado com aporte mensal
-    for (let i = 0; i < years * frequency; i++) {
-        amount = (amount + monthlyContribution) * (1 + monthlyRate);
-    }
+            // Loop para calcular o valor acumulado com aporte mensal
+            for (let i = 0; i < years * frequency; i++) {
+                amount = (amount + monthlyContribution) * (1 + monthlyRate);
+            }
 
-    const formattedAmount = formatCurrency(amount.toFixed(2));
-    document.getElementById('compoundInterestResult').innerHTML = `Montante Final: <span class="highlight-amount">${formattedAmount}</span>`;
-}
+            const formattedAmount = formatCurrency(amount.toFixed(2));
+            document.getElementById('compoundInterestResult').innerHTML = `Montante Final: <span class="highlight-amount">${formattedAmount}</span>`;
+        }
 
-function formatCurrency(value) {
-    // Formatando como moeda brasileira
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
-}
-
+        function formatCurrency(value) {
+            // Formatando como moeda brasileira
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+        }
     </script>
 </body>
 </html>
