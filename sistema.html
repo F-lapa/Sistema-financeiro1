@@ -740,7 +740,7 @@ let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00')
 auth.onAuthStateChanged(user => {
     if (user) {
         const userId = user.uid;
-        loadTheme(userId); // Carregar o tema do usuário ao fazer login
+        loadTheme(userId); 
         database.ref('users/' + userId).once('value').then((snapshot) => {
             const userData = snapshot.val();
             const userName = userData ? userData.name : "Usuário";
@@ -748,16 +748,11 @@ auth.onAuthStateChanged(user => {
             document.getElementById('userGreeting').innerHTML = '<span>Olá, <strong>' + userName + '</strong>!</span>';
             loadTransactions();
             checkAdmin(user.email);
-            loadPaymentReminders(); // Carrega lembretes de pagamento
+            loadPaymentReminders(); 
         });
     } else {
         window.location.href = 'index.html';
     }
-});
-
-document.addEventListener('click', function enableSound() {
-    document.getElementById('alertSound').play().catch(() => {});
-    document.removeEventListener('click', enableSound);
 });
 
 function saveTransactions() {
@@ -775,18 +770,16 @@ function loadTransactions() {
             updateFilteredView();
             calculateBalances();
             checkMonthlyLimit();
-        } else {
-            console.log('Nenhuma transação encontrada.');
         }
     });
 }
 
 function checkAdmin(email) {
     const adminButton = document.getElementById('adminButton');
-    if (email === 'fernandolapa1987@gmail.com') {
+    if (adminButton && email === 'fernandolapa1987@gmail.com') {
         adminButton.style.display = 'block';
         loadAllUsers();
-    } else {
+    } else if (adminButton) {
         adminButton.style.display = 'none';
     }
 }
@@ -1388,7 +1381,7 @@ function applyTheme(color) {
     document.documentElement.style.setProperty('--button-color', color);
     document.documentElement.style.setProperty('--input-border-color', color);
     const userId = auth.currentUser.uid;
-    database.ref('users/' + userId + '/theme').set(color); // Salva a cor no banco de dados do Firebase
+    database.ref('users/' + userId + '/theme').set(color); 
 }
 
 function populateColorGrid() {
