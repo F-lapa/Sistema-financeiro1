@@ -526,12 +526,22 @@
 body {
     margin: 0;
     padding: 0;
-    height: 100%;
+    min-height: 100vh; /* Garante que o conteúdo ocupe pelo menos a altura da janela */
     overflow-y: auto; /* Garante a barra de rolagem vertical */
     font-family: 'Roboto', sans-serif;
     background-color: var(--background-color); /* Cor de fundo do seu tema */
     color: var(--text-color); /* Cor do texto do seu tema */
 }
+
+.content-wrapper {
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+footer {
+    margin-top: 50px; /* Adiciona algum espaço para garantir que a barra de rolagem seja ativada */
+}
+
 
 
 
@@ -541,7 +551,7 @@ body {
     <div class="content-wrapper">
     <div class="sidebar">
         <div class="logo-container">
-            <img src="logo.png" alt="Logo">
+        <img src="logo.png" alt="Logo">
         </div>
         <h3>Menu</h3>
         <div class="menu-icons">
@@ -800,7 +810,7 @@ body {
             </div>
         </div>
 
-        
+      <div style="height: 1500px;"></div>  
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
