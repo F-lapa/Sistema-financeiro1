@@ -300,8 +300,61 @@
     color: var(--text-color);
     text-align: center;
     animation: fadein 0.5s;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza o conteúdo dentro do modal */
 }
 
+.modal-content .form-group {
+    width: 100%; /* Largura total disponível no modal */
+    max-width: 400px; /* Define um tamanho máximo para os campos */
+    margin-bottom: 15px;
+    text-align: left; /* Alinha o texto à esquerda */
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #bdc3c7;
+}
+
+.modal-content input[type="text"], 
+.modal-content input[type="number"], 
+.modal-content input[type="date"], 
+.modal-content select, 
+.modal-content input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 14px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.modal-content button {
+    width: 100%;
+    max-width: 200px; /* Botões centralizados e com tamanho limitado */
+    padding: 10px;
+    background-color: var(--button-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+.modal-content button:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+        
 @media (min-width: 769px) {
     .modal-content {
         width: 80%;
