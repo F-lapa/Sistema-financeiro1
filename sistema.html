@@ -477,6 +477,32 @@
         .remove-icon:hover {
             transform: scale(1.1);
         }
+
+         #compoundInterestModal .modal-content {
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            color: var(--text-color);
+        }
+
+        #compoundInterestModal .form-group {
+            margin-bottom: 15px;
+        }
+
+        #compoundInterestModal .form-group label {
+            font-size: 14px;
+        }
+
+        #compoundInterestModal .form-group input,
+        #compoundInterestModal .form-group select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid var(--input-border-color);
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
     </style>
 </head>
 <body>
@@ -497,6 +523,7 @@
             <button onclick="openReminderReceitasPage()"><i class="fas fa-bell"></i> Lembrete de Receitas</button>
             <button onclick="openFinancialPerformanceModal()"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
             <button onclick="openPerformanceFromDateModal()"><i class="fas fa-chart-line"></i> Acompanhar Desempenho</button>
+            <button onclick="openCompoundInterestModal()">Calculadora de Juros Compostos</button>
         </div>
         <div class="theme-selector">
             <label for="theme">Selecionar Tema:</label>
@@ -677,6 +704,38 @@
                 <canvas id="performanceFromSelectedDateChart" style="margin-top: 20px;"></canvas>
             </div>
         </div>
+
+    <!-- Modal para Calculadora de Juros Compostos -->
+    <div id="compoundInterestModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCompoundInterestModal()">&times;</span>
+            <h2>Calculadora de Juros Compostos</h2>
+            <div class="form-group">
+                <label for="initialAmount">Valor Inicial (R$):</label>
+                <input type="number" id="initialAmount" class="highlight" placeholder="Ex: 1000">
+            </div>
+            <div class="form-group">
+                <label for="interestRate">Taxa de Juros (% ao ano):</label>
+                <input type="number" id="interestRate" class="highlight" placeholder="Ex: 5">
+            </div>
+            <div class="form-group">
+                <label for="years">Período (Anos):</label>
+                <input type="number" id="years" class="highlight" placeholder="Ex: 10">
+            </div>
+            <div class="form-group">
+                <label for="compoundingFrequency">Frequência de Capitalização:</label>
+                <select id="compoundingFrequency" class="highlight">
+                    <option value="1">Anual</option>
+                    <option value="2">Semestral</option>
+                    <option value="4">Trimestral</option>
+                    <option value="12">Mensal</option>
+                    <option value="365">Diária</option>
+                </select>
+            </div>
+            <button onclick="calculateCompoundInterest()">Calcular</button>
+            <div id="compoundInterestResult" style="margin-top: 20px; font-weight: bold;"></div>
+        </div>
+    </div>
 
         <div id="adminModal" class="modal">
             <div class="modal-content">
@@ -1612,6 +1671,44 @@
         }
     });
 }
+        function openCompoundInterestModal() {
+            const modal = document.getElementById('compoundInterestModal');
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+        }
+
+        // Função para fechar o modal
+        function closeCompoundInterestModal() {
+            const modal = document.getElementById('compoundInterestModal');
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
+        // Função para calcular os juros compostos
+        function calculateCompoundInterest() {
+            const principal = parseFloat(document.getElementById('initialAmount').value);
+            const rate = parseFloat(document.getElementById('interestRate').value) / 100;
+            const years = parseInt(document.getElementById('years').value);
+            const frequency = parseInt(document.getElementById('compoundingFrequency').value);
+
+            if (isNaN(principal) || isNaN(rate) || isNaN(years) || isNaN(frequency)) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            // Fórmula dos Juros Compostos: A = P(1 + r/n)^(nt)
+            const amount = principal * Math.pow((1 + rate / frequency), frequency * years);
+            const formattedAmount = formatCurrency(amount.toFixed(2));
+
+            document.getElementById('compoundInterestResult').textContent = `Montante Final: ${formattedAmount}`;
+        }
+
+        // Formatação de moeda
+        function formatCurrency(value) {
+            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
     </script>
 </body>
 </html>
