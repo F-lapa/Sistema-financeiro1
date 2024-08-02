@@ -1476,6 +1476,20 @@
             });
         }
 
+        function openPerformanceFromDateModal() {
+            const modal = document.getElementById('performanceFromDateModal');
+            modal.style.display = 'block';
+            modal.style.animation = 'fadein 0.5s';
+        }
+
+        function closePerformanceFromDateModal() {
+            const modal = document.getElementById('performanceFromDateModal');
+            modal.style.animation = 'fadeout 0.5s';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
         let performanceFromSelectedDateChart;
 
         function generatePerformanceFromSelectedDateChart() {
