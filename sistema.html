@@ -740,7 +740,7 @@ let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00')
 auth.onAuthStateChanged(user => {
     if (user) {
         const userId = user.uid;
-        loadTheme(userId); 
+        loadTheme(userId);
         database.ref('users/' + userId).once('value').then((snapshot) => {
             const userData = snapshot.val();
             const userName = userData ? userData.name : "Usuário";
@@ -748,7 +748,7 @@ auth.onAuthStateChanged(user => {
             document.getElementById('userGreeting').innerHTML = '<span>Olá, <strong>' + userName + '</strong>!</span>';
             loadTransactions();
             checkAdmin(user.email);
-            loadPaymentReminders(); 
+            loadPaymentReminders();
         });
     } else {
         window.location.href = 'index.html';
@@ -1248,6 +1248,7 @@ function generateFinancialPerformanceChart() {
     console.log('Dates:', dates);
     console.log('Balances:', balances);
 
+    // Destrói o gráfico anterior, se existir
     if (financialPerformanceChart) {
         financialPerformanceChart.destroy();
     }
@@ -1381,7 +1382,7 @@ function applyTheme(color) {
     document.documentElement.style.setProperty('--button-color', color);
     document.documentElement.style.setProperty('--input-border-color', color);
     const userId = auth.currentUser.uid;
-    database.ref('users/' + userId + '/theme').set(color); 
+    database.ref('users/' + userId + '/theme').set(color);
 }
 
 function populateColorGrid() {
