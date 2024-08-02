@@ -712,7 +712,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         var firebaseConfig = {
@@ -725,145 +724,10 @@
             appId: "1:252102478972:web:c7e9e4c25b3bc7c6c50df9",
             measurementId: "G-K2HCS7WNZV"
         };
-       firebase.initializeApp(firebaseConfig);
+       
+        firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const auth = firebase.auth();
-
-        // Variáveis globais
-        let currentReminderId;
-        let transactions = [];
-        let paymentReminders = [];
-        let lastTransactionId = localStorage.getItem('lastTransactionId');
-        let allUsers = [];
-        let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
-
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                const userId = user.uid;
-                loadTheme(userId);
-                database.ref('users/' + userId).once('value').then((snapshot) => {
-                    const userData = snapshot.val();
-                    const userName = userData ? userData.name : "Usuário";
-                    localStorage.setItem('username', userName);
-                    document.getElementById('userGreeting').innerHTML = '<span>Olá, <strong>' + userName + '</strong>!</span>';
-                    loadTransactions();
-                    checkAdmin(user.email);
-                    loadPaymentReminders();
-                });
-            } else {
-                window.location.href = 'index.html';
-            }
-        });
-
-        // Funções JavaScript
-        function saveTransactions() {
-            const userId = auth.currentUser.uid;
-            database.ref('transactions/' + userId).set(transactions);
-        }
-
-        function loadTransactions() {
-            const userId = auth.currentUser.uid;
-            database.ref('transactions/' + userId).once('value', function(snapshot) {
-                if (snapshot.val()) {
-                    const data = snapshot.val();
-                    transactions = Array.isArray(data) ? data : Object.values(data);
-                    updateDescriptionList();
-                    updateFilteredView();
-                    calculateBalances();
-                    checkMonthlyLimit();
-                }
-            });
-        }
-
-        // Demais funções JavaScript para gerenciar as transações
-
-        // Função para gerar o gráfico de desempenho financeiro
-        let financialPerformanceChart;
-
-        function generateFinancialPerformanceChart() {
-            const startDate = document.getElementById('performanceStartDate').value;
-            const endDate = document.getElementById('performanceEndDate').value;
-
-            if (!startDate || !endDate) {
-                alert('Por favor, selecione as datas de início e fim.');
-                return;
-            }
-
-            const filteredTransactions = transactions.filter(transaction =>
-                transaction.date >= startDate && transaction.date <= endDate
-            );
-
-            filteredTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-            const dates = [];
-            const balances = [];
-            let cumulativeBalance = 0;
-
-            filteredTransactions.forEach(transaction => {
-                if (!dates.includes(transaction.date)) {
-                    dates.push(transaction.date);
-                    const dailyTransactions = filteredTransactions.filter(t => t.date === transaction.date);
-                    const dailyBalance = dailyTransactions.reduce((total, t) => total + (t.type === 'receita' ? t.amount : -t.amount), 0);
-                    cumulativeBalance += dailyBalance;
-                    balances.push(cumulativeBalance);
-                }
-            });
-
-            if (financialPerformanceChart) {
-                financialPerformanceChart.destroy();
-            }
-
-            const ctx = document.getElementById('financialPerformanceChart').getContext('2d');
-            financialPerformanceChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: dates,
-                    datasets: [{
-                        label: 'Desempenho Financeiro',
-                        data: balances,
-                        borderColor: '#3498db',
-                        backgroundColor: 'rgba(52, 152, 219, 0.5)',
-                        fill: false,
-                        tension: 0.1
-                    }]
-                },
-                options: {
-                    scales: {
-                        x: {
-                            type: 'time',
-                            time: {
-                                unit: 'day',
-                                tooltipFormat: 'dd MMM yyyy'
-                            },
-                            title: {
-                                display: true,
-                                text: 'Data'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Saldo (R$)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return formatCurrency(value);
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    return `Saldo: ${formatCurrency(tooltipItem.raw)}`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
 
         let currentReminderId;
         let transactions = [];
