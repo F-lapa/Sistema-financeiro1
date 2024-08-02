@@ -728,6 +728,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
+
     <script>
         var firebaseConfig = {
             apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
@@ -1476,20 +1478,6 @@
 
         let performanceFromSelectedDateChart;
 
-        function openPerformanceFromDateModal() {
-            const modal = document.getElementById('performanceFromDateModal');
-            modal.style.display = 'block';
-            modal.style.animation = 'fadein 0.5s';
-        }
-
-        function closePerformanceFromDateModal() {
-            const modal = document.getElementById('performanceFromDateModal');
-            modal.style.animation = 'fadeout 0.5s';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 500);
-        }
-
         function generatePerformanceFromSelectedDateChart() {
             const startDate = document.getElementById('performanceFromStartDate').value;
             const endDate = getCurrentDate();
@@ -1519,6 +1507,7 @@
                 }
             });
 
+            // Certifique-se de que o gráfico anterior seja destruído antes de criar um novo
             if (performanceFromSelectedDateChart) {
                 performanceFromSelectedDateChart.destroy();
             }
@@ -1543,7 +1532,7 @@
                             type: 'time',
                             time: {
                                 unit: 'day',
-                                tooltipFormat: 'DD MMM YYYY'
+                                tooltipFormat: 'dd MMM yyyy'
                             },
                             title: {
                                 display: true,
