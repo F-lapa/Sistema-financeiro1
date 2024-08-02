@@ -384,16 +384,17 @@
             }
         }
 
-        .modal {
+    .modal {
     display: none;
     position: fixed;
     z-index: 1;
     left: 0;
-    top: 10%; /* Ajuste a posição do modal para mais perto do topo */
+    top: 50%; /* Centraliza verticalmente */
     width: 100%;
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
+    transform: translateY(-50%); /* Ajuste para centralizar na metade da tela */
 }
 
 .modal-content {
@@ -408,9 +409,6 @@
     color: var(--text-color);
     text-align: center;
     animation: fadein 0.5s;
-    position: relative;
-    top: 0;
-    transform: translateY(-50%);
 }
 
 
@@ -524,19 +522,17 @@
     border-radius: 5px;
     display: inline-block;
 }
-body, html {
-    height: 100%;
+
+body {
     margin: 0;
     padding: 0;
-    overflow-x: hidden; /* Evita a rolagem horizontal */
+    height: 100%;
+    overflow-y: auto; /* Garante a barra de rolagem vertical */
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color); /* Cor de fundo do seu tema */
+    color: var(--text-color); /* Cor do texto do seu tema */
 }
 
-.content-wrapper {
-    height: 100vh; /* Altura da janela de visualização */
-    overflow-y: auto; /* Adiciona barra de rolagem vertical */
-    padding: 20px;
-    box-sizing: border-box;
-}
 
 
     </style>
