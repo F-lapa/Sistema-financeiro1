@@ -542,6 +542,27 @@ footer {
     margin-top: 50px; /* Adiciona algum espaço para garantir que a barra de rolagem seja ativada */
 }
 
+.menu-icons {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.menu-icons i {
+    margin: 0 5px;
+    cursor: pointer;
+    color: var(--text-color);
+    font-size: 1.5em;
+    transition: color 0.3s;
+}
+
+.menu-icons i:hover {
+    color: var(--button-color);
+}
+
+.admin-icon {
+    display: inline-block;
+    /* Outros estilos, se necessário */
+}
 
 
 
@@ -556,6 +577,7 @@ footer {
         <h3>Menu</h3>
             
               <div class="menu-icons">
+            <i class="fas fa-user-shield admin-icon" onclick="openAdminModal()" title="Área do Administrador"></i>
             <i class="fas fa-key change-password" onclick="openChangePasswordModal()" title="Alterar Senha"></i>
             <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Deslogar"></i>
         </div>
