@@ -511,6 +511,16 @@
          padding: 5px 10px;
          border-radius: 5px;
 }
+        .highlight-amount {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #2ecc71;
+    background-color: #34495e;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
 
     </style>
 </head>
@@ -530,7 +540,6 @@
             <button onclick="openSpecificTransactionsModal()"><i class="fas fa-search-dollar"></i> Transações Específicas</button>
             <button onclick="openPaymentRemindersPage()"><i class="fas fa-bell"></i> Lembrete de Pagamentos</button>
             <button onclick="openReminderReceitasPage()"><i class="fas fa-bell"></i> Lembrete de Receitas</button>
-            <button onclick="openFinancialPerformanceModal()"><i class="fas fa-chart-line"></i> Desempenho Financeiro</button>
             <button onclick="openPerformanceFromDateModal()"><i class="fas fa-chart-line"></i> Acompanhar Desempenho</button>
             <button onclick="openCompoundInterestModal()">Calculadora de Juros Compostos</button>
         </div>
@@ -683,23 +692,7 @@
             </div>
         </div>
 
-        <div id="financialPerformanceModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeFinancialPerformanceModal()">&times;</span>
-                <h2>Desempenho Financeiro</h2>
-                <div class="form-group">
-                    <label for="performanceStartDate">Data Inicial:</label>
-                    <input type="date" id="performanceStartDate" class="highlight">
-                </div>
-                <div class="form-group">
-                    <label for="performanceEndDate">Data Final:</label>
-                    <input type="date" id="performanceEndDate" class="highlight">
-                </div>
-                <button onclick="generateFinancialPerformanceChart()">Gerar Gráfico</button>
-                <canvas id="financialPerformanceChart" style="margin-top: 20px;"></canvas>
-            </div>
-        </div>
-
+        
         <!-- Modal para Acompanhamento de Desempenho a partir de uma data -->
         <div id="performanceFromDateModal" class="modal">
             <div class="modal-content">
@@ -715,13 +708,17 @@
         </div>
 
     <!-- Modal para Calculadora de Juros Compostos -->
-   <div id="compoundInterestModal" class="modal">
+  <div id="compoundInterestModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeCompoundInterestModal()">&times;</span>
         <h2>Calculadora de Juros Compostos</h2>
         <div class="form-group">
             <label for="initialAmount">Valor Inicial (R$):</label>
             <input type="number" id="initialAmount" class="highlight" placeholder="Ex: 1000">
+        </div>
+        <div class="form-group">
+            <label for="monthlyContribution">Aporte Mensal (R$):</label>
+            <input type="number" id="monthlyContribution" class="highlight" placeholder="Ex: 200">
         </div>
         <div class="form-group">
             <label for="interestRate">Taxa de Juros (% ao ano):</label>
@@ -742,9 +739,10 @@
             </select>
         </div>
         <button onclick="calculateCompoundInterest()">Calcular</button>
-        <div id="compoundInterestResult" style="margin-top: 20px;"></div>
+        <div id="compoundInterestResult" style="margin-top: 20px; font-weight: bold;"></div>
     </div>
 </div>
+
 
         <div id="adminModal" class="modal">
             <div class="modal-content">
@@ -788,7 +786,7 @@
             </div>
         </div>
 
-        <audio id="alertSound" src="alert.mp3" preload="auto"></audio>
+        
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
@@ -1697,25 +1695,34 @@
 
         // Função para calcular os juros compostos
        function calculateCompoundInterest() {
-        const principal = parseFloat(document.getElementById('initialAmount').value);
-        const rate = parseFloat(document.getElementById('interestRate').value) / 100;
-        const years = parseInt(document.getElementById('years').value);
-        const frequency = parseInt(document.getElementById('compoundingFrequency').value);
+    const principal = parseFloat(document.getElementById('initialAmount').value);
+    const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value) || 0;
+    const rate = parseFloat(document.getElementById('interestRate').value) / 100;
+    const years = parseInt(document.getElementById('years').value);
+    const frequency = parseInt(document.getElementById('compoundingFrequency').value);
 
-        if (isNaN(principal) || isNaN(rate) || isNaN(years) || isNaN(frequency)) {
-            alert('Por favor, preencha todos os campos corretamente.');
-            return;
-        }
-
-        const amount = principal * Math.pow((1 + rate / frequency), frequency * years);
-        const formattedAmount = formatCurrency(amount.toFixed(2));
-
-        document.getElementById('compoundInterestResult').innerHTML = `Montante Final: <span class="highlight-amount">R$ ${formattedAmount}</span>`;
+    if (isNaN(principal) || isNaN(rate) || isNaN(years) || isNaN(frequency)) {
+        alert('Por favor, preencha todos os campos corretamente.');
+        return;
     }
 
-    function formatCurrency(value) {
-        return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    let amount = principal;
+    const monthlyRate = rate / frequency;
+
+    // Loop para calcular o valor acumulado com aporte mensal
+    for (let i = 0; i < years * frequency; i++) {
+        amount = (amount + monthlyContribution) * (1 + monthlyRate);
     }
+
+    const formattedAmount = formatCurrency(amount.toFixed(2));
+    document.getElementById('compoundInterestResult').innerHTML = `Montante Final: <span class="highlight-amount">${formattedAmount}</span>`;
+}
+
+function formatCurrency(value) {
+    // Formatando como moeda brasileira
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+}
+
     </script>
 </body>
 </html>
