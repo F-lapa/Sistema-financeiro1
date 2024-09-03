@@ -764,6 +764,7 @@
     <script>
         // Configuração do Firebase
 // Configuração do Firebase
+// Configuração do Firebase
 var firebaseConfig = {
     apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
     authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
@@ -1155,69 +1156,94 @@ function closeSpecificTransactionsModal() {
     }, 500);
 }
 
-function filterByPeriod() {
-    const startDate = document.getElementById('startDate').value;
-    const endDate = document.getElementById('endDate').value;
-    const filterType = document.getElementById('filterType').value;
-    const filterDescription = document.getElementById('filterDescription').value.toLowerCase();
+// Função para gerar relatório de transações específicas
+function generateSpecificTransactionsReport() {
+    const startDate = document.getElementById('specificStartDate').value;
+    const endDate = document.getElementById('specificEndDate').value;
+    const specificType = document.getElementById('specificType').value;
 
-    let totalReceitas = 0;
-    let totalDespesas = 0;
+    if (!startDate || !endDate || !specificType) {
+        alert('Por favor, preencha todos os campos corretamente.');
+        return;
+    }
 
-    const filteredTransactions = transactions.filter(transaction => 
-        transaction.date >= startDate && transaction.date <= endDate &&
-        (filterType === '' || transaction.type === filterType) &&
-        (filterDescription === '' || transaction.description.toLowerCase().includes(filterDescription))
+    const specificTransactions = transactions.filter(transaction => 
+        transaction.date >= startDate && transaction.date <= endDate && transaction.type === specificType
     );
 
-    const filteredTbody = document.getElementById('filteredTransactionsTable').getElementsByTagName('tbody')[0];
-    filteredTbody.innerHTML = '';
+    const groupedTransactions = {};
 
-    filteredTransactions.forEach(transaction => {
-        if (transaction.type === 'receita') {
-            totalReceitas += transaction.amount;
-        } else if (transaction.type === 'despesa') {
-            totalDespesas += transaction.amount;
+    specificTransactions.forEach(transaction => {
+        const normalizedDescription = normalizeText(transaction.description);
+        if (groupedTransactions[normalizedDescription]) {
+            groupedTransactions[normalizedDescription] += transaction.amount;
+        } else {
+            groupedTransactions[normalizedDescription] = transaction.amount;
         }
-
-        const row = filteredTbody.insertRow();
-        const cellDate = row.insertCell(0);
-        const cellDescription = row.insertCell(1);
-        const cellAmount = row.insertCell(2);
-        const cellType = row.insertCell(3);
-
-        cellDate.innerText = transaction.date;
-        cellDescription.innerHTML = `<div class="transaction-description">
-                                        <i class="transaction-icon ${transaction.type === 'receita' ? 'fas fa-arrow-circle-up' : 'fas fa-arrow-circle-down'}" style="color: ${transaction.type === 'receita' ? 'green' : 'red'};"></i>
-                                        ${transaction.description}
-                                    </div>`;
-        cellAmount.innerHTML = `<div class="transaction-amount ${transaction.type}">${formatCurrency(transaction.amount)}</div>`;
-        cellType.innerText = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
     });
 
-    const totalSaldo = totalReceitas - totalDespesas;
+    const descriptions = Object.keys(groupedTransactions);
+    const data = Object.values(groupedTransactions);
 
-    const totalReceitasSpan = document.getElementById('totalReceitas');
-    const totalDespesasSpan = document.getElementById('totalDespesas');
-    const totalSaldoSpan = document.getElementById('totalSaldo');
+    if (specificTransactionsChart) {
+        specificTransactionsChart.destroy();
+    }
 
-    totalReceitasSpan.innerText = formatCurrency(totalReceitas);
-    totalDespesasSpan.innerText = formatCurrency(totalDespesas);
-    totalSaldoSpan.innerText = formatCurrency(totalSaldo);
-
-    totalDespesasSpan.classList.add('negative');
-    totalSaldoSpan.classList.toggle('negative', totalSaldo < 0);
+    const ctx = document.getElementById('specificTransactionsChart').getContext('2d');
+    specificTransactionsChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: descriptions,
+            datasets: [{
+                label: 'Transações Específicas',
+                data: data,
+                backgroundColor: descriptions.map(() => `#${Math.floor(Math.random()*16777215).toString(16)}`),
+                borderColor: '#fff',
+                borderWidth: 2,
+                hoverBorderWidth: 3,
+                hoverBorderColor: '#fff'
+            }]
+        },
+        options: {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            let total = tooltipItem.dataset.data.reduce((sum, value) => sum + value, 0);
+                            let currentValue = tooltipItem.raw;
+                            let percentage = ((currentValue / total) * 100).toFixed(2);
+                            return `${tooltipItem.label}: R$ ${currentValue.toFixed(2)} (${percentage}%)`;
+                        }
+                    },
+                    backgroundColor: 'rgba(44, 62, 80, 0.8)',
+                    titleFont: { size: 16, weight: 'bold' },
+                    bodyFont: { size: 14 },
+                    footerFont: { size: 14 },
+                    displayColors: false,
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: '#3498db',
+                    borderWidth: 1
+                },
+                legend: {
+                    labels: {
+                        color: '#ecf0f1',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
-function clearFilter() {
-    document.getElementById('startDate').value = '';
-    document.getElementById('endDate').value = '';
-    document.getElementById('filterType').value = '';
-    document.getElementById('filterDescription').value = '';
-    document.getElementById('filteredTransactionsTable').getElementsByTagName('tbody')[0].innerHTML = '';
-    document.getElementById('totalReceitas').innerText = 'R$ 0,00';
-    document.getElementById('totalDespesas').innerText = 'R$ 0,00';
-    document.getElementById('totalSaldo').innerText = 'R$ 0,00';
+function normalizeText(text) {
+    return text.trim().toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, " ");
 }
 
 // Função para abrir o modal de performance a partir de uma data
@@ -1434,6 +1460,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateFilteredView();
     checkReminders();
 });
+
 
     </script>
 </body>
