@@ -795,7 +795,8 @@ auth.onAuthStateChanged(user => {
             document.getElementById('userGreeting').innerHTML = '<span>Olá, <strong>' + userName + '</strong>!</span>';
             loadTransactions();
             checkAdmin(user.email);
-            loadPaymentReminders();  // Função corrigida
+            loadPaymentReminders();
+            checkReminders();
         });
     } else {
         window.location.href = 'index.html';
@@ -807,8 +808,8 @@ function loadPaymentReminders() {
     const userId = auth.currentUser.uid;
     database.ref('paymentReminders/' + userId).once('value').then((snapshot) => {
         if (snapshot.val()) {
-            paymentReminders = snapshot.val();
-            // Adicione a lógica para exibir lembretes na interface do usuário
+            paymentReminders = Object.values(snapshot.val());
+            // Exibir lembretes na interface do usuário
         } else {
             paymentReminders = [];
         }
@@ -832,8 +833,7 @@ function loadTransactions() {
     const userId = auth.currentUser.uid;
     database.ref('transactions/' + userId).once('value', function(snapshot) {
         if (snapshot.val()) {
-            const data = snapshot.val();
-            transactions = Array.isArray(data) ? data : Object.values(data);
+            transactions = Object.values(snapshot.val());
             updateDescriptionList();
             updateFilteredView();
             calculateBalances();
@@ -876,6 +876,11 @@ function addTransaction() {
     const amountInput = document.getElementById('amount');
     const amount = parseCurrency(amountInput.value);
     const type = document.getElementById('type').value;
+
+    if (!date || !description || isNaN(amount) || !type) {
+        alert('Por favor, preencha todos os campos corretamente.');
+        return;
+    }
 
     const transaction = { id: generateTransactionId(), date, description, amount, type };
     transactions.push(transaction);
@@ -937,6 +942,23 @@ function updateFilteredView() {
     });
 
     calculateBalances();
+}
+
+// Função para confirmar a remoção de uma transação
+function confirmRemoveTransaction(transactionId) {
+    if (confirm('Tem certeza que deseja remover esta transação?')) {
+        removeTransaction(transactionId);
+    }
+}
+
+// Função para remover uma transação
+function removeTransaction(transactionId) {
+    transactions = transactions.filter(transaction => transaction.id !== transactionId);
+    saveTransactions();
+    updateDescriptionList();
+    updateFilteredView();
+    calculateBalances();
+    checkMonthlyLimit();
 }
 
 // Função para calcular os saldos
@@ -1032,7 +1054,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const dateInput = document.getElementById('date');
     dateInput.value = getCurrentDate();
     updateFilteredView();
-    checkReminders();  // Função corrigida
+    checkReminders();
 });
 
 // Funções para manipulação de modais
@@ -1218,11 +1240,11 @@ function generatePerformanceFromSelectedDateChart() {
             datasets: [{
                 label: 'Desempenho Financeiro',
                 data: balances,
-                borderColor: '#3498db', // Cor da linha
-                backgroundColor: 'rgba(52, 152, 219, 0.2)', // Preenchimento da área abaixo da linha
-                fill: true, // Preencher a área abaixo da linha
-                borderWidth: 3, // Espessura da linha
-                tension: 0.1 // Suavização da linha
+                borderColor: '#3498db',
+                backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                fill: true,
+                borderWidth: 3,
+                tension: 0.1
             }]
         },
         options: {
@@ -1344,7 +1366,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const dateInput = document.getElementById('date');
     dateInput.value = getCurrentDate();
     updateFilteredView();
-    checkReminders();  // Função corrigida
+    checkReminders();
 });
     </script>
 </body>
