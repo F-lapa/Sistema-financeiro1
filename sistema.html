@@ -765,6 +765,7 @@
         // Configuração do Firebase
 // Configuração do Firebase
 // Configuração do Firebase
+// Configuração do Firebase
 var firebaseConfig = {
     apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
     authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
@@ -785,6 +786,7 @@ let transactions = [];
 let paymentReminders = [];
 let allUsers = [];
 let monthlyLimit = parseCurrency(localStorage.getItem('monthlyLimit') || '0,00');
+let specificTransactionsChart; // Inicialize a variável fora da função
 
 // Observador de autenticação
 auth.onAuthStateChanged(user => {
@@ -1185,7 +1187,8 @@ function generateSpecificTransactionsReport() {
     const descriptions = Object.keys(groupedTransactions);
     const data = Object.values(groupedTransactions);
 
-    if (specificTransactionsChart) {
+    // Verificar se specificTransactionsChart é uma instância de Chart antes de destruir
+    if (specificTransactionsChart && specificTransactionsChart instanceof Chart) {
         specificTransactionsChart.destroy();
     }
 
@@ -1460,6 +1463,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateFilteredView();
     checkReminders();
 });
+
 
 
     </script>
