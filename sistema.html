@@ -762,7 +762,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
 
     <script>
-        var firebaseConfig = {
+        // Configuração do Firebase
+var firebaseConfig = {
     apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
     authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
     databaseURL: "https://sistema-de-receitas-e-despesas-default-rtdb.firebaseio.com",
@@ -802,6 +803,17 @@ auth.onAuthStateChanged(user => {
         window.location.href = 'index.html';
     }
 });
+
+// Função para carregar o tema do usuário
+function loadTheme(userId) {
+    database.ref('users/' + userId + '/theme').once('value').then((snapshot) => {
+        const themeColor = snapshot.val();
+        if (themeColor) {
+            document.documentElement.style.setProperty('--button-color', themeColor);
+            document.documentElement.style.setProperty('--input-border-color', themeColor);
+        }
+    });
+}
 
 // Função para carregar lembretes de pagamento
 function loadPaymentReminders() {
@@ -1117,6 +1129,31 @@ function closeFilterPeriodModal() {
     }, 500);
 }
 
+// Função para abrir a página de lembretes de pagamento
+function openPaymentRemindersPage() {
+    window.location.href = 'lembrete_pagamentos.html';
+}
+
+// Função para abrir a página de lembretes de receitas
+function openReminderReceitasPage() {
+    window.location.href = 'lembrete_receitas.html';
+}
+
+// Função para abrir o modal de transações específicas
+function openSpecificTransactionsModal() {
+    const modal = document.getElementById('specificTransactionsModal');
+    modal.style.display = 'block';
+    modal.style.animation = 'fadein 0.5s';
+}
+
+function closeSpecificTransactionsModal() {
+    const modal = document.getElementById('specificTransactionsModal');
+    modal.style.animation = 'fadeout 0.5s';
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 500);
+}
+
 function filterByPeriod() {
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
@@ -1368,6 +1405,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateFilteredView();
     checkReminders();
 });
+
     </script>
 </body>
 </html>
