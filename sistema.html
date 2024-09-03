@@ -763,6 +763,7 @@
 
     <script>
         // Configuração do Firebase
+// Configuração do Firebase
 var firebaseConfig = {
     apiKey: "AIzaSyDgTFBPipaSGqJlahiT-THgzBH4JKuQSA4",
     authDomain: "sistema-de-receitas-e-despesas.firebaseapp.com",
@@ -1396,6 +1397,34 @@ function calculateCompoundInterest() {
 
     const formattedAmount = formatCurrency(amount.toFixed(2));
     document.getElementById('compoundInterestResult').innerHTML = `Montante Final: <span class="highlight-amount">${formattedAmount}</span>`;
+}
+
+// Função para abrir o seletor de temas
+function openThemeSelectorModal() {
+    const modal = document.getElementById('themeSelectorModal');
+    modal.style.display = 'block';
+    modal.style.animation = 'fadein 0.5s';
+}
+
+// Função para fechar o seletor de temas
+function closeThemeSelectorModal() {
+    const modal = document.getElementById('themeSelectorModal');
+    modal.style.animation = 'fadeout 0.5s';
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 500);
+}
+
+// Função para aplicar o tema selecionado
+function applyTheme(color) {
+    document.documentElement.style.setProperty('--button-color', color);
+    document.documentElement.style.setProperty('--input-border-color', color);
+    closeThemeSelectorModal();
+}
+
+// Função para abrir a página de definir limite
+function goToLimitPage() {
+    window.location.href = 'definir_limite.html';
 }
 
 // Inicialização ao carregar o documento
